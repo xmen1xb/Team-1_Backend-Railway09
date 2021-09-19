@@ -28,4 +28,8 @@ public Page<Account> getAllAccounts(Pageable pageable);
 	
 	public boolean existsByPhoneNumber(String phoneNumber);
 	
+	public void createCart(Account account);
+	
+	public void deleteAccount(int id);
+	
 }

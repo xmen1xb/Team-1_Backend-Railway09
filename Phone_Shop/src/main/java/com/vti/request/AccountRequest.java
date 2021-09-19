@@ -1,54 +1,25 @@
 package com.vti.request;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.Length;
-
-import com.vti.validation.CheckEmailNotExists;
-import com.vti.validation.CheckPhonNumberExists;
-import com.vti.validation.CheckUserNameExists;
-import com.vti.validation.EmailValidator;
-
 public class AccountRequest {
 
-	@NotBlank(message = "Không thể để trống")
-	@Length(max = 12, min = 6, message = "Tên phải từ 6-12 kí tự" )
-	@CheckUserNameExists
 	private String username;
 	
-	@NotBlank(message = "Không thể để trống")
-	@Length(max = 12, min = 6, message = "Tên phải từ 6-12 kí tự" )
 	private String firstname;
 	
-	@NotBlank(message = "Không thể để trống")
-	@Length(max = 12, min = 6, message = "Tên phải từ 6-12 kí tự" )
 	private String lastname;
 	
-	@NotBlank(message = "Không thể để trống")
-	@CheckEmailNotExists
-	@EmailValidator
 	private String email;
 	
-	@Length(max = 12, min = 10, message = "Số điện thoại phải từ 10-12 số" )
-	@NotNull(message = "Không thể để trống")
-	@CheckPhonNumberExists
 	private String phoneNumber;
 	
-	@NotBlank(message = "Không thể để trống")
 	private String city;
 	
-	@NotBlank(message = "Không thể để trống")
 	private String district;
 	
-	@NotBlank(message = "Không thể để trống")
 	private String ward;
 	
-	@NotBlank(message = "Không thể để trống")
 	private String street;
 	
-	@Length(min = 8, message = "Mật khẩu phải từ 8 kí tự" )
-	@NotNull(message = "Không thể để trống")
 	private String password;
 	
 	public AccountRequest() {

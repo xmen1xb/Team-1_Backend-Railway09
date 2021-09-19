@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -86,5 +87,11 @@ public class AccountController {
 		accountService.sendConfirmUserRegistrationViaEmail(email);
 
 		return new ResponseEntity<>("We have sent 1 email. Please check email to active account!", HttpStatus.OK);
+	}
+	
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<?> deleteAccount(@PathVariable(name = "id") int id) {
+		accountService.deleteAccount(id);
+		return new ResponseEntity<String>("Delete successfully!", HttpStatus.OK);
 	}
 }

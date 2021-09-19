@@ -10,4 +10,6 @@ public interface IProductService {
 	public Page<Product> getAllProducts(Pageable pageable);
 	
 	public Product getProductById(int id);
+	
+	public void deleteProduct(int id);
 }

@@ -11,9 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
-
 @Entity
 @Table(name = "CartDetail", catalog = "Mock_Project")
 public class CartDetail implements Serializable{
@@ -28,28 +25,26 @@ public class CartDetail implements Serializable{
 	private Double price;
 	
 	@Column(name = "quantity")
-	private short quantity;
+	private int quantity;
 	
 	@ManyToOne
-	@JoinColumn(name = "cart_id", nullable = false)
-	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
+	@JoinColumn(name = "cart_id")
 	private Cart cart;
 	
 	@ManyToOne
-	@JoinColumn(name = "product_id", nullable = false)
-	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	private Product product;
+	@JoinColumn(name = "product_id")
+	private Product productInCartdetail;
 	
 	public CartDetail() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
-	public CartDetail(Double price, short quantity, Cart cart, Product product) {
+	public CartDetail(Double price, int quantity, Cart cart, Product product) {
 		super();
 		this.price = price;
 		this.quantity = quantity;
 		this.cart = cart;
-		this.product = product;
+		this.productInCartdetail = product;
 	}
 
 	public Double getPrice() {
@@ -60,11 +55,11 @@ public class CartDetail implements Serializable{
 		this.price = price;
 	}
 
-	public short getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(short quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 
@@ -77,11 +72,11 @@ public class CartDetail implements Serializable{
 	}
 
 	public Product getProduct() {
-		return product;
+		return productInCartdetail;
 	}
 
 	public void setProduct(Product product) {
-		this.product = product;
+		this.productInCartdetail = product;
 	}
 
 	public int getCartdetail_id() {

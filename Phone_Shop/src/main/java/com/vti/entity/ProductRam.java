@@ -14,8 +14,6 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "ProductRam", catalog = "Mock_Project")
@@ -32,8 +30,7 @@ public class ProductRam implements Serializable{
 	private String ramName;
 	
 	@OneToMany(mappedBy = "ram", fetch = FetchType.EAGER)
-	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	@Fetch(value = FetchMode.SUBSELECT)
+	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })
 	private List<Product> listProduct;
 
 	public ProductRam() {

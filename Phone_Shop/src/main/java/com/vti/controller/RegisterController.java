@@ -26,7 +26,7 @@ public class RegisterController {
 	private IAccountService accountService;
 	
 	@PostMapping()
-	public ResponseEntity<?> createAccount(@Valid @RequestBody AccountRequest request) {
+	public ResponseEntity<?> createAccount(@RequestBody AccountRequest request) {
 		accountService.createAccount(request);
 		return new ResponseEntity<String>("We have sent 1 email. Please check email to active account!",
 				HttpStatus.CREATED);

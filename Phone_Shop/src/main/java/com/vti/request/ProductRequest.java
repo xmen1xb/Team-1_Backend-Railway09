@@ -9,7 +9,7 @@ public class ProductRequest {
 	private String ram;
 	private String memory;
 	private String brand;
-	private String  category;
+	private String category;
 	private short quantity;
 
 	public ProductRequest() {

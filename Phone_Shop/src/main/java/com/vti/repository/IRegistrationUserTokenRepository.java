@@ -17,8 +17,8 @@ public interface IRegistrationUserTokenRepository extends JpaRepository<Registat
 	
 	@Query("	SELECT 	token	"
 			+ "	FROM 	RegistationAccountToken "
-			+ " WHERE 	user_id = :acccountID")
-	public String findByUserId(int acccountID);
+			+ " WHERE 	user_id = :accountID")
+	public String findByUserId(int accountID);
 
 	@Transactional
 	@Modifying

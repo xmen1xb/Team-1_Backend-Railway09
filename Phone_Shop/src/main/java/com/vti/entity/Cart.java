@@ -5,13 +5,12 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
@@ -28,17 +27,17 @@ public class Cart implements Serializable{
 	private int cartId;
 	
 	@Column(name = "quantity")
-	private short quantity;
+	private int quantity;
 	
 	@Column(name = "total_price")
 	private Double totalPrice;
 	
-	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
+	@OneToOne
+	@JoinColumn(name = "user_id", referencedColumnName = "account_id")
 	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	private Account cartAccount;
+	private Account cartaccount;
 	
-	@OneToMany(mappedBy = "cart", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "cart")
 	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
 	private List<CartDetail> listCartDetail;
 	
@@ -46,19 +45,11 @@ public class Cart implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public Cart(short quantity, Double total_price, Account account, List<CartDetail> listCartDetail) {
-		super();
-		this.quantity = quantity;
-		this.totalPrice = total_price;
-		this.cartAccount = account;
-		this.listCartDetail = listCartDetail;
-	}
-
-	public short getQuantity() {
+	public int getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(short quantity) {
+	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
 
@@ -71,11 +62,11 @@ public class Cart implements Serializable{
 	}
 
 	public Account getAccount() {
-		return cartAccount;
+		return cartaccount;
 	}
 
 	public void setAccount(Account account) {
-		this.cartAccount = account;
+		this.cartaccount = account;
 	}
 
 	public List<CartDetail> getListCartDetail() {

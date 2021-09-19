@@ -7,20 +7,21 @@ public class ProductResponse {
 	private int id;
 	private String name;
 	private String description;
-	private String price;
+	private Double price;
 	private String ram;
 	private String memory;
 	private String brand;
 	private String category;
 	private short quantity;
+	private String image;
 	private Date enter_date;
 	
 	public ProductResponse() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ProductResponse(int id, String name, String description, String price, String ram, String memory,
-			String brand, String category, short quantity, Date enter_date) {
+	public ProductResponse(int id, String name, String description, Double price, String ram, String memory,
+			String brand, String category, short quantity, String image, Date enter_date) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -31,6 +32,7 @@ public class ProductResponse {
 		this.brand = brand;
 		this.category = category;
 		this.quantity = quantity;
+		this.image = image;
 		this.enter_date = enter_date;
 	}
 
@@ -58,11 +60,11 @@ public class ProductResponse {
 		this.description = description;
 	}
 
-	public String getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(String price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
@@ -113,4 +115,13 @@ public class ProductResponse {
 	public void setEnter_date(Date enter_date) {
 		this.enter_date = enter_date;
 	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
 }

@@ -31,24 +31,19 @@ public class ProductImage implements Serializable{
 	@Column(name = "path_image", length = 100)
 	private String path_image;
 	
-	@Enumerated(EnumType.ORDINAL)
-	@Column(name = "`status`", nullable = false)
-	private ProductImageStatus status = ProductImageStatus.NOT_ACTIVE;
-	
 	@ManyToOne
 	@JoinColumn(name = "product_id", nullable = false)
-	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	private Product product;
+	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })
+	private Product productInImage;
 	
 	public ProductImage() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public ProductImage(String path_image, ProductImageStatus status, Product product) {
+	public ProductImage(String path_image, Product product) {
 		super();
 		this.path_image = path_image;
-		this.status = status;
-		this.product = product;
+		this.productInImage = product;
 	}
 
 	public String getPath_image() {
@@ -59,20 +54,12 @@ public class ProductImage implements Serializable{
 		this.path_image = path_image;
 	}
 
-	public ProductImageStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(ProductImageStatus status) {
-		this.status = status;
-	}
-
 	public Product getProduct() {
-		return product;
+		return productInImage;
 	}
 
 	public void setProduct(Product product) {
-		this.product = product;
+		this.productInImage = product;
 	}
 
 	public int getImage_id() {

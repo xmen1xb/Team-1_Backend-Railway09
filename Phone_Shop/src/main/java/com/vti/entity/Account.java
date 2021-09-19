@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -61,16 +62,16 @@ public class Account implements Serializable{
 	@Column(name = "phone_number", length = 12, nullable = false, unique = true)
 	private String phonenumber;
 	
-	@Column(name = "city", length = 12, nullable = false, unique = true)
+	@Column(name = "city", length = 12)
 	private String city;
 	
-	@Column(name = "district", length = 12, nullable = false, unique = true)
+	@Column(name = "district", length = 12)
 	private String district;
 	
-	@Column(name = "ward", length = 12, nullable = false, unique = true)
+	@Column(name = "ward", length = 12)
 	private String ward;
 	
-	@Column(name = "street", length = 12, nullable = false, unique = true)
+	@Column(name = "street", length = 12)
 	private String street;
 	
 	@Formula("concat(city, ' ', district, ' ', ward, ' ', street)")
@@ -95,12 +96,10 @@ public class Account implements Serializable{
 	@CreationTimestamp
 	private Date registerDate;
 	
-	@OneToMany(mappedBy = "cartAccount", fetch = FetchType.EAGER)
-	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<Cart> listcart;
+	@OneToOne(mappedBy = "cartaccount")
+	private Cart cart;
 	
-	@OneToMany(mappedBy = "orderAccount", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "orderAccount")
 	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Order> listOrder;
@@ -258,6 +257,10 @@ public class Account implements Serializable{
 
 	public void setStreet(String street) {
 		this.street = street;
+	}
+
+	public Cart getCart() {
+		return cart;
 	}
 	
 }

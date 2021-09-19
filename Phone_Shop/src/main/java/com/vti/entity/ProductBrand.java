@@ -32,8 +32,7 @@ public class ProductBrand implements Serializable{
 	private String brandName;
 	
 	@OneToMany(mappedBy = "brand", fetch = FetchType.EAGER)
-	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	@Fetch(value = FetchMode.SUBSELECT)
+	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })
 	private List<Product> listProduct;
 	
 	public ProductBrand() {

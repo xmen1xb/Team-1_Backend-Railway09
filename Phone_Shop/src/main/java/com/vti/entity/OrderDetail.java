@@ -38,7 +38,7 @@ public class OrderDetail implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "product_id", nullable = false)
 	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })
-	private Product product;
+	private Product productInOrder;
 	
 	public OrderDetail() {
 		// TODO Auto-generated constructor stub
@@ -49,7 +49,7 @@ public class OrderDetail implements Serializable{
 		this.price = price;
 		this.quantity = quantity;
 		this.order = order;
-		this.product = product;
+		this.productInOrder = product;
 	}
 
 	public short getPrice() {
@@ -77,11 +77,11 @@ public class OrderDetail implements Serializable{
 	}
 
 	public Product getProduct() {
-		return product;
+		return productInOrder;
 	}
 
 	public void setProduct(Product product) {
-		this.product = product;
+		this.productInOrder = product;
 	}
 
 	public int getorderdetail_id() {

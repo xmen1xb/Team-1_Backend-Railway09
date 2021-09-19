@@ -10,10 +10,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.vti.entity.Account;
+import com.vti.entity.Cart;
 import com.vti.entity.RegistationAccountToken;
 import com.vti.enumerate.AccountStatus;
 import com.vti.event.OnSendRegistrationUserConfirmViaEmailEvent;
 import com.vti.repository.IAccountRepository;
+import com.vti.repository.ICartRepository;
 import com.vti.repository.IRegistrationUserTokenRepository;
 import com.vti.request.AccountRequest;
 
@@ -31,6 +33,9 @@ public class AccountService implements IAccountService{
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
+	@Autowired
+	private ICartRepository cartRepo;
 
 	@Override
 	public Page<Account> getAllAccounts(Pageable pageable) {
@@ -66,6 +71,8 @@ public class AccountService implements IAccountService{
 		createNewRegistrationUserToken(account);
 		
 		sendConfirmUserRegistrationViaEmail(account.getEmail());
+		
+		createCart(account);
 	}
 
 	@Override
@@ -112,5 +119,21 @@ public class AccountService implements IAccountService{
 		
 		return account_repo.existsByPhonenumber(phoneNumber);
 	}
+
+	@Override
+	public void createCart(Account account) {
+		Cart cart = new Cart();
+		cart.setQuantity(0);
+		cart.setTotal_price(0.0);
+		cart.setAccount(account);
+		cartRepo.save(cart);	
+	}
+
+	@Override
+	public void deleteAccount(int id) {
+		account_repo.deleteById(id);
+		
+	}
+	
 	
 }
