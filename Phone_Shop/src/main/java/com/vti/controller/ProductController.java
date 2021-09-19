@@ -1,6 +1,7 @@
 package com.vti.controller;
 
 import java.util.function.Function;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,8 +12,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.vti.entity.Product;
+import com.vti.request.ProductFilterRequest;
 import com.vti.response.ProductResponse;
 import com.vti.service.IProductService;
 
@@ -26,8 +30,9 @@ public class ProductController {
 	private IProductService productService;
 
 	@GetMapping()
-	public ResponseEntity<?> getAllProducts(Pageable pageable) {
-		Page<Product> entities = productService.getAllProducts(pageable);
+	public ResponseEntity<?> getAllProducts(Pageable pageable, @RequestParam(required = false) String search,
+			ProductFilterRequest filter) {
+		Page<Product> entities = productService.getAllProducts(pageable, search, filter);
 
 		Page<ProductResponse> pageResponse = entities.map(new Function<Product, ProductResponse>() {
 
