@@ -8,9 +8,9 @@ public class ProductResponse {
 	private String name;
 	private String description;
 	private Double price;
-	private String ramname;
-	private String memoryname;
-	private String brandname;
+	private String ram;
+	private String memory;
+	private String brand;
 	private String category;
 	private short quantity;
 	private String image;
@@ -27,9 +27,9 @@ public class ProductResponse {
 		this.name = name;
 		this.description = description;
 		this.price = price;
-		this.ramname = ram;
-		this.memoryname = memory;
-		this.brandname = brand;
+		this.ram = ram;
+		this.memory = memory;
+		this.brand = brand;
 		this.category = category;
 		this.quantity = quantity;
 		this.image = image;
@@ -69,27 +69,27 @@ public class ProductResponse {
 	}
 
 	public String getRam() {
-		return ramname;
+		return ram;
 	}
 
 	public void setRam(String ram) {
-		this.ramname = ram;
+		this.ram = ram;
 	}
 
 	public String getMemory() {
-		return memoryname;
+		return memory;
 	}
 
 	public void setMemory(String memory) {
-		this.memoryname = memory;
+		this.memory = memory;
 	}
 
 	public String getBrand() {
-		return brandname;
+		return brand;
 	}
 
 	public void setBrand(String brand) {
-		this.brandname = brand;
+		this.brand = brand;
 	}
 
 	public String getCategory() {

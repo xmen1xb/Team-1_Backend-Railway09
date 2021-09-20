@@ -3,7 +3,7 @@ package com.vti.request;
 public class ProductFilterRequest {
 
 	private String ramName;
-	private String bandName;
+	private String brandName;
 	private String memoryName;
 	
 	public ProductFilterRequest() {
@@ -18,12 +18,12 @@ public class ProductFilterRequest {
 		this.ramName = ramName;
 	}
 
-	public String getBandName() {
-		return bandName;
+	public String getBrandName() {
+		return brandName;
 	}
 
-	public void setBandName(String bandName) {
-		this.bandName = bandName;
+	public void setBrandName(String bandName) {
+		this.brandName = bandName;
 	}
 
 	public String getMemoryName() {

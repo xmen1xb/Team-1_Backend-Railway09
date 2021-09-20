@@ -40,10 +40,10 @@ public class ProductController {
 
 	@GetMapping()
 	public ResponseEntity<?> getAllProducts(Pageable pageable, @RequestParam(required = false) String search,
-			 ProductFilterRequest filter) {
+			ProductFilterRequest filter) {
 		Page<Product> entities = productService.getAllProducts(pageable, search, filter);
+		System.out.println(filter.getBrandName());
 		System.out.println(filter.getMemoryName());
-		System.out.println(filter.getBandName());
 		System.out.println(filter.getRamName());
 		System.out.println(search);
 		Page<ProductResponse> pageResponse = entities.map(new Function<Product, ProductResponse>() {
