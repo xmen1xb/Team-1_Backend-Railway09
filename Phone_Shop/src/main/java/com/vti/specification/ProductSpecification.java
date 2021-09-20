@@ -27,7 +27,7 @@ public class ProductSpecification implements Specification<Product>{
 	@Override
 	public Predicate toPredicate(Root<Product> root, CriteriaQuery<?> query, CriteriaBuilder builder) {
 		if (operator.equalsIgnoreCase("LIKE")) {		
-				return builder.like(root.get(field), "%" + value.toString() + "%");		
+				return builder.like(root.get(field), "%" + value.toString() + "%");	
 		}
 		
 		if (operator.equalsIgnoreCase("=")) {			
@@ -40,6 +40,23 @@ public class ProductSpecification implements Specification<Product>{
 				return builder.equal(root.get("ram").get("ramName"),"%" + value.toString() + "%");
 			}
 		}
+		
+//		if (operator.equalsIgnoreCase("=")) {			
+//			if (field.equalsIgnoreCase("brand.brandName")) {
+//				return builder.equal(root.get("brand").get("brandName"),"%" + value.toString() + "%");
+//			}
+//		}
+//		if (operator.equalsIgnoreCase("=")) {			
+//			if (field.equalsIgnoreCase("memory.memoryName")) {
+//				return builder.equal(root.get("memory").get("memoryName"),"%" + value.toString() + "%");
+//			}
+//		}
+//		
+//		if (operator.equalsIgnoreCase("=")) {			
+//			if (field.equalsIgnoreCase("ram.ramName")) {
+//				return builder.equal(root.get("ram").get("ramName"),"%" + value.toString() + "%");
+//			}
+//		}
 		
 		return null;
 	}
