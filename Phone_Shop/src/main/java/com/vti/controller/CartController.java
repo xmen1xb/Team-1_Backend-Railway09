@@ -1,5 +1,8 @@
 package com.vti.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vti.entity.Cart;
+import com.vti.entity.CartDetail;
+import com.vti.exception.NotFoundException;
+import com.vti.response.CartDetailResponse;
 import com.vti.response.CartResponse;
 import com.vti.service.ICartService;
 
@@ -21,12 +27,43 @@ public class CartController {
 	@Autowired
 	private ICartService cartService;
 	
+	
+	/**
+	 * API lấy cart = accountID
+	 */
+	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<?> getCartById(@PathVariable(name = "id") int id){
 		Cart cart = cartService.getCartbyId(id);
-		
+		if (cart == null) {
+			throw new NotFoundException(String.format("Cart (ID = %s) is not found", id));
+		}
 		CartResponse cartResponse = new CartResponse(cart.getQuantity(), cart.getTotal_price());
-		return new ResponseEntity<CartResponse>(cartResponse, HttpStatus.OK);
+		return new ResponseEntity<CartResponse>(cartResponse, HttpStatus.OK);		
+	}
+	
+	
+	/**
+	 * API lấy ListCartDetail = CartID
+	 */
+	
+	@GetMapping(value = "/{id}/cartDetails")
+	public ResponseEntity<?> getListCartDetail(@PathVariable(name = "id") int id){
+		Cart cart = cartService.getCartbyId(id);
+		if (cart == null) {
+			throw new NotFoundException(String.format("Cart (ID = %s) is not found", id));
+		}
+		List<CartDetail> listcartdetail = cart.getListCartDetail();
+		List<CartDetailResponse> listRespone = new ArrayList<>();
+		
+		for (CartDetail cartDetail : listcartdetail) {
+			CartDetailResponse cartDetailResponse = new CartDetailResponse();
+			cartDetailResponse.setId(cartDetail.getCartdetail_id());
+			cartDetailResponse.setPrice(cartDetail.getPrice());
+			cartDetailResponse.setQuantity(cartDetail.getQuantity());
+			listRespone.add(cartDetailResponse);
+		}
+		return new ResponseEntity<>(listRespone, HttpStatus.OK);
 		
 	}
 }

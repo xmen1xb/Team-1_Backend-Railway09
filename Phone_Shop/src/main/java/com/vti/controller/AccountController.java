@@ -11,13 +11,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.vti.entity.Account;
-import com.vti.request.AccountRequest;
 import com.vti.response.AccountResponse;
 import com.vti.service.IAccountService;
 
@@ -29,6 +26,11 @@ public class AccountController {
 	@Autowired
 	private IAccountService accountService;
 	
+	/**
+	 * API getAll Account
+	 * Trả ra 1 list Account theo pagging
+	 */
+	
 	@GetMapping
 	public ResponseEntity<?> getAllAccounts(Pageable pageable) {
 		Page<Account> entity = accountService.getAllAccounts(pageable);
@@ -38,7 +40,7 @@ public class AccountController {
 			@Override
 			public AccountResponse apply(Account account) {
 				AccountResponse response = new AccountResponse(account.getAccountId(), account.getUsername(), account.getFullname(), 
-						account.getEmail(), account.getGender(), account.getPhone_number(), account.getAddress(), account.getRegister_date());
+						account.getEmail(), account.getGender(), account.getPhonenumber(), account.getAddress(), account.getRegisterDate());
 				return response;
 			}
 		});
@@ -46,12 +48,16 @@ public class AccountController {
 		return new ResponseEntity<>(pageResponse, HttpStatus.OK);		
 	}
 	
+	/**
+	 * API getAccount by AccountID
+	 */
+	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<?> getAccountById(@PathVariable(name = "id") int id){
 		Account account = accountService.getAccountById(id);
 		
 		AccountResponse response = new AccountResponse(account.getAccountId(), account.getUsername(), account.getFullname(), 
-				account.getEmail(), account.getGender(), account.getPhone_number(), account.getAddress(), account.getRegister_date());
+				account.getEmail(), account.getGender(), account.getPhonenumber(), account.getAddress(), account.getRegisterDate());
 		return new ResponseEntity<AccountResponse>(response, HttpStatus.OK);			
 	}
 	
@@ -64,30 +70,9 @@ public class AccountController {
 //		return new ResponseEntity<AccountResponse>(response, HttpStatus.OK);			
 //	}
 	
-	@PostMapping()
-	public ResponseEntity<?> createAccount(@RequestBody AccountRequest request) {
-		accountService.createAccount(request);
-		return new ResponseEntity<String>("We have sent 1 email. Please check email to active account!",
-				HttpStatus.CREATED);
-	}
-	
-	@GetMapping("/activeUser")
-	public ResponseEntity<?> activeUserViaEmail(@RequestParam String token) {
-
-		// active user
-		accountService.activeUser(token);
-
-		return new ResponseEntity<>("Active success!", HttpStatus.OK);
-	}
-	
-	@GetMapping("/userRegistrationConfirmRequest")
-	// validate: email exists, email not active
-	public ResponseEntity<?> sendConfirmRegistrationViaEmail(@RequestParam String email) {
-
-		accountService.sendConfirmUserRegistrationViaEmail(email);
-
-		return new ResponseEntity<>("We have sent 1 email. Please check email to active account!", HttpStatus.OK);
-	}
+	/**
+	 * API deleteAccount by AccountID
+	 */
 	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> deleteAccount(@PathVariable(name = "id") int id) {

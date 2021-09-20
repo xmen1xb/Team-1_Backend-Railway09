@@ -30,6 +30,10 @@ public class FileController {
 	@Autowired
 	private IFileService fileService;
 
+	/**
+	 * API upload Image
+	 */
+	
 	@PostMapping(value = "/image")
 	public ResponseEntity<?> upLoadImage(@RequestParam(name = "image") MultipartFile image,
 			@RequestParam(name = "id", required = false) int id) throws IOException {
@@ -41,6 +45,10 @@ public class FileController {
 		return new ResponseEntity<String>(fileService.uploadImage(image, id), HttpStatus.OK);
 	}
 
+	/**
+	 * API dowload Image
+	 */
+	
 	@GetMapping(value = "/image")
 	public ResponseEntity<?> downloadImage(@RequestParam String nameImage) throws IOException {
 
@@ -58,6 +66,10 @@ public class FileController {
 		return ResponseEntity.ok().headers(headers).contentLength(imageFile.length())
 				.contentType(MediaType.parseMediaType("image/jpeg")).body(imageStream);
 	}
+	
+	/**
+	 * API get ImageName by ImageID
+	 */
 
 	@GetMapping(value = "/image/{id}")
 	public ResponseEntity<?> getImgNameByID(@PathVariable(name = "id") short id) {

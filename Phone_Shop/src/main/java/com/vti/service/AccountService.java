@@ -63,8 +63,8 @@ public class AccountService implements IAccountService{
 
 	@Override
 	public void createAccount(AccountRequest request) {
-		Account account = new Account(request.getUsername(), request.getFirstname(),request.getLastname(), request.getEmail(),
-				request.getPhone_number(), passwordEncoder.encode(request.getPassword()));
+		Account account = new Account(request.getUsername(), request.getFullname(), request.getEmail(),
+				 passwordEncoder.encode(request.getPassword()));
 		
 		account_repo.save(account);
 		
@@ -134,6 +134,4 @@ public class AccountService implements IAccountService{
 		account_repo.deleteById(id);
 		
 	}
-	
-	
 }

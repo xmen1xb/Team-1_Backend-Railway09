@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 public class LoginResponse {
+	
+		private int accountId;
 
 		private String email;
 	
@@ -24,8 +26,9 @@ public class LoginResponse {
 			// TODO Auto-generated constructor stub
 		}
 
-		public LoginResponse(String email, String accessToken, int expireTime, String role) {
+		public LoginResponse(int accountId, String email, String accessToken, int expireTime, String role) {
 			super();
+			this.accountId = accountId;
 			this.email = email;
 			this.accessToken = accessToken;
 			this.expireTime = expireTime;
@@ -62,5 +65,9 @@ public class LoginResponse {
 
 		public void setRole(String role) {
 			this.role = role;
+		}
+
+		public int getAccountId() {
+			return accountId;
 		}
 }

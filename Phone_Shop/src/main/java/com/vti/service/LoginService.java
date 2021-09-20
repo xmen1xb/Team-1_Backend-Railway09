@@ -42,6 +42,8 @@ public class LoginService {
 
 		// Store authenticated user information
 		LoginUserDetail principal = (LoginUserDetail) authentication.getPrincipal();
+		
+		int id = principal.getId();
 
 		String email = principal.getEmail();
 
@@ -49,6 +51,6 @@ public class LoginService {
 
 		String role = principal.getRole();
 
-		return new LoginResponse(email, jwt, EXPIRES_IN, role);
+		return new LoginResponse(id, email, jwt, EXPIRES_IN, role);
 	}
 }
