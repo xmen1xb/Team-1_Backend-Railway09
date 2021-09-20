@@ -188,4 +188,14 @@ public class Product implements Serializable {
 		this.pathImage = pathImage;
 	}
 
+	public List<ProductImage> getListProductImage() {
+		return listProductImage;
+	}
+
+	public void setListProductImage(List<ProductImage> listProductImage) {
+		this.listProductImage = listProductImage;
+	}
+	
+	
+
 }

@@ -1,5 +1,7 @@
 package com.vti.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vti.entity.Product;
+import com.vti.entity.ProductImage;
+import com.vti.exception.NotFoundException;
+import com.vti.repository.IProductRepository;
 import com.vti.request.ProductFilterRequest;
+import com.vti.response.ProductImagesRespone;
 import com.vti.response.ProductResponse;
 import com.vti.service.IProductService;
 
@@ -25,6 +31,9 @@ import com.vti.service.IProductService;
 @RequestMapping(value = "api/v2/products")
 @CrossOrigin("*")
 public class ProductController {
+	
+	@Autowired
+	private IProductRepository productRepository;
 
 	@Autowired
 	private IProductService productService;
@@ -65,4 +74,23 @@ public class ProductController {
 		productService.deleteProduct(id);
 		return new ResponseEntity<String>("Delete successfully!", HttpStatus.OK);
 	}
+	
+	@GetMapping(value = "/{id}/images")
+	public ResponseEntity<?> ProductImgesDetail(@PathVariable(name = "id") Integer productId) {
+		Product product = productRepository.findById(productId).orElse(null);
+		if (product == null) {
+			throw new NotFoundException(String.format("Product (ID = %s) is not found", productId));
+		}
+		List<ProductImage> productImages = product.getListProductImage();
+		List<ProductImagesRespone> listRespone = new ArrayList<>();
+		for (ProductImage productImage : productImages) {
+			String pathRespone =  productImage.getPath_image();
+			ProductImagesRespone respone = new ProductImagesRespone(productImage.getImage_id(), productImage.getProduct().getProduct_id(), pathRespone);
+			listRespone.add(respone);
+		}
+		return new ResponseEntity<>(listRespone, HttpStatus.OK);
+	}
+	
+	
+	
 }
