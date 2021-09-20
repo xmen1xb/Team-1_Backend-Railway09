@@ -1,4 +1,4 @@
-package com.vti.specification;
+	package com.vti.specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -32,12 +32,12 @@ public class ProductSpecification implements Specification<Product>{
 		
 		if (operator.equalsIgnoreCase("=")) {			
 			if (field.equalsIgnoreCase("brand.brandName")) {
-				return builder.equal(root.get("brand").get("brandName"),"%" + value.toString() + "%");
+				return builder.equal(root.get("brand").get("brandName"), value.toString());
 //				return builder.like(root.get("brand").get("brandName"), "%" + value.toString() + "%");
 			}else if (field.equalsIgnoreCase("memory.memoryName")) {
-				return builder.equal(root.get("memory").get("memoryName"),"%" + value.toString() + "%");
+				return builder.equal(root.get("memory").get("memoryName"),value.toString());
 			}else if (field.equalsIgnoreCase("ram.ramName")) {
-				return builder.equal(root.get("ram").get("ramName"),"%" + value.toString() + "%");
+				return builder.equal(root.get("ram").get("ramName"),value.toString());
 			}
 		}
 		

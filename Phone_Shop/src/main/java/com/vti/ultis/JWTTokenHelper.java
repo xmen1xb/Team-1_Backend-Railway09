@@ -6,6 +6,7 @@
  */
 package com.vti.ultis;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
@@ -27,7 +28,9 @@ import io.jsonwebtoken.UnsupportedJwtException;
  * @author P Tr Xuan Created on Sep 14, 2021
  */
 @Component
-public class JWTTokenHelper {
+public class JWTTokenHelper implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@Value("${app.name}")
 	private String APP_NAME;

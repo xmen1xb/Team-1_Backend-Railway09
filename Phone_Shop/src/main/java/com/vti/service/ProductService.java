@@ -22,16 +22,14 @@ public class ProductService implements IProductService{
 	@Override
 	public Page<Product> getAllProducts(Pageable pageable, String search, ProductFilterRequest filter) {
 		Specification<Product> where = null;
+		
 		if (!StringUtils.isEmpty(search)) {
 			ProductSpecification nameSpecification = new ProductSpecification("productName", "LIKE", search);
-//			ProductSpecification brandFilter = new ProductSpecification("brand.brandName", "=", search);
-//			ProductSpecification ramFilter = new ProductSpecification("ram.ramName", "=", search);
-//			ProductSpecification memoryFilter = new ProductSpecification("memory.memoryName", "=", search);
 			where = Specification.where(nameSpecification);			
 		}
 		
-		if (filter != null && filter.getBandName() != null) {
-			ProductSpecification brandFilter = new ProductSpecification("brand.brandName", "=", filter.getBandName());
+		if (filter != null && filter.getBrandName() != null) {
+			ProductSpecification brandFilter = new ProductSpecification("brand.brandName", "=", filter.getBrandName());
 			if (where == null) {
 				where = Specification.where(brandFilter);
 			}else {
