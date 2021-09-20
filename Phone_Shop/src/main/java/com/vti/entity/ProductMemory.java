@@ -5,7 +5,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,7 +28,7 @@ public class ProductMemory implements Serializable{
 	@Column(name = "memory_name", length = 100, nullable = false, unique = true)
 	private String memoryName;
 	
-	@OneToMany(mappedBy = "memory", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "memory")
 	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })
 	private List<Product> listProduct;
 	
@@ -65,5 +64,10 @@ public class ProductMemory implements Serializable{
 
 	public void setListProduct(List<Product> listProduct) {
 		this.listProduct = listProduct;
+	}
+
+	@Override
+	public String toString() {
+		return "ProductMemory [productMemoryId=" + productMemoryId + ", memoryName=" + memoryName + "]";
 	}
 }

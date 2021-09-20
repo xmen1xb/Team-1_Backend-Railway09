@@ -9,6 +9,7 @@ package com.vti.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LoginResponse {
+
 	private Integer id;
 
 	private String email;
@@ -72,4 +73,5 @@ public class LoginResponse {
 	public void setRole(String role) {
 		this.role = role;
 	}
+
 }

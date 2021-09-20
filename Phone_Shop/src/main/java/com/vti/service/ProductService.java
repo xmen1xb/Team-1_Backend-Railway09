@@ -13,48 +13,48 @@ import com.vti.request.ProductFilterRequest;
 import com.vti.specification.ProductSpecification;
 
 @Service
-public class ProductService implements IProductService{
+public class ProductService implements IProductService {
 
 	@Autowired
 	private IProductRepository product_repo;
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public Page<Product> getAllProducts(Pageable pageable, String search, ProductFilterRequest filter) {
 		Specification<Product> where = null;
-		
+
 		if (!StringUtils.isEmpty(search)) {
 			ProductSpecification nameSpecification = new ProductSpecification("productName", "LIKE", search);
-			where = Specification.where(nameSpecification);			
+			where = Specification.where(nameSpecification);
 		}
-		
+
 		if (filter != null && filter.getBrandName() != null) {
 			ProductSpecification brandFilter = new ProductSpecification("brand.brandName", "=", filter.getBrandName());
 			if (where == null) {
 				where = Specification.where(brandFilter);
-			}else {
+			} else {
 				where = where.and(brandFilter);
 			}
 		}
-		
+
 		if (filter != null && filter.getMemoryName() != null) {
-			ProductSpecification memoryFilter = new ProductSpecification("memory.memoryName", "=", filter.getMemoryName());
+			ProductSpecification memoryFilter = new ProductSpecification("memory.memoryName", "=",
+					filter.getMemoryName());
 			if (where == null) {
 				where = Specification.where(memoryFilter);
-			}else {
+			} else {
 				where = where.and(memoryFilter);
 			}
 		}
-		
+
 		if (filter != null && filter.getRamName() != null) {
 			ProductSpecification memoryFilter = new ProductSpecification("ram.ramName", "=", filter.getRamName());
 			if (where == null) {
 				where = Specification.where(memoryFilter);
-			}else {
+			} else {
 				where = where.and(memoryFilter);
 			}
 		}
-		
 		return product_repo.findAll(where, pageable);
 	}
 
@@ -67,7 +67,20 @@ public class ProductService implements IProductService{
 	@Override
 	public void deleteProduct(int id) {
 		product_repo.deleteById(id);
-		
+
 	}
+
+	@Override
+	public Page<Product> findAllOrderByPriceDesc(Pageable pageable) {
+		
+		return product_repo.findAllOrderByPriceDesc(pageable);
+	}
+
+	@Override
+	public Page<Product> findAllOrderByPriceAsc(Pageable pageable) {
+		
+		return product_repo.findAllOrderByPriceAsc(pageable);
+	}
+
 
 }

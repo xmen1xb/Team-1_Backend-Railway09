@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -42,14 +41,8 @@ public class Account implements Serializable{
 
 	@Column(name = "username", length = 50, nullable = false, unique = true)
 	private String username;
-	
-	@Column(name = "firstname", length = 20, nullable = false)
-	private String fistname;
-	
-	@Column(name = "lastname", length = 30, nullable = false)
-	private String lastname;
 
-	@Formula("concat(firstname, ' ', lastname)")
+	@Column(name = "fullname", length = 50, nullable = false)
 	private String fullname;
 	
 	@Column(name = "gender")
@@ -108,14 +101,11 @@ public class Account implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public Account(String username, String fistname, String lastname, String email, String phonenumber,
-			String password) {
+	public Account(String username, String fullname, String email, String password) {
 		super();
 		this.username = username;
-		this.fistname = fistname;
-		this.lastname = lastname;
+		this.fullname = fullname;
 		this.email = email;
-		this.phonenumber = phonenumber;
 		this.password = password;
 	}
 
@@ -127,24 +117,12 @@ public class Account implements Serializable{
 		this.username = username;
 	}
 
-	public String getFistname() {
-		return fistname;
-	}
-
-	public void setFistname(String fistname) {
-		this.fistname = fistname;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
-	}
-
 	public String getFullname() {
 		return fullname;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 
 	public AccountGenderEnum getGender() {
@@ -163,68 +141,12 @@ public class Account implements Serializable{
 		this.email = email;
 	}
 
-	public String getPhone_number() {
-		return phonenumber;
-	}
-
-	public void setPhone_number(String phone_number) {
-		this.phonenumber = phone_number;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public String getPath_image() {
-		return pathImage;
-	}
-
-	public void setPath_image(String path_image) {
-		this.pathImage = path_image;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public AccountStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(AccountStatus status) {
-		this.status = status;
-	}
-
-	public AccountRole getRole() {
-		return role;
-	}
-
-	public void setRole(AccountRole role) {
-		this.role = role;
-	}
-
-	public Date getRegister_date() {
-		return registerDate;
-	}
-
-	public void setRegister_date(Date register_date) {
-		this.registerDate = register_date;
-	}
-
 	public String getPhonenumber() {
 		return phonenumber;
 	}
 
 	public void setPhonenumber(String phonenumber) {
 		this.phonenumber = phonenumber;
-	}
-
-	public int getAccountId() {
-		return accountId;
 	}
 
 	public String getCity() {
@@ -259,8 +181,72 @@ public class Account implements Serializable{
 		this.street = street;
 	}
 
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPathImage() {
+		return pathImage;
+	}
+
+	public void setPathImage(String pathImage) {
+		this.pathImage = pathImage;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public AccountStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(AccountStatus status) {
+		this.status = status;
+	}
+
+	public AccountRole getRole() {
+		return role;
+	}
+
+	public void setRole(AccountRole role) {
+		this.role = role;
+	}
+
+	public Date getRegisterDate() {
+		return registerDate;
+	}
+
+	public void setRegisterDate(Date registerDate) {
+		this.registerDate = registerDate;
+	}
+
 	public Cart getCart() {
 		return cart;
+	}
+
+	public void setCart(Cart cart) {
+		this.cart = cart;
+	}
+
+	public List<Order> getListOrder() {
+		return listOrder;
+	}
+
+	public void setListOrder(List<Order> listOrder) {
+		this.listOrder = listOrder;
+	}
+
+	public int getAccountId() {
+		return accountId;
 	}
 	
 }

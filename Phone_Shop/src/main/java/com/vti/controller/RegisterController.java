@@ -23,12 +23,22 @@ public class RegisterController {
 	@Autowired
 	private IAccountService accountService;
 	
+	/**
+	 * API create Account
+	 * Gửi kèm 1 mail về email đăng ký
+	 */
+	
 	@PostMapping()
 	public ResponseEntity<?> createAccount(@RequestBody AccountRequest request) {
 		accountService.createAccount(request);
 		return new ResponseEntity<String>("We have sent 1 email. Please check email to active account!",
 				HttpStatus.CREATED);
 	}
+	
+	/**
+	 * API active Account
+	 * Gửi 1 xác nhận active thành công
+	 */
 	
 	@GetMapping("/activeUser")
 	public ResponseEntity<?> activeUserViaEmail(@RequestParam String token) {

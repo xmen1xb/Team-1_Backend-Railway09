@@ -4,9 +4,7 @@ public class AccountRequest {
 
 	private String username;
 	
-	private String firstname;
-	
-	private String lastname;
+	private String fullname;
 	
 	private String email;
 	
@@ -34,12 +32,12 @@ public class AccountRequest {
 		this.username = username;
 	}
 
-	public String getFirstname() {
-		return firstname;
+	public String getFullname() {
+		return fullname;
 	}
 
-	public void setFirstname(String firstname) {
-		this.firstname = firstname;
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 
 	public String getEmail() {
@@ -64,14 +62,6 @@ public class AccountRequest {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-
-	public String getLastname() {
-		return lastname;
-	}
-
-	public void setLastname(String lastname) {
-		this.lastname = lastname;
 	}
 
 	public String getCity() {

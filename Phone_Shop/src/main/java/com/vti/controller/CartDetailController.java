@@ -22,6 +22,11 @@ public class CartDetailController {
 	@Autowired
 	private ICartDetailService cartdetailService;
 	
+	/**
+	 * API create CartDetail by productId and accountId
+	 * Thông số sẽ đồng bộ với cart có cartID tương ứng accountID
+	 */
+	
 	@PostMapping
 	public ResponseEntity<?> createCartDetail(@RequestParam(name = "productId") int productId,@RequestParam(name = "accountId") int accountId){
 		cartdetailService.createCartDetail(productId, accountId);
@@ -30,19 +35,32 @@ public class CartDetailController {
 		
 	}
 	
+	/**
+	 * API delete CartDetail by CartdetailID
+	 * Thông số sẽ đồng bộ với cart có cartID tương ứng accountID
+	 */
+	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> deleteCartDetail(@PathVariable(name = "id") int id) {
 		cartdetailService.deleteCartDetail(id);
 		return new ResponseEntity<String>("Delete successfully!", HttpStatus.OK);
 	}
 	
+	/**
+	 * API update CartDetail by CartdetailID ( tăng quantity )
+	 * Thông số sẽ đồng bộ với cart có cartID tương ứng accountID
+	 */
+	
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<?> updateCartDetailUp(@PathVariable(name = "id") int id) {
 		cartdetailService.updateCartDetailUp(id);
-		return new ResponseEntity<String>("Update successfully!", HttpStatus.OK);
-
-		
+		return new ResponseEntity<String>("Update successfully!", HttpStatus.OK);		
 	}
+	
+	/**
+	 * API update CartDetail by CartdetailID ( giảm quantity )
+	 * Thông số sẽ đồng bộ với cart có cartID tương ứng accountID
+	 */
 	
 	@PutMapping()
 	public ResponseEntity<?> updateCartDetailDown(@RequestParam(name = "id") int id) {

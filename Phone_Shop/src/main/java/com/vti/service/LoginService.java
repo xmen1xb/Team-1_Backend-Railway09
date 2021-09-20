@@ -43,6 +43,7 @@ public class LoginService {
 		// Store authenticated user information
 		LoginUserDetail principal = (LoginUserDetail) authentication.getPrincipal();
 		
+
 		Integer id = principal.getId();
 
 		String email = principal.getEmail();
