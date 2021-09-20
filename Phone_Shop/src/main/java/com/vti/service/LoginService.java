@@ -42,13 +42,15 @@ public class LoginService {
 
 		// Store authenticated user information
 		LoginUserDetail principal = (LoginUserDetail) authentication.getPrincipal();
+		
+		Integer id = principal.getId();
 
 		String email = principal.getEmail();
 
-		String jwt = jwttokenHelper.generateToken(String.valueOf(principal.getId()));
+		String jwt = jwttokenHelper.generateToken(String.valueOf(principal.getUsername()));
 
 		String role = principal.getRole();
 
-		return new LoginResponse(email, jwt, EXPIRES_IN, role);
+		return new LoginResponse(id, email, jwt, EXPIRES_IN, role);
 	}
 }
