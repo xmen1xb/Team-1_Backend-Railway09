@@ -9,5 +9,4 @@ import com.vti.entity.Product;
 @Repository
 public interface IProductRepository extends JpaRepository<Product, Integer>, JpaSpecificationExecutor<Product>{
 
-
 }
