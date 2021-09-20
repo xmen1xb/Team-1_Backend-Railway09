@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,12 +28,11 @@ import com.vti.response.ProductImagesRespone;
 import com.vti.response.ProductResponse;
 import com.vti.service.IProductService;
 
-
 @RestController
 @RequestMapping(value = "api/v2/products")
 @CrossOrigin("*")
 public class ProductController {
-	
+
 	@Autowired
 	private IProductRepository productRepository;
 
@@ -78,15 +78,15 @@ public class ProductController {
 			@Override
 			public ProductResponse apply(Product product) {
 				ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
-						product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
-						product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
-						product.getPathImage(),product.getEnter_date());
+						product.getDescription(), product.getPrice(), product.getRam().getRamName(),
+						product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
+						product.getQuantity(), product.getPathImage(), product.getEnter_date());
 				return response;
 			}
 		});
 		return new ResponseEntity<>(pageResponse, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * API getAll Product
 	 * Filter theo price up
@@ -115,27 +115,27 @@ public class ProductController {
 	 */
 	
 	@GetMapping(value = "/{id}")
-	public ResponseEntity<?> getProductByID(@PathVariable(name = "id") short id){
+	public ResponseEntity<?> getProductByID(@PathVariable(name = "id") short id) {
 		Product product = productService.getProductById(id);
-		
+
 		ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
-				product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
-				product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
-				product.getPathImage(), product.getEnter_date());
-		
-		return new ResponseEntity<ProductResponse>(response, HttpStatus.OK);	
+				product.getDescription(), product.getPrice(), product.getRam().getRamName(),
+				product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
+				product.getQuantity(), product.getPathImage(), product.getEnter_date());
+
+		return new ResponseEntity<ProductResponse>(response, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * API deleteProduct by ProductID
 	 */
-	
+  @PreAuthorize("hasRole('Admin')")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> deleteProduct(@PathVariable(name = "id") int id) {
 		productService.deleteProduct(id);
 		return new ResponseEntity<String>("Delete successfully!", HttpStatus.OK);
 	}
-	
+
 	/**
 	 * API lấy listProductImage by ProductID
 	 */
@@ -149,13 +149,12 @@ public class ProductController {
 		List<ProductImage> productImages = product.getListProductImage();
 		List<ProductImagesRespone> listRespone = new ArrayList<>();
 		for (ProductImage productImage : productImages) {
-			String pathRespone =  productImage.getPath_image();
-			ProductImagesRespone respone = new ProductImagesRespone(productImage.getImage_id(), productImage.getProduct().getProduct_id(), pathRespone);
+			String pathRespone = productImage.getPath_image();
+			ProductImagesRespone respone = new ProductImagesRespone(productImage.getImage_id(),
+					productImage.getProduct().getProduct_id(), pathRespone);
 			listRespone.add(respone);
 		}
 		return new ResponseEntity<>(listRespone, HttpStatus.OK);
 	}
-	
-	
-	
+
 }
