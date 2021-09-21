@@ -25,7 +25,7 @@ public class OrderDetail implements Serializable{
 	private int orderdetailId;
 	
 	@Column(name = "price")
-	private short price;
+	private Double price;
 	
 	@Column(name = "quantity")
 	private short quantity;
@@ -44,7 +44,7 @@ public class OrderDetail implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public OrderDetail(short price, short quantity, Order order, Product product) {
+	public OrderDetail(Double price, short quantity, Order order, Product product) {
 		super();
 		this.price = price;
 		this.quantity = quantity;
@@ -52,11 +52,11 @@ public class OrderDetail implements Serializable{
 		this.productInOrder = product;
 	}
 
-	public short getPrice() {
+	public Double getPrice() {
 		return price;
 	}
 
-	public void setPrice(short price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
