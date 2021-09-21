@@ -118,4 +118,6 @@ public class AccountController {
 		accountService.deleteAccount(id);
 		return new ResponseEntity<String>("Delete successfully!", HttpStatus.OK);
 	}
+  
+  // Test merge code.
 }
