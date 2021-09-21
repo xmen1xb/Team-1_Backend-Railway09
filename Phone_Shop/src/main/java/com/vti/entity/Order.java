@@ -22,6 +22,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Formula;
 
 import com.vti.enumerate.OrderStatusEnum;
 
@@ -41,7 +42,19 @@ public class Order implements Serializable{
 	@Column(name = "total_price")
 	private Double totalPrice;
 	
-	@Column(name = "ship_address", length = 100, nullable = false)
+	@Column(name = "city", length = 50)
+	private String city;
+	
+	@Column(name = "district", length = 50)
+	private String district;
+	
+	@Column(name = "ward", length = 50)
+	private String ward;
+	
+	@Column(name = "street", length = 100)
+	private String street;
+	
+	@Formula("concat(city, ' ', district, ' ', ward, ' ', street)")
 	private String shipAddress;
 	
 	@Column(name = "order_date")
@@ -66,16 +79,15 @@ public class Order implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public Order(short quantity, Double total_price, String ship_address, Date order_date, OrderStatusEnum status,
-			Account account, List<OrderDetail> listOrderDetail) {
+	public Order(short quantity, Double totalPrice, String city, String district, String ward, String street,Account orderAccount) {
 		super();
 		this.quantity = quantity;
-		this.totalPrice = total_price;
-		this.shipAddress = ship_address;
-		this.orderDate = order_date;
-		this.status = status;
-		this.orderAccount = account;
-		this.listOrderDetail = listOrderDetail;
+		this.totalPrice = totalPrice;
+		this.city = city;
+		this.district = district;
+		this.ward = ward;
+		this.street = street;
+		this.orderAccount = orderAccount;
 	}
 
 	public short getQuantity() {
@@ -136,5 +148,53 @@ public class Order implements Serializable{
 
 	public int getOrder_id() {
 		return orderId;
+	}
+
+	public Double getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Double totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
+	}
+
+	public String getWard() {
+		return ward;
+	}
+
+	public void setWard(String ward) {
+		this.ward = ward;
+	}
+
+	public String getStreet() {
+		return street;
+	}
+
+	public void setStreet(String street) {
+		this.street = street;
+	}
+
+	public Account getOrderAccount() {
+		return orderAccount;
+	}
+
+	public void setOrderAccount(Account orderAccount) {
+		this.orderAccount = orderAccount;
 	}
 }
