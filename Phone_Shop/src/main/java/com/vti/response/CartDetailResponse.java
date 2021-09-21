@@ -1,10 +1,13 @@
 package com.vti.response;
 
+import com.vti.entity.Product;
+
 public class CartDetailResponse {
 
 	private int id;
 	private Double price;
 	private int quantity;
+	private Product product;
 	
 	public CartDetailResponse() {
 		// TODO Auto-generated constructor stub
@@ -32,5 +35,13 @@ public class CartDetailResponse {
 
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
+	}
+
+	public Product getProduct() {
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
 	}
 }
