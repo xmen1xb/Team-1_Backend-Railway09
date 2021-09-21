@@ -61,6 +61,7 @@ public class CartController {
 			cartDetailResponse.setId(cartDetail.getCartdetail_id());
 			cartDetailResponse.setPrice(cartDetail.getPrice());
 			cartDetailResponse.setQuantity(cartDetail.getQuantity());
+			cartDetailResponse.setProduct(cartDetail.getProduct());
 			listRespone.add(cartDetailResponse);
 		}
 		return new ResponseEntity<>(listRespone, HttpStatus.OK);

@@ -57,7 +57,7 @@ public class ProductController {
 				ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
 						product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
 						product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
-						product.getPathImage(),product.getEnter_date());
+						product.getPathImage(),product.getDiscount() ,product.getEnter_date());
 				return response;
 			}
 		});
@@ -80,7 +80,7 @@ public class ProductController {
 				ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
 						product.getDescription(), product.getPrice(), product.getRam().getRamName(),
 						product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
-						product.getQuantity(), product.getPathImage(), product.getEnter_date());
+						product.getQuantity(), product.getPathImage(),product.getDiscount(), product.getEnter_date());
 				return response;
 			}
 		});
@@ -103,7 +103,7 @@ public class ProductController {
 				ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
 						product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
 						product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
-						product.getPathImage(),product.getEnter_date());
+						product.getPathImage(),product.getDiscount(), product.getEnter_date());
 				return response;
 			}
 		});
@@ -121,7 +121,7 @@ public class ProductController {
 		ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
 				product.getDescription(), product.getPrice(), product.getRam().getRamName(),
 				product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
-				product.getQuantity(), product.getPathImage(), product.getEnter_date());
+				product.getQuantity(), product.getPathImage(),product.getDiscount(), product.getEnter_date());
 
 		return new ResponseEntity<ProductResponse>(response, HttpStatus.OK);
 	}

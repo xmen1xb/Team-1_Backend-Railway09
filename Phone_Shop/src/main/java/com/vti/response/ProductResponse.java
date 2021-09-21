@@ -7,6 +7,7 @@ public class ProductResponse {
 	private int id;
 	private String name;
 	private String description;
+	private short discount;
 	private Double price;
 	private String ram;
 	private String memory;
@@ -21,7 +22,7 @@ public class ProductResponse {
 	}
 
 	public ProductResponse(int id, String name, String description, Double price, String ram, String memory,
-			String brand, String category, short quantity, String image, Date enter_date) {
+			String brand, String category, short quantity, String image,short discount, Date enter_date) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -33,6 +34,7 @@ public class ProductResponse {
 		this.category = category;
 		this.quantity = quantity;
 		this.image = image;
+		this.discount = discount;
 		this.enter_date = enter_date;
 	}
 
@@ -122,6 +124,14 @@ public class ProductResponse {
 
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public short getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(short discount) {
+		this.discount = discount;
 	}
 
 }

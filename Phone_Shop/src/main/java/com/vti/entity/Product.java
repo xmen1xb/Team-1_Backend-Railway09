@@ -195,7 +195,13 @@ public class Product implements Serializable {
 	public void setListProductImage(List<ProductImage> listProductImage) {
 		this.listProductImage = listProductImage;
 	}
-	
-	
+
+	public List<CartDetail> getListCartDetail() {
+		return listCartDetail;
+	}
+
+	public void setListCartDetail(List<CartDetail> listCartDetail) {
+		this.listCartDetail = listCartDetail;
+	}
 
 }
