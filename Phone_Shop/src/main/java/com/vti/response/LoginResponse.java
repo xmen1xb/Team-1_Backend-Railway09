@@ -8,59 +8,70 @@ package com.vti.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-
 public class LoginResponse {
 
-		private String email;
-	
-	    private String accessToken;
-	    
-	    @JsonProperty("expires_in")
-	    private int expireTime;
-	    
-	    private String role;
-	    
-	    public LoginResponse() {
-			// TODO Auto-generated constructor stub
-		}
+	private Integer id;
 
-		public LoginResponse(String email, String accessToken, int expireTime, String role) {
-			super();
-			this.email = email;
-			this.accessToken = accessToken;
-			this.expireTime = expireTime;
-			this.role = role;
-		}
+	private String email;
 
-		public String getEmail() {
-			return email;
-		}
+	private String accessToken;
 
-		public void setEmail(String email) {
-			this.email = email;
-		}
+	@JsonProperty("expires_in")
+	private int expireTime;
 
-		public String getAccessToken() {
-			return accessToken;
-		}
+	private String role;
 
-		public void setAccessToken(String accessToken) {
-			this.accessToken = accessToken;
-		}
+	public LoginResponse() {
+		// TODO Auto-generated constructor stub
+	}
 
-		public int getExpireTime() {
-			return expireTime;
-		}
+	public LoginResponse(Integer id, String email, String accessToken, int expireTime, String role) {
+		super();
+		this.id = id;
+		this.email = email;
+		this.accessToken = accessToken;
+		this.expireTime = expireTime;
+		this.role = role;
+	}
 
-		public void setExpireTime(int expireTime) {
-			this.expireTime = expireTime;
-		}
+	public Integer getId() {
+		return id;
+	}
 
-		public String getRole() {
-			return role;
-		}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-		public void setRole(String role) {
-			this.role = role;
-		}
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getAccessToken() {
+		return accessToken;
+	}
+
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+
+	public int getExpireTime() {
+		return expireTime;
+	}
+
+	public void setExpireTime(int expireTime) {
+		this.expireTime = expireTime;
+	}
+
+	public String getRole() {
+		return role;
+	}
+
+	public void setRole(String role) {
+		this.role = role;
+	}
+
 }

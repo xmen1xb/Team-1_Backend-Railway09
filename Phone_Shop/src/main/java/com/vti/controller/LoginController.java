@@ -32,6 +32,11 @@ public class LoginController {
 	@Autowired
     private LoginService loginService;
 
+	/**
+	 * API Login Account
+	 * Trả ra accountID - email - token - role - thời hạn token
+	 */
+	
     @PostMapping(value = "/login")
     public ResponseEntity<Object> login(@RequestBody @Validated LoginRequest loginRequest, Errors errors) {
         if (errors.hasErrors()) {
