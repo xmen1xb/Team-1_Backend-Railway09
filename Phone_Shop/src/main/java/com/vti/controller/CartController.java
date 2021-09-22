@@ -69,6 +69,7 @@ public class CartController {
 					product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
 					product.getPathImage(),product.getDiscount() ,product.getEnter_date());
 			cartDetailResponse.setProduct(productResponse);
+			cartDetailResponse.setStatus(cartDetail.getStatus());
 			listRespone.add(cartDetailResponse);
 		}
 		return new ResponseEntity<>(listRespone, HttpStatus.OK);

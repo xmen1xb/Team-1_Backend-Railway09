@@ -1,10 +1,19 @@
 package com.vti.response;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+import com.vti.enumerate.CartDetailStatus;
+
 public class CartDetailResponse {
 
 	private int id;
 	private Double price;
 	private int quantity;
+	
+	@Enumerated(EnumType.STRING)
+	private CartDetailStatus status = CartDetailStatus.Not_Order;
+	
 	private ProductResponse product;
 	
 	public CartDetailResponse() {
@@ -41,5 +50,13 @@ public class CartDetailResponse {
 
 	public void setProduct(ProductResponse product) {
 		this.product = product;
+	}
+
+	public CartDetailStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(CartDetailStatus status) {
+		this.status = status;
 	}
 }
