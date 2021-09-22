@@ -67,6 +67,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 								.antMatchers("/api/v3/register/**").permitAll()
 								.antMatchers("/api/v4/cartdetail/**").permitAll()
 								.antMatchers("/api/v5/cart/**").permitAll()
+								.antMatchers("/api/v5/orders/**").permitAll()
 								.anyRequest().authenticated().and().sessionManagement()
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().httpBasic().and().cors().and().csrf()
 				.disable().addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

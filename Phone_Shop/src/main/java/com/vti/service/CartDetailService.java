@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.vti.entity.Account;
 import com.vti.entity.Cart;
 import com.vti.entity.CartDetail;
 import com.vti.entity.Product;
@@ -43,23 +42,23 @@ public class CartDetailService implements ICartDetailService {
 		Product product = productRepo.getById(producId);
 		List<CartDetail> listCartDetail = product.getListCartDetail();
 		for (CartDetail cartDetail : listCartDetail) {
-			if (cartDetail.getProduct().getProduct_id() == product.getProduct_id()) {
+			if (cartDetail.getProduct().getProduct_id() == product.getProduct_id() && cartDetail.getCart().getCart_id() == accountId) {
+				System.out.println(cartDetail.getCart().getCart_id());
+				System.out.println(accountId);
 				updateCartDetailUp(cartDetail.getCartdetail_id());
 				return;
 			} 		
 		}	
 		CartDetail cartDetail2 = new CartDetail();
-		Account account = accountRepo.getById(accountId);
-		int cartID = account.getCart().getCart_id();
 
 		cartDetail2.setPrice(product.getPrice());
 		cartDetail2.setQuantity(1);
-		cartDetail2.setCart(cartRepo.getById(cartID));
+		cartDetail2.setCart(cartRepo.getById(accountId));
 		cartDetail2.setProduct(product);
 
 		cartdetailRepo.save(cartDetail2);
 
-		updateCartUp(cartID, cartDetail2);
+		updateCartUp(accountId, cartDetail2);
 	}
 
 	@Override

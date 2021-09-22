@@ -1,13 +1,20 @@
 package com.vti.response;
 
-import com.vti.entity.Product;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+
+import com.vti.enumerate.CartDetailStatus;
 
 public class CartDetailResponse {
 
 	private int id;
 	private Double price;
 	private int quantity;
-	private Product product;
+	
+	@Enumerated(EnumType.STRING)
+	private CartDetailStatus status = CartDetailStatus.Not_Order;
+	
+	private ProductResponse product;
 	
 	public CartDetailResponse() {
 		// TODO Auto-generated constructor stub
@@ -37,11 +44,19 @@ public class CartDetailResponse {
 		this.quantity = quantity;
 	}
 
-	public Product getProduct() {
+	public ProductResponse getProduct() {
 		return product;
 	}
 
-	public void setProduct(Product product) {
+	public void setProduct(ProductResponse product) {
 		this.product = product;
+	}
+
+	public CartDetailStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(CartDetailStatus status) {
+		this.status = status;
 	}
 }

@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vti.entity.Cart;
 import com.vti.entity.CartDetail;
+import com.vti.entity.Product;
 import com.vti.exception.NotFoundException;
 import com.vti.response.CartDetailResponse;
 import com.vti.response.CartResponse;
+import com.vti.response.ProductResponse;
 import com.vti.service.ICartService;
 
 @RestController
@@ -61,7 +63,13 @@ public class CartController {
 			cartDetailResponse.setId(cartDetail.getCartdetail_id());
 			cartDetailResponse.setPrice(cartDetail.getPrice());
 			cartDetailResponse.setQuantity(cartDetail.getQuantity());
-			cartDetailResponse.setProduct(cartDetail.getProduct());
+			Product product = cartDetail.getProduct();
+			ProductResponse productResponse = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
+					product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
+					product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
+					product.getPathImage(),product.getDiscount() ,product.getEnter_date());
+			cartDetailResponse.setProduct(productResponse);
+			cartDetailResponse.setStatus(cartDetail.getStatus());
 			listRespone.add(cartDetailResponse);
 		}
 		return new ResponseEntity<>(listRespone, HttpStatus.OK);

@@ -104,6 +104,7 @@ CREATE TABLE CartDetail(
     quantity			INT UNSIGNED NOT NULL,
     cart_id				INT UNSIGNED,
     product_id			INT UNSIGNED,
+    `status`			ENUM('Order', 'Not_Order') DEFAULT 'Not_Order' ,
 	FOREIGN KEY(cart_id)  REFERENCES Cart(cart_id),
     FOREIGN KEY(product_id)  REFERENCES Product(product_id) ON DELETE NO ACTION
 );
@@ -114,7 +115,10 @@ CREATE TABLE `Order`(
 	order_id		INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     quantity		SMALLINT UNSIGNED NOT NULL,
     total_price		DOUBLE UNSIGNED NOT NULL,
-    ship_address	VARCHAR(100),
+	city			VARCHAR(50) ,
+    district		VARCHAR(50) ,
+    ward			VARCHAR(50) ,
+    street			VARCHAR(100),
     user_id			INT UNSIGNED NOT NULL,
     order_date		DATETIME DEFAULT NOW(),
     `Status`		ENUM('Active', 'Not_Active', 'End', 'Delete') DEFAULT 'Not_Active',
@@ -200,3 +204,7 @@ INSERT INTO `mock_project`.`productimage` (`path_image`, `product_id`) VALUES ('
 INSERT INTO `mock_project`.`productimage` (`path_image`, `product_id`) VALUES ('246', '2');
 INSERT INTO `mock_project`.`productimage` (`path_image`, `product_id`) VALUES ('357', '2');
 
+UPDATE `mock_project`.`account` SET `status` = 'Active' WHERE (`account_id` = '3');
+
+UPDATE `mock_project`.`cartdetail` SET `status` = 'Order' WHERE (`cartdetail_id` = '4');
+UPDATE `mock_project`.`cartdetail` SET `status` = 'Order' WHERE (`cartdetail_id` = '5');
