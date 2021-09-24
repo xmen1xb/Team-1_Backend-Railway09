@@ -22,7 +22,8 @@ import javax.validation.Payload;
 //@Repeatable(List.class)
 public @interface PasswordValidator {
 
-	String message() default "Email không đúng định dạng";
+	String message() default "Password có ít nhất 8 kí tự, Có ít nhất 1 kí tự thường, 1 kí tự viết hoa và 1 chữ số, \"\r\n"
+			+ "	+ \"Có 1 trong các kí tự đặc biệt sau (! # $ @ _ + , ? . - )";
 
 	Class<?>[] groups() default {};
 

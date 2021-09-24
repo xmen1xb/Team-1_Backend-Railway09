@@ -154,8 +154,10 @@ INSERT INTO `mock_project`.`account` (`username`, 		`fullname`, 	`email`, 		`pho
 VALUES 								('adminaccount', 'adminaccount', 'admin1@gmail.com', '0961271391', 'Admin', 'Active'),
 									('useraccount',  'useraccount', 'account1@gmail.com', '0983631931', 'User', 'Active');
                                     
-INSERT INTO `mock_project`.`cart` (`quantity`, `total_price`, `user_id`) VALUES ('0', '0', '1');
-INSERT INTO `mock_project`.`cart` (`quantity`, `total_price`, `user_id`) VALUES ('0', '0', '2');
+INSERT INTO `mock_project`.`cart` (`quantity`, `total_price`, `user_id`) 
+VALUES 								('3', 		'35490000', 	'1');
+INSERT INTO `mock_project`.`cart` (`quantity`, `total_price`, `user_id`) 
+VALUES 								('0', '0', '2');
 
 INSERT INTO `mock_project`.`productbrand` (`brand_name`) 
 VALUES 										('Apple'),
@@ -193,9 +195,11 @@ VALUES 								('Iphone 11 ', 			'15000000', 		'5', 				'5', 				'1', 		'Phone',
 
 UPDATE `mock_project`.`product` SET `path_image` = '1624773227391.jpg' WHERE (`product_id` = '1');							
 									
-INSERT INTO `mock_project`.`cartdetail` (`price`, `quantity`, `cart_id`, `product_id`) VALUES ('15000000', '1', '1', '1');
-INSERT INTO `mock_project`.`cartdetail` (`price`, `quantity`, `cart_id`, `product_id`) VALUES ('12490000', '1', '1', '2');
-INSERT INTO `mock_project`.`cartdetail` (`price`, `quantity`, `cart_id`, `product_id`) VALUES ('8000000', '1', '1', '3');
+INSERT INTO `mock_project`.`cartdetail` (`price`, `quantity`, `cart_id`, `product_id`, `status`) 
+VALUES 									('15000000', '1', 		'1', 		'1', 		'Order'),
+										('12490000', '1',		'1', 		'2', 		'Order'),
+                                        ('8000000',  '1', 		'1', 		'3', 		'Order');
+
 
 INSERT INTO `mock_project`.`productimage` (`path_image`, `product_id`) VALUES ('123', '1');
 INSERT INTO `mock_project`.`productimage` (`path_image`, `product_id`) VALUES ('456', '1');
@@ -204,7 +208,3 @@ INSERT INTO `mock_project`.`productimage` (`path_image`, `product_id`) VALUES ('
 INSERT INTO `mock_project`.`productimage` (`path_image`, `product_id`) VALUES ('246', '2');
 INSERT INTO `mock_project`.`productimage` (`path_image`, `product_id`) VALUES ('357', '2');
 
-UPDATE `mock_project`.`account` SET `status` = 'Active' WHERE (`account_id` = '3');
-
-UPDATE `mock_project`.`cartdetail` SET `status` = 'Order' WHERE (`cartdetail_id` = '4');
-UPDATE `mock_project`.`cartdetail` SET `status` = 'Order' WHERE (`cartdetail_id` = '5');
