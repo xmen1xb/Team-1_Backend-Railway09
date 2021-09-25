@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.vti.entity.Cart;
 import com.vti.entity.CartDetail;
 import com.vti.entity.Product;
-import com.vti.repository.IAccountRepository;
+import com.vti.enumerate.CartDetailStatus;
 import com.vti.repository.ICartDetailRepository;
 import com.vti.repository.ICartRepository;
 import com.vti.repository.IProductRepository;
@@ -26,9 +26,6 @@ public class CartDetailService implements ICartDetailService {
 
 	@Autowired
 	private ICartRepository cartRepo;
-
-	@Autowired
-	private IAccountRepository accountRepo;
 
 	@Override
 	public Page<CartDetail> getAllCartDetail(Pageable pageable) {
@@ -95,7 +92,19 @@ public class CartDetailService implements ICartDetailService {
 			cartdetailRepo.save(cartDetail);
 			updateCartDown(cartID, cartDetail);
 		}
-
+	}
+	
+	@Override
+	public void updateStatusCartDetail(int id) {
+		CartDetail cartDetail = cartdetailRepo.getById(id);
+		String check = "Order";
+		if (cartDetail.getStatus().toString().equals(check)) {
+			cartDetail.setStatus(CartDetailStatus.Not_Order);
+			cartdetailRepo.save(cartDetail);
+			return;
+		}
+		cartDetail.setStatus(CartDetailStatus.Order);
+		cartdetailRepo.save(cartDetail);
 	}
 
 	public void updateCartUp(int cartID, CartDetail cartDetail) {
@@ -105,10 +114,17 @@ public class CartDetailService implements ICartDetailService {
 		cartRepo.save(cart);
 	}
 
+	
 	public void updateCartDown(int cartID, CartDetail cartDetail) {
 		Cart cart = cartRepo.getById(cartID);
 		cart.setQuantity(cart.getQuantity() - 1);
 		cart.setTotal_price(cart.getTotal_price() - cartDetail.getPrice());
 		cartRepo.save(cart);
+	}
+
+	@Override
+	public CartDetail getCartDetailById(int id) {
+		
+		return cartdetailRepo.getById(id);
 	}
 }

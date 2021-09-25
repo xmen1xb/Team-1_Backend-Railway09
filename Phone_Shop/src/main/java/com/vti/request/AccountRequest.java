@@ -1,11 +1,27 @@
 package com.vti.request;
 
-public class AccountRequest {
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 
-	private String username;
+import org.hibernate.validator.constraints.Length;
+
+import com.vti.validation.CheckEmailNotExists;
+import com.vti.validation.EmailValidator;
+import com.vti.validation.UsernameValidator;
+
+public class AccountRequest {
 	
+	@NotBlank(message = "Username không được để trống")
+	@UsernameValidator
+	private String username;
+
+	@NotBlank(message = "Username không được để trống")
+	@Length(min = 6, max = 50, message = "Độ dài FullName không hợp lệ")
 	private String fullname;
 	
+	@NotBlank(message = "Email không được để trống")
+	@CheckEmailNotExists(message = "Email này đã có trên hệ thống, hãy lựa chọn Email khác!!")
+	@EmailValidator
 	private String email;
 	
 	private String phoneNumber;
@@ -18,6 +34,9 @@ public class AccountRequest {
 	
 	private String street;
 	
+	@NotBlank(message = "Password không được để trống")
+	@Pattern(regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", message = "Password có ít nhất 8 kí tự, Có ít nhất 1 kí tự thường, 1 kí tự viết hoa và 1 chữ số, \"\r\n"
+			+ "	+ \"Có 1 trong các kí tự đặc biệt sau (! # $ @ _ + , ? . - )")
 	private String password;
 	
 	public AccountRequest() {

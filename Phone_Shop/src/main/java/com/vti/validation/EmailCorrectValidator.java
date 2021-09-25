@@ -1,24 +1,21 @@
 package com.vti.validation;
 
+import java.util.regex.Pattern;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-import com.vti.ultis.ScannerUltis;
-
 public class EmailCorrectValidator implements ConstraintValidator<EmailValidator, String>{
-
+	private Pattern pattern; 
+	private static final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+			+ "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+	
+	public EmailCorrectValidator() {
+		pattern = Pattern.compile(EMAIL_PATTERN);
+	}
 	@Override
-	public boolean isValid(String value, ConstraintValidatorContext context) {
-		boolean flag = false;
-		while (true) {
-			String email = ScannerUltis.inputString();
-			if (email == null || !email.contains("@dxc.com")) {
-				System.err.println("Xin nhập đúng định dạng email: ...@dxc.com");
-			} else {
-				flag = true;
-				return flag;
-			}
-		}
+	public boolean isValid(String email, ConstraintValidatorContext context) {
+		return pattern.matcher(email).matches(); 
 	}
 
 }

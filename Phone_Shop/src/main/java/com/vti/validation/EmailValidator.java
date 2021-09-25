@@ -21,7 +21,7 @@ import javax.validation.Payload;
 @Constraint(validatedBy = { EmailCorrectValidator.class })
 //@Repeatable(List.class)
 public @interface EmailValidator {
-	String message() default "Email không đúng định dạng";
+	String message() default "Email phải đúng định dạng ...@(.com, .net, .org, ...) ";
 
 	Class<?>[] groups() default {};
 

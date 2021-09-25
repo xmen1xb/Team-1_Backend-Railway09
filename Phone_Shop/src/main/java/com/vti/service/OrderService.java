@@ -33,6 +33,9 @@ public class OrderService implements IOrderService{
 	@Autowired
 	private IOrderDetailRepository orderDetailRepo;
 	
+	@Autowired
+	private ICartDetailService cartDetailService;
+	
 	@Override
 	public void createOrder(int accountID, OrderRequest request) {
 		Cart cart = cartRepo.getById(accountID);
@@ -40,29 +43,35 @@ public class OrderService implements IOrderService{
 		
 		List<CartDetail> listCartDetail2 = new ArrayList<>();
 		String check = "Order";
-		short quantity = 0;
-		Double totalPrice = 0.0;
+		
 		for (CartDetail cartDetail : listCartDetail) {
-			if (cartDetail.getStatus().equals(check)) {
+			if (cartDetail.getStatus().toString().equals(check)) {
 				listCartDetail2.add(cartDetail);
 			}
 		}
-		
+		int quantity = 0;
+		Double totalPrice = 0.0;
 		for (CartDetail cartDetail : listCartDetail2) {
-			quantity += cartDetail.getQuantity();
-			totalPrice += cartDetail.getPrice();
+			 quantity = quantity + cartDetail.getQuantity();
+			 totalPrice = totalPrice + cartDetail.getPrice();
 		}
-		
+
+		System.out.println(quantity);
+		System.out.println(totalPrice);
 		Account account = accountRepo.getById(accountID);		
-		Order order = new Order(quantity, totalPrice, 
+		Order order = new Order((short) quantity, totalPrice, 
 				request.getCity(), request.getDistrict(), request.getStreet(), request.getWard(), account);
 		orderRepo.save(order);
 		
+		int cartDetailID = 0;
 		for (CartDetail cartDetail : listCartDetail2) {
 			Product product = cartDetail.getProduct();
+			cartDetailID = cartDetail.getCartdetail_id();
 			OrderDetail orderDetail = new OrderDetail(cartDetail.getPrice(), (short) cartDetail.getQuantity(),
 					order, product);
 			orderDetailRepo.save(orderDetail);
+			cartDetailService.deleteCartDetail(cartDetailID);
+			System.out.println(cartDetailID);
 		}
 	}
 

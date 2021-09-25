@@ -1,8 +1,11 @@
 package com.vti.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +21,7 @@ import com.vti.service.IAccountService;
 @RestController
 @RequestMapping(value = "api/v3/register")
 @CrossOrigin("*")
+@Validated
 public class RegisterController {
 
 	@Autowired
@@ -29,10 +33,10 @@ public class RegisterController {
 	 */
 	
 	@PostMapping()
-	public ResponseEntity<?> createAccount(@RequestBody AccountRequest request) {
+	public ResponseEntity<?> createAccount(@RequestBody @Valid AccountRequest request) {
 		accountService.createAccount(request);
 		return new ResponseEntity<String>("We have sent 1 email. Please check email to active account!",
-				HttpStatus.CREATED);
+				HttpStatus.CREATED );
 	}
 	
 	/**
@@ -57,4 +61,5 @@ public class RegisterController {
 
 		return new ResponseEntity<>("We have sent 1 email. Please check email to active account!", HttpStatus.OK);
 	}
+	
 }

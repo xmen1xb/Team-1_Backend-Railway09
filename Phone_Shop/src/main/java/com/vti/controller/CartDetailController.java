@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -12,6 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.vti.entity.CartDetail;
+import com.vti.entity.Product;
+import com.vti.response.CartDetailResponse;
+import com.vti.response.ProductResponse;
 import com.vti.service.ICartDetailService;
 
 @RestController
@@ -31,8 +36,31 @@ public class CartDetailController {
 	public ResponseEntity<?> createCartDetail(@RequestParam(name = "productId") int productId,@RequestParam(name = "accountId") int accountId){
 		cartdetailService.createCartDetail(productId, accountId);
 		return new ResponseEntity<String>("Create successfully!!",
-				HttpStatus.CREATED);
+				HttpStatus.CREATED);	
+	}
+	
+	/**
+	 * API get CartDetail by ID
+	 */
+	
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<?> getCartDetailById(@PathVariable(name = "id") int id){
+		CartDetail cartDetail = cartdetailService.getCartDetailById(id);
 		
+		CartDetailResponse cartDetailResponse = new CartDetailResponse();
+		cartDetailResponse.setId(cartDetail.getCartdetail_id());
+		cartDetailResponse.setPrice(cartDetail.getPrice());
+		cartDetailResponse.setQuantity(cartDetail.getQuantity());
+		
+		Product product = cartDetail.getProduct();
+		ProductResponse productResponse = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
+				product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
+				product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
+				product.getPathImage(),product.getDiscount() ,product.getEnter_date());
+		cartDetailResponse.setProduct(productResponse);
+		cartDetailResponse.setStatus(cartDetail.getStatus());
+		
+		return new ResponseEntity<>(cartDetailResponse, HttpStatus.OK);
 	}
 	
 	/**
@@ -65,7 +93,16 @@ public class CartDetailController {
 	@PutMapping()
 	public ResponseEntity<?> updateCartDetailDown(@RequestParam(name = "id") int id) {
 		cartdetailService.updateCartDetailDown(id);
-		return new ResponseEntity<String>("Update successfully!", HttpStatus.OK);
-		
+		return new ResponseEntity<String>("Update successfully!", HttpStatus.OK);	
+	}
+	
+	/**
+	 * API update CartDetailStatus -> order
+	 */
+	
+	@PostMapping(value = "/{id}")
+	public ResponseEntity<?> updateStatusCartDetail(@PathVariable(name = "id") int id){
+		cartdetailService.updateStatusCartDetail(id);
+		return new ResponseEntity<String>("Update successfully!", HttpStatus.OK);	
 	}
 }

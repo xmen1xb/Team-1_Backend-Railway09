@@ -22,7 +22,7 @@ import javax.validation.Payload;
 //@Repeatable(List.class)
 public @interface UsernameValidator {
 
-	String message() default "Email không đúng định dạng";
+	String message() default "Username có 6-15 kí tự, chỉ bao gồm chữ cái và số";
 
 	Class<?>[] groups() default {};
 
@@ -32,6 +32,6 @@ public @interface UsernameValidator {
 	@Retention(RUNTIME)
 	@Documented
 	@interface List {
-		PasswordValidator[] value();
+		UsernameValidator[] value();
 	}
 }
