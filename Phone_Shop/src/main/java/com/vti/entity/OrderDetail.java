@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,41 +16,37 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 @Entity
-@Table(name = "OrderDetail", catalog = "Mock_Project")
+@Table(name = "order_details", catalog = "Mock_Project")
 public class OrderDetail implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name = "orderdetail_id")
+	@Column(name = "id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int orderdetailId;
+	private Long id;
 	
 	@Column(name = "price")
 	private Double price;
 	
 	@Column(name = "quantity")
-	private short quantity;
+	private Integer quantity;
 	
-	@ManyToOne
-	@JoinColumn(name = "order_id", nullable = false)
-	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })
+	@ManyToOne      
+	@JoinColumn(name = "order_id", nullable = false)   
+	@Cascade(value = { CascadeType.SAVE_UPDATE }) 
 	private Order order;
 	
 	@ManyToOne
-	@JoinColumn(name = "product_id", nullable = false)
-	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })
-	private Product productInOrder;
-	
-	public OrderDetail() {
-		// TODO Auto-generated constructor stub
+	@JoinColumn(name = "product_id", nullable = false)   
+	@Cascade(value = { CascadeType.SAVE_UPDATE }) 
+	private Product product;
+
+	public Long getId() {
+		return id;
 	}
 
-	public OrderDetail(Double price, short quantity, Order order, Product product) {
-		super();
-		this.price = price;
-		this.quantity = quantity;
-		this.order = order;
-		this.productInOrder = product;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Double getPrice() {
@@ -60,11 +57,11 @@ public class OrderDetail implements Serializable{
 		this.price = price;
 	}
 
-	public short getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(short quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
 
@@ -77,14 +74,23 @@ public class OrderDetail implements Serializable{
 	}
 
 	public Product getProduct() {
-		return productInOrder;
+		return product;
 	}
 
 	public void setProduct(Product product) {
-		this.productInOrder = product;
+		this.product = product;
 	}
 
-	public int getorderdetail_id() {
-		return orderdetailId;
+	public OrderDetail(Long id, Double price, Integer quantity, Order order, Product product) {
+		super();
+		this.id = id;
+		this.price = price;
+		this.quantity = quantity;
+		this.order = order;
+		this.product = product;
+	}
+
+	public OrderDetail() {
+		super();
 	}
 }

@@ -1,24 +1,17 @@
 package com.vti.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vti.entity.Cart;
-import com.vti.entity.CartDetail;
-import com.vti.entity.Product;
-import com.vti.exception.NotFoundException;
-import com.vti.response.CartDetailResponse;
-import com.vti.response.CartResponse;
-import com.vti.response.ProductResponse;
+import com.vti.service.IAccountService;
 import com.vti.service.ICartService;
 
 @RestController
@@ -27,52 +20,24 @@ import com.vti.service.ICartService;
 public class CartController {
 
 	@Autowired
-	private ICartService cartService;
+	ICartService cartService;
+
+	@Autowired
+	IAccountService userService;
 	
-	
-	/**
-	 * API lấy cart = accountID
-	 */
-	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<?> getCartById(@PathVariable(name = "id") int id){
-		Cart cart = cartService.getCartbyId(id);
-		if (cart == null) {
-			throw new NotFoundException(String.format("Cart (ID = %s) is not found", id));
+	@GetMapping("/account/{id}")
+	public ResponseEntity<Cart> getCartUser(@PathVariable("id") Long id) {
+		if(!userService.existsById(id)) {
+			return ResponseEntity.notFound().build();
 		}
-		CartResponse cartResponse = new CartResponse(cart.getQuantity(), cart.getTotal_price());
-		return new ResponseEntity<CartResponse>(cartResponse, HttpStatus.OK);		
+		return ResponseEntity.ok(cartService.getCartUser(id));
 	}
 	
-	
-	/**
-	 * API lấy ListCartDetail = CartID
-	 */
-	
-	@GetMapping(value = "/{id}/cartDetails")
-	public ResponseEntity<?> getListCartDetail(@PathVariable(name = "id") int id){
-		Cart cart = cartService.getCartbyId(id);
-		if (cart == null) {
-			throw new NotFoundException(String.format("Cart (ID = %s) is not found", id));
+	@PutMapping("/account/{id}")
+	public ResponseEntity<Cart> putCartUser(@PathVariable("id") Long id, @RequestBody Cart cart) {
+		if(!userService.existsById(id)) {
+			return ResponseEntity.notFound().build();
 		}
-		List<CartDetail> listcartdetail = cart.getListCartDetail();
-		List<CartDetailResponse> listRespone = new ArrayList<>();
-		
-		for (CartDetail cartDetail : listcartdetail) {
-			CartDetailResponse cartDetailResponse = new CartDetailResponse();
-			cartDetailResponse.setId(cartDetail.getCartdetail_id());
-			cartDetailResponse.setPrice(cartDetail.getPrice());
-			cartDetailResponse.setQuantity(cartDetail.getQuantity());
-			Product product = cartDetail.getProduct();
-			ProductResponse productResponse = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
-					product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
-					product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
-					product.getPathImage(),product.getDiscount() ,product.getEnter_date());
-			cartDetailResponse.setProduct(productResponse);
-			cartDetailResponse.setStatus(cartDetail.getStatus());
-			listRespone.add(cartDetailResponse);
-		}
-		return new ResponseEntity<>(listRespone, HttpStatus.OK);
-		
+		return ResponseEntity.ok(cartService.save(cart));
 	}
 }

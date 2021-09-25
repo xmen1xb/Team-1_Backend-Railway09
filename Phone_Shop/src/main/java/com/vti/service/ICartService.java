@@ -4,6 +4,8 @@ import com.vti.entity.Cart;
 
 public interface ICartService {
 	
-	public Cart getCartbyId(int id);	
+	public boolean existsById(Long id);
+	public Cart save(Cart entity);
+	public Cart getCartUser(Long id) ;
 
 }

@@ -1,137 +1,156 @@
 package com.vti.service;
 
+import java.util.List;
 import java.util.UUID;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.vti.dto.UserForm;
+import com.vti.dto.UserFormForRegistration;
 import com.vti.entity.Account;
-import com.vti.entity.Cart;
 import com.vti.entity.RegistationAccountToken;
-import com.vti.enumerate.AccountStatus;
 import com.vti.event.OnSendRegistrationUserConfirmViaEmailEvent;
 import com.vti.repository.IAccountRepository;
-import com.vti.repository.ICartRepository;
 import com.vti.repository.IRegistrationUserTokenRepository;
-import com.vti.request.AccountRequest;
 
 @Service
 public class AccountService implements IAccountService{
 
 	@Autowired
-	private IAccountRepository account_repo;
+	IAccountRepository userRepository;
 	
-	@Autowired
-	private IRegistrationUserTokenRepository token_repo;
-	
+
 	@Autowired
 	private ApplicationEventPublisher eventPublisher;
+
+	@Autowired
+	private IRegistrationUserTokenRepository registrationUserTokenRepository;
 	
+//	Dùng để mã hóa Password
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	@Autowired
-	private ICartRepository cartRepo;
+	@Override
+	public boolean exist(String email){
+	       return userRepository.existsByEmail(email);
+	    }
 
 	@Override
-	public Page<Account> getAllAccounts(Pageable pageable) {
-		
-		return account_repo.findAll(pageable);
+	public Account findById(Long id) {
+		return userRepository.findByIdAndStatus(id);
 	}
 
 	@Override
-	public Account getAccountById(int id) {
-	
-		return account_repo.findById(id).get();
+	public Account findByEmail(short status, String email) {
+		return userRepository.findByEmail(status, email);	
 	}
 
 	@Override
-	public Account getAccountByUsername(String name) {
-		
-		return account_repo.findByUsername(name);
-	}
-	
-	@Override
-	public Account getAccountByEmail(String email) {
-		
-		return account_repo.findByEmail(email);
+	public void delete(Long id) {
+		Account user = userRepository.getById(id);
+		userRepository.delete(user);	
 	}
 
 	@Override
-	public void createAccount(AccountRequest request) {
-		Account account = new Account(request.getUsername(), request.getFullname(), request.getEmail(),
-				 passwordEncoder.encode(request.getPassword()));
-		
-		account_repo.save(account);
-		
-		createNewRegistrationUserToken(account);
-		
-		sendConfirmUserRegistrationViaEmail(account.getEmail());
-		
-		createCart(account);
+	public List<Account> showAll() {
+		return userRepository.findAllByStatus();
 	}
 
 	@Override
-	public void activeUser(String token) {
-		RegistationAccountToken active_token = token_repo.findByToken(token);
-		
-		Account account = active_token.getAccount();
-		account.setStatus(AccountStatus.Active);
-		
-		account_repo.save(account);
-		
-		token_repo.deleteById(active_token.getId());
+	@Transactional
+	public void add(Account user) {
+		userRepository.save(user);
 	}
 	
-	private void createNewRegistrationUserToken(Account account) {
+	public boolean existsById(Long id) {
+		return userRepository.existsById(id);
+	}
 
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		Account user = userRepository.findByUserName(username);
+
+		if (user == null) {
+			throw new UsernameNotFoundException(username);
+		}
+
+		return new org.springframework.security.core.userdetails.User(
+				user.getUsername(), user.getPassword(),
+				AuthorityUtils.createAuthorityList(user.getRole().toString()));
+	}	
+	
+
+	@Override
+	public void createUserRegister(UserFormForRegistration form) {
+			
+//			boolean exist = this.exist(form.getEmail());
+//			if(exist) {
+//				return;
+//			}
+			Account user = new Account();
+			user.setEmail(form.getEmail());
+			user.setUsername(form.getUserName());
+			user.setFullname(form.getName());
+			user.setAddress(form.getAddress());
+			user.setPhone(form.getPhone());
+			user.setImage(form.getImage());
+			user.setPassword(passwordEncoder.encode(form.getPassword()));
+			userRepository.save(user);
+			// create new user registration token
+			createNewRegistrationUserToken(user);
+			// send email to confirm
+			sendConfirmUserRegistrationViaEmail(user.getEmail());
+		
+	}
+	private void createNewRegistrationUserToken(Account user) {
+		System.out.println(user);
 		// create new token for confirm Registration
 		final String newToken = UUID.randomUUID().toString();
-		RegistationAccountToken token = new RegistationAccountToken(newToken, account);
+		RegistationAccountToken token = new RegistationAccountToken(newToken, user);
 
-		token_repo.save(token);
+		registrationUserTokenRepository.save(token);
 	}
 
-	@Override
-	public void sendConfirmUserRegistrationViaEmail(String email) {
+//Gui mail xac nhan
+	private void sendConfirmUserRegistrationViaEmail(String email) {
 		eventPublisher.publishEvent(new OnSendRegistrationUserConfirmViaEmailEvent(email));
+	}
+	
+	@Override
+	public void activeUser(String token) {
+		RegistationAccountToken registrationUserToken = registrationUserTokenRepository.findByToken(token);
+
+		Account user = registrationUserToken.getAccount();
+		user.setStatus((short) 1);
+
+		userRepository.save(user);
+
+		// remove Registration User Token
+		registrationUserTokenRepository.deleteById(registrationUserToken.getId());
+
 		
 	}
 
 	@Override
-	public boolean existsByUsername(String name) {
+	public void createUser(UserForm userForm) {
+		Account user = new Account();
 		
-		return account_repo.existsByUsername(name);
-	}
-
-	@Override
-	public boolean existsByEmail(String email) {
+		user.setEmail(userForm.getEmail());
+		user.setUsername(userForm.getUserName());
+		user.setFullname(userForm.getName());
+		user.setAddress(userForm.getAddress());
+		user.setPhone(userForm.getPhone());
+		user.setImage(userForm.getImage());
 		
-		return account_repo.existsByEmail(email);
-	}
-
-	@Override
-	public boolean existsByPhoneNumber(String phoneNumber) {
-		
-		return account_repo.existsByPhonenumber(phoneNumber);
-	}
-
-	@Override
-	public void createCart(Account account) {
-		Cart cart = new Cart();
-		cart.setQuantity(0);
-		cart.setTotal_price(0.0);
-		cart.setAccount(account);
-		cartRepo.save(cart);	
-	}
-
-	@Override
-	public void deleteAccount(int id) {
-		account_repo.deleteById(id);
+		userRepository.save(user);
 		
 	}
 }

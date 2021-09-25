@@ -4,7 +4,7 @@
  * @author P Tr Xuan
  * Created on Sep 15, 2021
  */
-package com.vti.response;
+package com.vti.dto;
 
 import java.util.ArrayList;
 import java.util.List;

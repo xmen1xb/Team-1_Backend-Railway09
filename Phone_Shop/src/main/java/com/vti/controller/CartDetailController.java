@@ -1,7 +1,8 @@
 package com.vti.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -9,15 +10,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vti.entity.CartDetail;
 import com.vti.entity.Product;
-import com.vti.response.CartDetailResponse;
-import com.vti.response.ProductResponse;
 import com.vti.service.ICartDetailService;
+import com.vti.service.ICartService;
+import com.vti.service.IProductService;
 
 @RestController
 @RequestMapping(value = "api/v4/cartdetail")
@@ -25,84 +27,78 @@ import com.vti.service.ICartDetailService;
 public class CartDetailController {
 
 	@Autowired
-	private ICartDetailService cartdetailService;
+	ICartService cartService;
+
+	@Autowired
+	ICartDetailService cartDetailService;
 	
-	/**
-	 * API create CartDetail by productId and accountId
-	 * Thông số sẽ đồng bộ với cart có cartID tương ứng accountID
-	 */
-	
-	@PostMapping
-	public ResponseEntity<?> createCartDetail(@RequestParam(name = "productId") int productId,@RequestParam(name = "accountId") int accountId){
-		cartdetailService.createCartDetail(productId, accountId);
-		return new ResponseEntity<String>("Create successfully!!",
-				HttpStatus.CREATED);	
+	@Autowired
+	IProductService productService;
+
+	@GetMapping("/cart/{id}")
+	public ResponseEntity<List<CartDetail>> getByCartId(@PathVariable("id") Long id) {
+		if (!cartService.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(cartDetailService.getByCartId(id));
 	}
 	
-	/**
-	 * API get CartDetail by ID
-	 */
+	@RequestMapping(value="{id}", method = RequestMethod.GET)
+	public ResponseEntity<CartDetail> getOne(@PathVariable("id") Long id) {
+		if(!cartDetailService.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(cartDetailService.findById(id).get());
+	}
+
+	@PostMapping()
+	public ResponseEntity<CartDetail> post(@RequestBody CartDetail cartDetail ) {
+		if (!cartService.existsById(cartDetail.getCart().getId())) {
+			return ResponseEntity.notFound().build();
+		}
 	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<?> getCartDetailById(@PathVariable(name = "id") int id){
-		CartDetail cartDetail = cartdetailService.getCartDetailById(id);
+		boolean check = false;
+		// lấy những sản phẩm trong db 
+		List<Product> listP = productService.showAll();
+		// lấy ra sản phẩm  mình truyền vào 
+		Product product = productService.getById(cartDetail.getProduct().getId());
+		for(Product p : listP){
+			// sản phẩm có được kích hoạt trong db không 
+			if(p.getId() == product.getId()) {
+				check = true;
+			}
+		};
+		if(!check) {
+			return ResponseEntity.notFound().build();			
+		}
 		
-		CartDetailResponse cartDetailResponse = new CartDetailResponse();
-		cartDetailResponse.setId(cartDetail.getCartdetail_id());
-		cartDetailResponse.setPrice(cartDetail.getPrice());
-		cartDetailResponse.setQuantity(cartDetail.getQuantity());
-		
-		Product product = cartDetail.getProduct();
-		ProductResponse productResponse = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
-				product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
-				product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
-				product.getPathImage(),product.getDiscount() ,product.getEnter_date());
-		cartDetailResponse.setProduct(productResponse);
-		cartDetailResponse.setStatus(cartDetail.getStatus());
-		
-		return new ResponseEntity<>(cartDetailResponse, HttpStatus.OK);
+		// lấy ra tất cả cartdetail  của mình truyền vào ban đầu  theo   id của cart 
+		List<CartDetail> listD = cartDetailService.getByCartId(cartDetail.getCart().getId());
+		for (CartDetail item : listD) {
+			if (item.getProduct().getId() == cartDetail.getProduct().getId()) {
+				item.setQuantity(item.getQuantity() + 1);
+				item.setPrice(item.getPrice() + cartDetail.getPrice());
+				return ResponseEntity.ok(cartDetailService.save(item));
+			}
+		}
+		return ResponseEntity.ok(cartDetailService.save(cartDetail));
 	}
-	
-	/**
-	 * API delete CartDetail by CartdetailID
-	 * Thông số sẽ đồng bộ với cart có cartID tương ứng accountID
-	 */
-	
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<?> deleteCartDetail(@PathVariable(name = "id") int id) {
-		cartdetailService.deleteCartDetail(id);
-		return new ResponseEntity<String>("Delete successfully!", HttpStatus.OK);
-	}
-	
-	/**
-	 * API update CartDetail by CartdetailID ( tăng quantity )
-	 * Thông số sẽ đồng bộ với cart có cartID tương ứng accountID
-	 */
-	
-	@PutMapping(value = "/{id}")
-	public ResponseEntity<?> updateCartDetailUp(@PathVariable(name = "id") int id) {
-		cartdetailService.updateCartDetailUp(id);
-		return new ResponseEntity<String>("Update successfully!", HttpStatus.OK);		
-	}
-	
-	/**
-	 * API update CartDetail by CartdetailID ( giảm quantity )
-	 * Thông số sẽ đồng bộ với cart có cartID tương ứng accountID
-	 */
-	
+
 	@PutMapping()
-	public ResponseEntity<?> updateCartDetailDown(@RequestParam(name = "id") int id) {
-		cartdetailService.updateCartDetailDown(id);
-		return new ResponseEntity<String>("Update successfully!", HttpStatus.OK);	
+	// thêm cartdetail mới thay cho cartdetail cũ
+	public ResponseEntity<CartDetail> put(@RequestBody CartDetail cartDetail) {
+		if (!cartService.existsById(cartDetail.getCart().getId())) {
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.ok(cartDetailService.save(cartDetail));
 	}
-	
-	/**
-	 * API update CartDetailStatus -> order
-	 */
-	
-	@PostMapping(value = "/{id}")
-	public ResponseEntity<?> updateStatusCartDetail(@PathVariable(name = "id") int id){
-		cartdetailService.updateStatusCartDetail(id);
-		return new ResponseEntity<String>("Update successfully!", HttpStatus.OK);	
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> delete(@PathVariable("id") Long id) {
+		if (!cartDetailService.existsById(id)) {
+			return ResponseEntity.notFound().build();
+		}
+		cartDetailService.deleteById(id);
+		return ResponseEntity.ok().build();
 	}
 }

@@ -1,33 +1,38 @@
 package com.vti.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.vti.entity.CartDetail;
 import com.vti.entity.OrderDetail;
-import com.vti.entity.Product;
-import com.vti.repository.ICartDetailRepository;
 import com.vti.repository.IOrderDetailRepository;
-import com.vti.repository.IProductRepository;
 
 @Service
 public class OrderDetailService implements IOrderDetailService{
 
 	@Autowired
-	private IOrderDetailRepository orderDetailRepo;
-	
-	@Autowired
-	private ICartDetailRepository cartDetailRepo;
-	
-	@Autowired
-	private IProductRepository productRepo;
+	IOrderDetailRepository ods;
 	
 	@Override
-	public void createOrderDetail(int id) {
-		CartDetail cartDetail = cartDetailRepo.getById(id);
-		Product product = productRepo.getById(cartDetail.getProduct().getProduct_id()) ;
-		OrderDetail orderDetail = new OrderDetail(cartDetail.getPrice(), (short) cartDetail.getQuantity(), null, product);
-		
+	public List<OrderDetail> findOrderDetailByOrderId(Long id) {
+		return ods.findOrderDetailByOrderId(id);
+	}
+
+	@Override
+	public OrderDetail save(OrderDetail entity) {
+		return ods.save(entity);
+	}
+
+	@Override
+	public Optional<OrderDetail> findById(Long id) {
+		return ods.findById(id);
+	}
+
+	@Override
+	public boolean existsById(Long id) {
+		return ods.existsById(id);
 	}
 
 }

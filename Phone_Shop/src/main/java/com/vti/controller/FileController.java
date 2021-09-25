@@ -36,7 +36,7 @@ public class FileController {
 	
 	@PostMapping(value = "/image")
 	public ResponseEntity<?> upLoadImage(@RequestParam(name = "image") MultipartFile image,
-			@RequestParam(name = "id", required = false) int id) throws IOException {
+			@RequestParam(name = "id", required = false) Long id) throws IOException {
 
 		if (!new FileManager().isTypeFileImage(image)) {
 			return new ResponseEntity<>("File must be image!", HttpStatus.UNPROCESSABLE_ENTITY);
@@ -72,7 +72,7 @@ public class FileController {
 	 */
 
 	@GetMapping(value = "/image/{id}")
-	public ResponseEntity<?> getImgNameByID(@PathVariable(name = "id") short id) {
+	public ResponseEntity<?> getImgNameByID(@PathVariable(name = "id") Long id) {
 		String imgName = fileService.getImgNameByID(id);
 		return new ResponseEntity<String>(imgName, HttpStatus.OK);
 	}

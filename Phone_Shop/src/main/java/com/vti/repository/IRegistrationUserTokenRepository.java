@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.vti.entity.RegistationAccountToken;
 
 @Repository
-public interface IRegistrationUserTokenRepository extends JpaRepository<RegistationAccountToken, Integer>{
+public interface IRegistrationUserTokenRepository extends JpaRepository<RegistationAccountToken, Long>{
 
 	public RegistationAccountToken findByToken(String token);
 	
@@ -18,12 +18,12 @@ public interface IRegistrationUserTokenRepository extends JpaRepository<Registat
 	@Query("	SELECT 	token	"
 			+ "	FROM 	RegistationAccountToken "
 			+ " WHERE 	user_id = :accountID")
-	public String findByUserId(int accountID);
+	public String findByUserId(Long accountID);
 
 	@Transactional
 	@Modifying
 	@Query("	DELETE 							"
 			+ "	FROM 	RegistationAccountToken 	"
 			+ " WHERE 	user_id = :userId")
-	public void deleteByUserId(int userId);
+	public void deleteByUserId(Long userId);
 }

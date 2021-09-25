@@ -18,7 +18,7 @@ public class CheckPhonNumberExistsValidator implements ConstraintValidator<Check
 		if (StringUtils.isNullOrEmpty(phoneNumber)) {
 			return false;
 		}
-		Boolean flag = accountRepo.existsByPhonenumber(phoneNumber);
+		Boolean flag = accountRepo.existsByPhone(phoneNumber);
 		return !flag;
 	}
 

@@ -16,43 +16,31 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "`Registation_Account_Token`", catalog = "Mock_Project")
+@Table(name = "`registration_account_tokens`", catalog = "Mock_Project")
 public class RegistationAccountToken implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id", unique = true, nullable = false)
-	private int id;
+	private Long id;
 
-	@Column(name = "token", nullable = false, length = 36, unique = true)
+	@Column(name = "token", nullable = false, length = 40, unique = true)
 	private String token;
 
 	@OneToOne(targetEntity = Account.class, fetch = FetchType.EAGER)
-	@JoinColumn(nullable = false, name = "user_id")
+	@JoinColumn(nullable = false, name = "account_id")
 	private Account account;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "expiryDate", nullable = false)
 	private Date expiryDate;
-	
-	public RegistationAccountToken() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public RegistationAccountToken(String token, Account account) {
-		this.token = token;
-		this.account = account;
 
-		// 1h
-		expiryDate = new Date(System.currentTimeMillis() + 360000);
-	}
-
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -79,5 +67,24 @@ public class RegistationAccountToken implements Serializable{
 	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
 	}
+
+	public RegistationAccountToken(Long id, String token, Account account, Date expiryDate) {
+		super();
+		this.id = id;
+		this.token = token;
+		this.account = account;
+		this.expiryDate = expiryDate;
+	}
+
+	public RegistationAccountToken() {
+		super();
+	}
 	
+	public RegistationAccountToken(String token, Account user) {
+		this.token = token;
+		this.account = user;
+
+		// 1h
+		expiryDate = new Date(System.currentTimeMillis() + 360000);
+	}
 }

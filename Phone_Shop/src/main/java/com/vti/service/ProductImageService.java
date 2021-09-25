@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.vti.entity.ProductImage;
+import com.vti.entity.Image;
 import com.vti.repository.IProductImageRepository;
 import com.vti.repository.IProductRepository;
 
@@ -19,7 +19,7 @@ public class ProductImageService implements IProductImageService{
 	private IProductRepository productRepo;
 	
 	@Override
-	public List<ProductImage> getAllProductImage() {
+	public List<Image> getAllProductImage() {
 		
 		return null;
 	}

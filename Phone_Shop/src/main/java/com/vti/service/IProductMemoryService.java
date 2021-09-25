@@ -2,9 +2,9 @@ package com.vti.service;
 
 import java.util.List;
 
-import com.vti.entity.ProductMemory;
+import com.vti.entity.Memory;
 
 public interface IProductMemoryService {
 
-	public List<ProductMemory> getAllProductMemory();
+	public List<Memory> getAllProductMemory();
 }

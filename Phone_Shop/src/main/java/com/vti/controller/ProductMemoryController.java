@@ -1,6 +1,5 @@
 package com.vti.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vti.entity.ProductMemory;
-import com.vti.response.ProductMemoryResponse;
+import com.vti.entity.Memory;
 import com.vti.service.IProductMemoryService;
 
 @RestController
@@ -30,15 +28,15 @@ public class ProductMemoryController {
 	
 	@GetMapping
 	public ResponseEntity<?> getAllProductMemory(){
-		List<ProductMemory> listProductMemory = productMemoryService.getAllProductMemory();
+		List<Memory> listProductMemory = productMemoryService.getAllProductMemory();
 		
-		List<ProductMemoryResponse> listResponse = new ArrayList<>();
-		for (ProductMemory productMemory : listProductMemory) {
-			ProductMemoryResponse productMemoryResponse = new ProductMemoryResponse(
-					productMemory.getProductMemoryId(), productMemory.getMemoryName());
-			listResponse.add(productMemoryResponse);
-		}
+//		List<ProductMemoryResponse> listResponse = new ArrayList<>();
+//		for (Memory productMemory : listProductMemory) {
+//			ProductMemoryResponse productMemoryResponse = new ProductMemoryResponse(
+//					productMemory.getProductMemoryId(), productMemory.getMemoryName());
+//			listResponse.add(productMemoryResponse);
+//		}
 		
-		return new ResponseEntity<>(listResponse, HttpStatus.OK);
+		return new ResponseEntity<>(listProductMemory, HttpStatus.OK);
 	}
 }

@@ -7,10 +7,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 public interface IFileService {
 
-	String uploadImage(MultipartFile image, int id) throws IOException;
+	String uploadImage(MultipartFile image, Long id) throws IOException;
 
 	File dowwnloadImage(String nameImage) throws IOException;
 
-	String getImgNameByID(int id);
+	String getImgNameByID(Long id);
 
 }

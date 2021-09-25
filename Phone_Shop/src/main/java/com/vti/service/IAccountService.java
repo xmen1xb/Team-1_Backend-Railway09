@@ -1,35 +1,36 @@
 package com.vti.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
 
+import org.springframework.security.core.userdetails.UserDetailsService;
+
+import com.vti.dto.UserForm;
+import com.vti.dto.UserFormForRegistration;
 import com.vti.entity.Account;
-import com.vti.request.AccountRequest;
 
-public interface IAccountService {
+public interface IAccountService  extends UserDetailsService{
 
-public Page<Account> getAllAccounts(Pageable pageable);
+	public Account findById(Long i);
 	
-	public Account getAccountById(int id);
+	public void createUser(UserForm userForm);
+
 	
-	public Account getAccountByUsername(String name);
+	public Account findByEmail(short status, String email);
 	
-	public Account getAccountByEmail(String email);
+	public void delete(Long id);
 	
-	public void createAccount(AccountRequest form);
+	public List<Account> showAll();
 	
+	public void add(Account account);
+	
+//	public User getUserByEmail(String email);
+
+	boolean exist(String email);
+	
+	boolean existsById(Long id) ;
+
+	public void createUserRegister(UserFormForRegistration form);
+
 	public void activeUser(String token);
-
-	public void sendConfirmUserRegistrationViaEmail(String email);
-	
-	public boolean existsByUsername(String name);
-
-	public boolean existsByEmail(String email);
-	
-	public boolean existsByPhoneNumber(String phoneNumber);
-	
-	public void createCart(Account account);
-	
-	public void deleteAccount(int id);
 	
 }

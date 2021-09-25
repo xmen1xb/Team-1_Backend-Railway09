@@ -2,10 +2,10 @@ package com.vti.service;
 
 import java.util.List;
 
-import com.vti.entity.ProductImage;
+import com.vti.entity.Image;
 
 public interface IProductImageService {
 
-	public List<ProductImage> getAllProductImage();
+	public List<Image> getAllProductImage();
 	
 }

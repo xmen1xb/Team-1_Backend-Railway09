@@ -4,8 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,46 +12,41 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.vti.enumerate.CartDetailStatus;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 
 @Entity
-@Table(name = "CartDetail", catalog = "Mock_Project")
+@Table(name = "cart_details", catalog = "Mock_Project")
 public class CartDetail implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name = "cartdetail_id")
+	@Column(name = "id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int cartdetailId;
+	private Long id;
 	
 	@Column(name = "price")
 	private Double price;
 	
 	@Column(name = "quantity")
-	private int quantity;
+	private Integer quantity;
 	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "`status`")
-	private CartDetailStatus status = CartDetailStatus.Not_Order;
-	
-	@ManyToOne
-	@JoinColumn(name = "cart_id")
+	@ManyToOne      //thể hiện mối quan hệ 1 department có nhiều account
+	@JoinColumn(name = "cart_id", nullable = false)   // định nghĩa cột foreign key trong bảng Account, tức là trường department này nối với cột departmentID trong bảng Account của db
+	@Cascade(value = { CascadeType.SAVE_UPDATE }) //
 	private Cart cart;
 	
-	@ManyToOne
-	@JoinColumn(name = "product_id")
-	private Product productInCartdetail;
-	
-	public CartDetail() {
-		
+	@ManyToOne      //thể hiện mối quan hệ 1 department có nhiều account
+	@JoinColumn(name = "product_id", nullable = false)   // định nghĩa cột foreign key trong bảng Account, tức là trường department này nối với cột departmentID trong bảng Account của db
+	@Cascade(value = { CascadeType.SAVE_UPDATE }) //
+	private Product product;
+
+	public Long getId() {
+		return id;
 	}
 
-	public CartDetail(Double price, int quantity, Cart cart, Product product) {
-		super();
-		this.price = price;
-		this.quantity = quantity;
-		this.cart = cart;
-		this.productInCartdetail = product;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Double getPrice() {
@@ -63,14 +57,14 @@ public class CartDetail implements Serializable{
 		this.price = price;
 	}
 
-	public int getQuantity() {
+	public Integer getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-
+	
 	public Cart getCart() {
 		return cart;
 	}
@@ -80,22 +74,25 @@ public class CartDetail implements Serializable{
 	}
 
 	public Product getProduct() {
-		return productInCartdetail;
+		return product;
 	}
 
 	public void setProduct(Product product) {
-		this.productInCartdetail = product;
+		this.product = product;
 	}
 
-	public int getCartdetail_id() {
-		return cartdetailId;
+	public CartDetail(Long id, Double price, Integer quantity, Cart cart, Product product) {
+		super();
+		this.id = id;
+		this.price = price;
+		this.quantity = quantity;
+		this.cart = cart;
+		this.product = product;
 	}
 
-	public CartDetailStatus getStatus() {
-		return status;
+	public CartDetail() {
+		super();
 	}
-
-	public void setStatus(CartDetailStatus status) {
-		this.status = status;
-	}
+	
+	
 }

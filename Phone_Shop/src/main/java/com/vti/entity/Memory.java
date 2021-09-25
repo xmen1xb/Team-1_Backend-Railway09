@@ -15,39 +15,29 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
 @Entity
-@Table(name = "ProductMemory", catalog = "Mock_Project")
-public class ProductMemory implements Serializable{
+@Table(name = "memories", catalog = "Mock_Project")
+public class Memory implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name = "productMemory_id")
+	@Column(name = "memory_id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private short productMemoryId;
+	private Long id;
 
 	@Column(name = "memory_name", length = 100, nullable = false, unique = true)
 	private String memoryName;
 	
 	@OneToMany(mappedBy = "memory")
 	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })
-	private List<Product> listProduct;
-	
-	public ProductMemory() {
-		// TODO Auto-generated constructor stub
+	private List<Product> products;
+
+	public Long getId() {
+		return id;
 	}
 
-	public ProductMemory(short productMemoryId, String memoryName) {
-		super();
-		this.productMemoryId = productMemoryId;
-		this.memoryName = memoryName;
-	}
-
-	public int getProductMemoryId() {
-		return productMemoryId;
-	}
-
-	public void setProductMemoryId(short productMemoryId) {
-		this.productMemoryId = productMemoryId;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getMemoryName() {
@@ -58,16 +48,23 @@ public class ProductMemory implements Serializable{
 		this.memoryName = memoryName;
 	}
 
-	public List<Product> getListProduct() {
-		return listProduct;
+	public List<Product> getProducts() {
+		return products;
 	}
 
-	public void setListProduct(List<Product> listProduct) {
-		this.listProduct = listProduct;
+	public void setProducts(List<Product> products) {
+		this.products = products;
 	}
 
-	@Override
-	public String toString() {
-		return "ProductMemory [productMemoryId=" + productMemoryId + ", memoryName=" + memoryName + "]";
+	public Memory(Long id, String memoryName, List<Product> products) {
+		super();
+		this.id = id;
+		this.memoryName = memoryName;
+		this.products = products;
 	}
+
+	public Memory() {
+		super();
+	}
+
 }

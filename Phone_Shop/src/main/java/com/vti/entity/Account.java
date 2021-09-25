@@ -8,11 +8,11 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -20,16 +20,12 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Formula;
 
-import com.vti.enumerate.AccountGenderEnum;
-import com.vti.enumerate.AccountRole;
-import com.vti.enumerate.AccountStatus;
+import com.vti.enumerate.Gender;
+import com.vti.enumerate.Role;
 
 @Entity
-@Table(name = "`Account`", catalog = "Mock_Project")
+@Table(name = "`accounts`", catalog = "Mock_Project")
 public class Account implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
@@ -37,76 +33,62 @@ public class Account implements Serializable{
 	@Column(name = "account_id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int accountId;
+	private Long id;
 
-	@Column(name = "username", length = 50, nullable = false, unique = true)
+	@Column(name = "username", length = 255, nullable = false, unique = true)
 	private String username;
 
-	@Column(name = "fullname", length = 50, nullable = false)
+	@Column(name = "fullname", length = 255, nullable = false)
 	private String fullname;
 	
-	@Column(name = "gender")
-	@Enumerated(EnumType.STRING)
-	private AccountGenderEnum gender = AccountGenderEnum.Unknow;
-	
-	@Column(name = "email", length = 50, nullable = false, unique = true)
+	@Column(name = "email", length = 255, nullable = false, unique = true)
 	private String email;
 	
-	@Column(name = "phone_number", length = 12, nullable = false, unique = true)
-	private String phonenumber;
-	
-	@Column(name = "city", length = 12)
-	private String city;
-	
-	@Column(name = "district", length = 12)
-	private String district;
-	
-	@Column(name = "ward", length = 12)
-	private String ward;
-	
-	@Column(name = "street", length = 12)
-	private String street;
-	
-	@Formula("concat(city, ' ', district, ' ', ward, ' ', street)")
-	private String address;
-	
-	@Column(name = "path_image", length = 500)
-	private String pathImage;
-	
-	@Column(name = "password", length = 255)
+	@Column(name = "password", length = 255, nullable = false)
 	private String password;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "`status`")
-	private AccountStatus status = AccountStatus.Not_Active;
-	
-	@Enumerated(EnumType.STRING)
-	@Column(name = "`role`")
-	private AccountRole role = AccountRole.User;
 	
 	@Column(name = "register_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreationTimestamp
 	private Date registerDate;
 	
-	@OneToOne(mappedBy = "cartaccount")
-	private Cart cart;
+	@Column(name = "`status`")
+	private short status = 1;
 	
-	@OneToMany(mappedBy = "orderAccount")
-	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<Order> listOrder;
+	@Column(name = "gender")
+	@Enumerated(EnumType.STRING)
+	private Gender gender = Gender.UNKNOWN;
 	
-	public Account() {
-		// TODO Auto-generated constructor stub
+	@Column(name = "image")
+	private String image;
+	
+	@Column(name = "city", length = 255)
+	private String city;
+	
+	@Column(name = "address", length = 255, nullable = false)
+	private String address;
+
+	@Column(name = "phone", length = 255)
+	private String phone;
+	
+	@Column(name = "role")
+	@Enumerated(EnumType.STRING)
+	private Role role = Role.USER;
+	
+	@OneToMany(mappedBy = "account")
+	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })   //xoá cha thì xoá cả các con
+	private List<Order> orders;
+	
+	@OneToMany(mappedBy = "account")
+	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })   //xoá cha thì xoá cả các con
+	private List<Cart> carts;
+
+	public Long getId() {
+		return id;
 	}
 
-	public Account(String username, String fullname, String email, String password) {
-		super();
-		this.username = username;
-		this.fullname = fullname;
-		this.email = email;
-		this.password = password;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getUsername() {
@@ -125,76 +107,12 @@ public class Account implements Serializable{
 		this.fullname = fullname;
 	}
 
-	public AccountGenderEnum getGender() {
-		return gender;
-	}
-
-	public void setGender(AccountGenderEnum gender) {
-		this.gender = gender;
-	}
-
 	public String getEmail() {
 		return email;
 	}
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public String getPhonenumber() {
-		return phonenumber;
-	}
-
-	public void setPhonenumber(String phonenumber) {
-		this.phonenumber = phonenumber;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getDistrict() {
-		return district;
-	}
-
-	public void setDistrict(String district) {
-		this.district = district;
-	}
-
-	public String getWard() {
-		return ward;
-	}
-
-	public void setWard(String ward) {
-		this.ward = ward;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public String getPathImage() {
-		return pathImage;
-	}
-
-	public void setPathImage(String pathImage) {
-		this.pathImage = pathImage;
 	}
 
 	public String getPassword() {
@@ -205,22 +123,6 @@ public class Account implements Serializable{
 		this.password = password;
 	}
 
-	public AccountStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(AccountStatus status) {
-		this.status = status;
-	}
-
-	public AccountRole getRole() {
-		return role;
-	}
-
-	public void setRole(AccountRole role) {
-		this.role = role;
-	}
-
 	public Date getRegisterDate() {
 		return registerDate;
 	}
@@ -229,24 +131,101 @@ public class Account implements Serializable{
 		this.registerDate = registerDate;
 	}
 
-	public Cart getCart() {
-		return cart;
+	public short getStatus() {
+		return status;
 	}
 
-	public void setCart(Cart cart) {
-		this.cart = cart;
+	public void setStatus(short status) {
+		this.status = status;
 	}
 
-	public List<Order> getListOrder() {
-		return listOrder;
+	public Gender getGender() {
+		return gender;
 	}
 
-	public void setListOrder(List<Order> listOrder) {
-		this.listOrder = listOrder;
+	public void setGender(Gender gender) {
+		this.gender = gender;
 	}
 
-	public int getAccountId() {
-		return accountId;
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public Role getRole() {
+		return role;
+	}
+
+	public void setRole(Role role) {
+		this.role = role;
+	}
+
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
+	public List<Cart> getCarts() {
+		return carts;
+	}
+
+	public void setCarts(List<Cart> carts) {
+		this.carts = carts;
+	}
+
+	public Account(Long id, String username, String fullname, String email, String password, Date registerDate,
+			short status, Gender gender, String image, String city, String address, String phone, Role role,
+			List<Order> orders, List<Cart> carts) {
+		super();
+		this.id = id;
+		this.username = username;
+		this.fullname = fullname;
+		this.email = email;
+		this.password = password;
+		this.registerDate = registerDate;
+		this.status = status;
+		this.gender = gender;
+		this.image = image;
+		this.city = city;
+		this.address = address;
+		this.phone = phone;
+		this.role = role;
+		this.orders = orders;
+		this.carts = carts;
+	}
+
+	public Account() {
+		super();
 	}
 	
 }

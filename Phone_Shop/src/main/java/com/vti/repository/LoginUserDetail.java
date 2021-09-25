@@ -15,7 +15,7 @@ public class LoginUserDetail implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
 
-	private int id;
+	private Long id;
 
 	private String username;
 
@@ -28,7 +28,7 @@ public class LoginUserDetail implements UserDetails {
 
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public LoginUserDetail(int id, String username, String email, String password, String role,
+	public LoginUserDetail(Long id, String username, String email, String password, String role,
 			Collection<? extends GrantedAuthority> authorities) {
 		super();
 		this.id = id;
@@ -45,7 +45,7 @@ public class LoginUserDetail implements UserDetails {
 
 		List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userRole));
 
-		return new LoginUserDetail(account.getAccountId(), account.getUsername(), account.getEmail(), account.getPassword(),
+		return new LoginUserDetail(account.getId(), account.getUsername(), account.getEmail(), account.getPassword(),
 				userRole, authorities);
 
 	}
@@ -56,7 +56,7 @@ public class LoginUserDetail implements UserDetails {
 		return authorities;
 	}
 
-	public int getId() {
+	public Long getId() {
 		return id;
 	}
 

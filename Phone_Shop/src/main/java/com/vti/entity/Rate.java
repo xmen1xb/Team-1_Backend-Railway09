@@ -19,14 +19,14 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
-@Table(name = "Rate", catalog = "Mock_Project")
+@Table(name = "rates", catalog = "Mock_Project")
 public class Rate implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	@Column(name = "rate_id")
+	@Column(name = "id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int rateId;
+	private Long id;
 	
 	@Column(name = "star")
 	private Double star;
@@ -48,18 +48,13 @@ public class Rate implements Serializable{
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreationTimestamp
 	private Date rateDate;
-	
-	public Rate() {
-		// TODO Auto-generated constructor stub
+
+	public Long getId() {
+		return id;
 	}
 
-	public Rate(Double star, String comment, Account account, Product product, Date rate_date) {
-		super();
-		this.star = star;
-		this.comment = comment;
-		this.account = account;
-		this.product = product;
-		this.rateDate = rate_date;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public Double getStar() {
@@ -94,15 +89,26 @@ public class Rate implements Serializable{
 		this.product = product;
 	}
 
-	public Date getRate_date() {
+	public Date getRateDate() {
 		return rateDate;
 	}
 
-	public void setRate_date(Date rate_date) {
-		this.rateDate = rate_date;
+	public void setRateDate(Date rateDate) {
+		this.rateDate = rateDate;
 	}
 
-	public int getRate_id() {
-		return rateId;
+	public Rate(Long id, Double star, String comment, Account account, Product product, Date rateDate) {
+		super();
+		this.id = id;
+		this.star = star;
+		this.comment = comment;
+		this.account = account;
+		this.product = product;
+		this.rateDate = rateDate;
 	}
+
+	public Rate() {
+		super();
+	}
+	
 }

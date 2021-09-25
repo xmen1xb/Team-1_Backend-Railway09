@@ -6,8 +6,6 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,179 +20,122 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Formula;
-
-import com.vti.enumerate.OrderStatusEnum;
 
 @Entity
-@Table(name = "`Order`", catalog = "Mock_Project")
-public class Order implements Serializable{
+@Table(name = "`orders`", catalog = "Mock_Project")
+public class Order implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
-	@Column(name = "order_id")
+
+	@Column(name = "id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int orderId;
-	
-	@Column(name = "quantity")
-	private short quantity;
-	
-	@Column(name = "total_price")
-	private Double totalPrice;
-	
-	@Column(name = "city", length = 50)
-	private String city;
-	
-	@Column(name = "district", length = 50)
-	private String district;
-	
-	@Column(name = "ward", length = 50)
-	private String ward;
-	
-	@Column(name = "street", length = 100)
-	private String street;
-	
-	@Formula("concat(city, ' ', district, ' ', ward, ' ', street)")
-	private String shipAddress;
-	
+	private Long id;
+
+	@Column(name = "address", length = 255)
+	private String address;
+
+	@Column(name = "amount")
+	private Double price;
+
 	@Column(name = "order_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreationTimestamp
 	private Date orderDate;
-	
-	@Column(name = "`status`", nullable = false)
-	@Enumerated(EnumType.STRING)
-	private OrderStatusEnum status = OrderStatusEnum.Not_Active;
-	
+
+	@Column(name = "phone", length = 255)
+	private String phone;
+
+	@Column(name = "status")
+	private short status = 3;
+
 	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
-	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	private Account orderAccount;
-	
-	@OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
-	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	private List<OrderDetail> listOrderDetail;
-	
-	public Order() {
-		// TODO Auto-generated constructor stub
+	@JoinColumn(name = "account_id", nullable = false) 								
+	@Cascade(value = { CascadeType.SAVE_UPDATE })
+	private Account account;
+
+	@OneToMany(mappedBy = "order")
+	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE }) 
+	private List<OrderDetail> orderDetails;
+
+	public Long getId() {
+		return id;
 	}
 
-	public Order(short quantity, Double totalPrice, String city, String district, String ward, String street,Account orderAccount) {
-		super();
-		this.quantity = quantity;
-		this.totalPrice = totalPrice;
-		this.city = city;
-		this.district = district;
-		this.ward = ward;
-		this.street = street;
-		this.orderAccount = orderAccount;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public short getQuantity() {
-		return quantity;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setQuantity(short quantity) {
-		this.quantity = quantity;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
-	public Double getTotal_price() {
-		return totalPrice;
+	public Double getPrice() {
+		return price;
 	}
 
-	public void setTotal_price(Double total_price) {
-		this.totalPrice = total_price;
+	public void setPrice(Double price) {
+		this.price = price;
 	}
 
-	public String getShip_address() {
-		return shipAddress;
-	}
-
-	public void setShip_address(String ship_address) {
-		this.shipAddress = ship_address;
-	}
-
-	public Date getOrder_date() {
+	public Date getOrderDate() {
 		return orderDate;
 	}
 
-	public void setOrder_date(Date order_date) {
-		this.orderDate = order_date;
+	public void setOrderDate(Date orderDate) {
+		this.orderDate = orderDate;
 	}
 
-	public OrderStatusEnum getStatus() {
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public short getStatus() {
 		return status;
 	}
 
-	public void setStatus(OrderStatusEnum status) {
+	public void setStatus(short status) {
 		this.status = status;
 	}
 
 	public Account getAccount() {
-		return orderAccount;
+		return account;
 	}
 
 	public void setAccount(Account account) {
-		this.orderAccount = account;
+		this.account = account;
 	}
 
-	public List<OrderDetail> getListOrderDetail() {
-		return listOrderDetail;
+	public List<OrderDetail> getOrderDetails() {
+		return orderDetails;
 	}
 
-	public void setListOrderDetail(List<OrderDetail> listOrderDetail) {
-		this.listOrderDetail = listOrderDetail;
+	public void setOrderDetails(List<OrderDetail> orderDetails) {
+		this.orderDetails = orderDetails;
 	}
 
-	public int getOrder_id() {
-		return orderId;
+	public Order(Long id, String address, Double price, Date orderDate, String phone, short status, Account account,
+			List<OrderDetail> orderDetails) {
+		super();
+		this.id = id;
+		this.address = address;
+		this.price = price;
+		this.orderDate = orderDate;
+		this.phone = phone;
+		this.status = status;
+		this.account = account;
+		this.orderDetails = orderDetails;
 	}
 
-	public Double getTotalPrice() {
-		return totalPrice;
+	public Order() {
+		super();
 	}
 
-	public void setTotalPrice(Double totalPrice) {
-		this.totalPrice = totalPrice;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getDistrict() {
-		return district;
-	}
-
-	public void setDistrict(String district) {
-		this.district = district;
-	}
-
-	public String getWard() {
-		return ward;
-	}
-
-	public void setWard(String ward) {
-		this.ward = ward;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
-	public Account getOrderAccount() {
-		return orderAccount;
-	}
-
-	public void setOrderAccount(Account orderAccount) {
-		this.orderAccount = orderAccount;
-	}
 }

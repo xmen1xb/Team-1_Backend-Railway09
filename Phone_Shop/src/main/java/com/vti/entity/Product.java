@@ -1,12 +1,14 @@
 package com.vti.entity;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,86 +22,79 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+
+import com.vti.enumerate.Category;
 
 @Entity
-@Table(name = "Product", catalog = "Mock_Project")
+@Table(name = "products", catalog = "Mock_Project")
 public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Column(name = "product_id")
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int productId;
+	private Long id;
 
-	@Column(name = "product_name", length = 100, nullable = false)
-	private String productName;
-
-	@Column(name = "`description`", length = 1000)
+	@Column(name = "`description`", length = 4000)
 	private String description;
+	
+	@Column(name = "discount")
+	private Double discount;
 
-	@Column(name = "discount", nullable = true)
-	private short discount = 0;
+	@Column(name = "entered_date")
+	@Temporal(TemporalType.TIMESTAMP)
+	@CreationTimestamp
+	private Date enteredDate;
+
+	@Column(name = "image")
+	private String image;
+
+	@Column(name = "name", length = 255)
+	private String productName;
 
 	@Column(name = "price")
 	private Double price;
-
-	@Column(name = "path_image", length = 500)
-	private String pathImage;
-
-	@ManyToOne
-	@JoinColumn(name = "productRam_id")
-	private ProductRam ram;
-
-	@ManyToOne
-	@JoinColumn(name = "productMemory_id")
-	private ProductMemory memory;
-
-	@ManyToOne
-	@JoinColumn(name = "productBrand_id")
-	private ProductBrand brand;
-
-	@Column(name = "category")
-	private String category;
-
+	
 	@Column(name = "quantity")
 	private short quantity;
 
-	@Column(name = "enter_date")
-	@Temporal(TemporalType.TIMESTAMP)
-	@CreationTimestamp
-	private Date enterDate;
+	@ManyToOne
+	@JoinColumn(name = "brand_id", nullable = false)  
+	@Cascade(value = { CascadeType.SAVE_UPDATE }) //
+	private Brand brand;
 
-	@OneToMany(mappedBy = "productInImage")
-	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<ProductImage> listProductImage;
+	@ManyToOne(fetch = FetchType.LAZY)      
+	@JoinColumn(name = "ram_id", nullable = false)  
+	@Cascade(value = { CascadeType.SAVE_UPDATE }) 
+	private Ram ram;
 
-	@OneToMany(mappedBy = "productInCartdetail")
-	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<CartDetail> listCartDetail;
+	@ManyToOne(fetch = FetchType.LAZY)      
+	@JoinColumn(name = "memory_id", nullable = false)  
+	@Cascade(value = { CascadeType.SAVE_UPDATE }) //
+	private Memory memory;
 
-	@OneToMany(mappedBy = "productInOrder")
-	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	@Fetch(value = FetchMode.SUBSELECT)
-	private List<OrderDetail> listOrderDetail;
+	@Column(name = "category")
+	@Enumerated(EnumType.STRING)
+	private Category category;
 
-	public Product() {
-		// TODO Auto-generated constructor stub
+	@OneToMany(mappedBy = "product")
+	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })   
+	private List<OrderDetail> orderDetails;
+
+	@OneToMany(mappedBy = "product")
+	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })  
+	private List<CartDetail> cartDetails;
+
+	@OneToMany(mappedBy = "product")
+	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })   
+	private List<Image> images;
+
+	public Long getId() {
+		return id;
 	}
 
-	public int getProduct_id() {
-		return productId;
-	}
-
-	public String getProduct_name() {
-		return productName;
-	}
-
-	public void setProduct_name(String product_name) {
-		this.productName = product_name;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getDescription() {
@@ -110,58 +105,44 @@ public class Product implements Serializable {
 		this.description = description;
 	}
 
-	public short getDiscount() {
+	public Double getDiscount() {
 		return discount;
 	}
 
-	public void setDiscount(short discount) {
+	public void setDiscount(Double discount) {
 		this.discount = discount;
 	}
 
-	public String getPriceDesign() {
-		DecimalFormat formatter = new DecimalFormat("###,###,###");
-		return formatter.format(Double.valueOf(price));
+	public Date getEnteredDate() {
+		return enteredDate;
+	}
+
+	public void setEnteredDate(Date enteredDate) {
+		this.enteredDate = enteredDate;
+	}
+
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public String getProductName() {
+		return productName;
+	}
+
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 
 	public Double getPrice() {
-
 		return price;
 	}
 
 	public void setPrice(Double price) {
 		this.price = price;
-	}
-
-	public ProductRam getRam() {
-		return ram;
-	}
-
-	public void setRam(ProductRam ram) {
-		this.ram = ram;
-	}
-
-	public ProductMemory getMemory() {
-		return memory;
-	}
-
-	public void setMemory(ProductMemory memory) {
-		this.memory = memory;
-	}
-
-	public ProductBrand getBrand() {
-		return brand;
-	}
-
-	public void setBrand(ProductBrand brand) {
-		this.brand = brand;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
 	}
 
 	public short getQuantity() {
@@ -172,36 +153,85 @@ public class Product implements Serializable {
 		this.quantity = quantity;
 	}
 
-	public Date getEnter_date() {
-		return enterDate;
+	public Brand getBrand() {
+		return brand;
 	}
 
-	public void setEnter_date(Date enter_date) {
-		this.enterDate = enter_date;
+	public void setBrand(Brand brand) {
+		this.brand = brand;
 	}
 
-	public String getPathImage() {
-		return pathImage;
+	public Ram getRam() {
+		return ram;
 	}
 
-	public void setPathImage(String pathImage) {
-		this.pathImage = pathImage;
+	public void setRam(Ram ram) {
+		this.ram = ram;
 	}
 
-	public List<ProductImage> getListProductImage() {
-		return listProductImage;
+	public Memory getMemory() {
+		return memory;
 	}
 
-	public void setListProductImage(List<ProductImage> listProductImage) {
-		this.listProductImage = listProductImage;
+	public void setMemory(Memory memory) {
+		this.memory = memory;
 	}
 
-	public List<CartDetail> getListCartDetail() {
-		return listCartDetail;
+	public Category getCategory() {
+		return category;
 	}
 
-	public void setListCartDetail(List<CartDetail> listCartDetail) {
-		this.listCartDetail = listCartDetail;
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public List<OrderDetail> getOrderDetails() {
+		return orderDetails;
+	}
+
+	public void setOrderDetails(List<OrderDetail> orderDetails) {
+		this.orderDetails = orderDetails;
+	}
+
+	public List<CartDetail> getCartDetails() {
+		return cartDetails;
+	}
+
+	public void setCartDetails(List<CartDetail> cartDetails) {
+		this.cartDetails = cartDetails;
+	}
+
+	public List<Image> getImages() {
+		return images;
+	}
+
+	public void setImages(List<Image> images) {
+		this.images = images;
+	}
+
+	public Product(Long id, String description, Double discount, Date enteredDate, String image, String productName,
+			Double price, short quantity, Brand brand, Ram ram, Memory memory, Category category,
+			List<OrderDetail> orderDetails, List<CartDetail> cartDetails, List<Image> images) {
+		super();
+		this.id = id;
+		this.description = description;
+		this.discount = discount;
+		this.enteredDate = enteredDate;
+		this.image = image;
+		this.productName = productName;
+		this.price = price;
+		this.quantity = quantity;
+		this.brand = brand;
+		this.ram = ram;
+		this.memory = memory;
+		this.category = category;
+		this.orderDetails = orderDetails;
+		this.cartDetails = cartDetails;
+		this.images = images;
+	}
+
+	public Product() {
+		super();
 	}
 
 }

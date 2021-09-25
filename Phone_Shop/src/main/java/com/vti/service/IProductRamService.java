@@ -2,9 +2,9 @@ package com.vti.service;
 
 import java.util.List;
 
-import com.vti.entity.ProductRam;
+import com.vti.entity.Ram;
 
 public interface IProductRamService {
 
-	public List<ProductRam> getAllProductRam();
+	public List<Ram> getAllProductRam();
 }

@@ -16,7 +16,7 @@ import org.hibernate.annotations.CascadeType;
 
 @Entity
 @Table(name = "ProductRam", catalog = "Mock_Project")
-public class ProductRam implements Serializable{
+public class Ram implements Serializable{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -32,11 +32,11 @@ public class ProductRam implements Serializable{
 	@Cascade(value = { CascadeType.REMOVE, CascadeType.SAVE_UPDATE })
 	private List<Product> listProduct;
 
-	public ProductRam() {
-		// TODO Auto-generated constructor stub
+	public Ram() {
+	
 	}
 
-	public ProductRam(short productRamId, String ramName) {
+	public Ram(short productRamId, String ramName) {
 		super();
 		this.productRamId = productRamId;
 		this.ramName = ramName;

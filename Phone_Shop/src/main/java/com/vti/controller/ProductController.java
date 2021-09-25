@@ -1,31 +1,19 @@
 package com.vti.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vti.entity.Product;
-import com.vti.entity.ProductImage;
-import com.vti.exception.NotFoundException;
-import com.vti.repository.IProductRepository;
-import com.vti.request.ProductFilterRequest;
-import com.vti.response.ProductImagesRespone;
-import com.vti.response.ProductResponse;
 import com.vti.service.IProductService;
 
 @RestController
@@ -34,127 +22,53 @@ import com.vti.service.IProductService;
 public class ProductController {
 
 	@Autowired
-	private IProductRepository productRepository;
-
-	@Autowired
 	private IProductService productService;
 	
-	/**
-	 * API getAll Product
-	 * Search theo ProductName
-	 * Filter theo brand - memory - ram
-	 */
-	
-	@GetMapping()
-	public ResponseEntity<?> getAllProducts(Pageable pageable, @RequestParam(required = false) String search,
-			ProductFilterRequest filter) {
-		Page<Product> entities = productService.getAllProducts(pageable, search, filter);
-
-		Page<ProductResponse> pageResponse = entities.map(new Function<Product, ProductResponse>() {
-
-			@Override
-			public ProductResponse apply(Product product) {
-				ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
-						product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
-						product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
-						product.getPathImage(),product.getDiscount() ,product.getEnter_date());
-				return response;
-			}
-		});
-		return new ResponseEntity<>(pageResponse, HttpStatus.OK);
+	@GetMapping
+	public ResponseEntity<?> showAll() {
+		return new ResponseEntity<>(productService.showAll(), HttpStatus.OK);
 	}
 	
-	/**
-	 * API getAll Product
-	 * Filter theo price down
-	 */
-	
-	@RequestMapping(value = "/desc", method = RequestMethod.GET)
-	public ResponseEntity<?> findAllOrderByPriceDesc(Pageable pageable) {
-		Page<Product> entities = productService.findAllOrderByPriceDesc(pageable);
-
-		Page<ProductResponse> pageResponse = entities.map(new Function<Product, ProductResponse>() {
-
-			@Override
-			public ProductResponse apply(Product product) {
-				ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
-						product.getDescription(), product.getPrice(), product.getRam().getRamName(),
-						product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
-						product.getQuantity(), product.getPathImage(),product.getDiscount(), product.getEnter_date());
-				return response;
-			}
-		});
-		return new ResponseEntity<>(pageResponse, HttpStatus.OK);
-	}
-
-	/**
-	 * API getAll Product
-	 * Filter theo price up
-	 */
-	
-	@RequestMapping(value = "/asc", method = RequestMethod.GET)
-	public ResponseEntity<?> findAllOrderByPriceAsc(Pageable pageable) {
-		Page<Product> entities = productService.findAllOrderByPriceAsc(pageable);
-
-		Page<ProductResponse> pageResponse = entities.map(new Function<Product, ProductResponse>() {
-
-			@Override
-			public ProductResponse apply(Product product) {
-				ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
-						product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
-						product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
-						product.getPathImage(),product.getDiscount(), product.getEnter_date());
-				return response;
-			}
-		});
-		return new ResponseEntity<>(pageResponse, HttpStatus.OK);
-	}
-	
-	/**
-	 * API getProduct by ProductID
-	 */
-	
-	@GetMapping(value = "/{id}")
-	public ResponseEntity<?> getProductByID(@PathVariable(name = "id") short id) {
-		Product product = productService.getProductById(id);
-
-		ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
-				product.getDescription(), product.getPrice(), product.getRam().getRamName(),
-				product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
-				product.getQuantity(), product.getPathImage(),product.getDiscount(), product.getEnter_date());
-
-		return new ResponseEntity<ProductResponse>(response, HttpStatus.OK);
-	}
-
-	/**
-	 * API deleteProduct by ProductID
-	 */
-  @PreAuthorize("hasRole('Admin')")
-	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<?> deleteProduct(@PathVariable(name = "id") int id) {
-		productService.deleteProduct(id);
-		return new ResponseEntity<String>("Delete successfully!", HttpStatus.OK);
-	}
-
-	/**
-	 * API lấy listProductImage by ProductID
-	 */
-	
-	@GetMapping(value = "/{id}/images")
-	public ResponseEntity<?> ProductImgesDetail(@PathVariable(name = "id") Integer productId) {
-		Product product = productRepository.findById(productId).orElse(null);
-		if (product == null) {
-			throw new NotFoundException(String.format("Product (ID = %s) is not found", productId));
+	@GetMapping("/{id}")
+	public ResponseEntity<?> getProductById(@PathVariable("id") Long id) {
+		Product p = productService.findById(id);
+		if(p == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		List<ProductImage> productImages = product.getListProductImage();
-		List<ProductImagesRespone> listRespone = new ArrayList<>();
-		for (ProductImage productImage : productImages) {
-			String pathRespone = productImage.getPath_image();
-			ProductImagesRespone respone = new ProductImagesRespone(productImage.getImage_id(),
-					productImage.getProduct().getProduct_id(), pathRespone);
-			listRespone.add(respone);
-		}
-		return new ResponseEntity<>(listRespone, HttpStatus.OK);
+		return new ResponseEntity<>(p, HttpStatus.OK);
 	}
-
+	
+	@PostMapping
+	public ResponseEntity<?> post(@RequestBody Product product) {
+		productService.add(product);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@PutMapping("{id}")
+	public ResponseEntity<?> put(@PathVariable("id") Long id, @RequestBody Product product) {
+		if(!id.equals(product.getId())) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		Product p = productService.findById(product.getId());
+		if(p == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		productService.add(product);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@DeleteMapping("{id}")
+	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
+		Product p = productService.findById(id);
+		if(p == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}	
+		productService.delete(id);
+		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/by-category/{id}")
+	public ResponseEntity<?> getAllByCategory(@PathVariable("id") Long id) {
+		return new ResponseEntity<>(productService.getAllByCategory(id), HttpStatus.OK);
+	}
 }

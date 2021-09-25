@@ -1,7 +1,5 @@
 package com.vti.controller;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vti.request.AccountRequest;
+import com.vti.dto.UserFormForRegistration;
 import com.vti.service.IAccountService;
 
 
@@ -25,41 +23,24 @@ import com.vti.service.IAccountService;
 public class RegisterController {
 
 	@Autowired
-	private IAccountService accountService;
-	
-	/**
-	 * API create Account
-	 * Gửi kèm 1 mail về email đăng ký
-	 */
+	private IAccountService userService;
 	
 	@PostMapping()
-	public ResponseEntity<?> createAccount(@RequestBody @Valid AccountRequest request) {
-		accountService.createAccount(request);
+
+	public ResponseEntity<?> createUser(@RequestBody UserFormForRegistration form) {
+
+
+		userService.createUserRegister(form);
 		return new ResponseEntity<String>("We have sent 1 email. Please check email to active account!",
-				HttpStatus.CREATED );
+				HttpStatus.CREATED);
 	}
-	
-	/**
-	 * API active Account
-	 * Gửi 1 xác nhận active thành công
-	 */
 	
 	@GetMapping("/activeUser")
-	public ResponseEntity<?> activeUserViaEmail(@RequestParam String token) {
+	public ResponseEntity<?> activeUserViaEmail(@RequestParam String token) { //Kích hoạt tài khoản 
 
 		// active user
-		accountService.activeUser(token);
+		userService.activeUser(token);
 
 		return new ResponseEntity<>("Active success!", HttpStatus.OK);
-	}
-	
-	@GetMapping("/userRegistrationConfirmRequest")
-	// validate: email exists, email not active
-	public ResponseEntity<?> sendConfirmRegistrationViaEmail(@RequestParam String email) {
-
-		accountService.sendConfirmUserRegistrationViaEmail(email);
-
-		return new ResponseEntity<>("We have sent 1 email. Please check email to active account!", HttpStatus.OK);
-	}
-	
+	 }
 }

@@ -1,20 +1,20 @@
 package com.vti.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import java.util.List;
 
 import com.vti.entity.Product;
-import com.vti.request.ProductFilterRequest;
 
 public interface IProductService {
-
-	public Page<Product> getAllProducts(Pageable pageable, String search, ProductFilterRequest filter);
 	
-	public Product getProductById(int id);
+	Product findById(Long id);
 	
-	public void deleteProduct(int id);
+	void delete(Long id);
 	
-	public Page<Product> findAllOrderByPriceDesc(Pageable pageable);
+	List<Product> showAll();
 	
-	public Page<Product> findAllOrderByPriceAsc(Pageable pageable);
+	List<Product> getAllByCategory(Long id);
+	
+	void add(Product product);
+	
+	Product getById(Long id);
 }

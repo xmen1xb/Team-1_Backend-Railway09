@@ -21,7 +21,7 @@ public class FileService implements IFileService {
 	private String linkFolder = "F:\\Code\\Frontend\\IMG";
 
 	@Override
-	public String uploadImage(MultipartFile image, int id) throws IOException {
+	public String uploadImage(MultipartFile image, Long id) throws IOException {
 
 		String nameImage = new Date().getTime() + "." + fileManager.getFormatFile(image.getOriginalFilename());
 
@@ -31,7 +31,7 @@ public class FileService implements IFileService {
 
 		// TODO save link file to database
 		Product product = productRepo.getById(id);
-		product.setPathImage(nameImage);
+		product.setImage(nameImage);
 		productRepo.save(product);
 		// return link uploaded file
 		return path;
@@ -46,8 +46,8 @@ public class FileService implements IFileService {
 	}
 
 	@Override
-	public String getImgNameByID(int id) {
+	public String getImgNameByID(Long id) {
 		Product product = productRepo.getById(id);
-		return product.getPathImage();
+		return product.getImage();
 	}
 }
