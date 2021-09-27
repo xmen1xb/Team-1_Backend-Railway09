@@ -12,12 +12,17 @@ import org.springframework.stereotype.Service;
 import com.vti.entity.Account;
 import com.vti.entity.Cart;
 import com.vti.entity.RegistationAccountToken;
+import com.vti.entity.ResetPasswordToken;
 import com.vti.enumerate.AccountStatus;
 import com.vti.event.OnSendRegistrationUserConfirmViaEmailEvent;
+import com.vti.event.OnSendResetPasswordConfirmViaEmailEvent;
+import com.vti.exception.NotFoundException;
 import com.vti.repository.IAccountRepository;
 import com.vti.repository.ICartRepository;
 import com.vti.repository.IRegistrationUserTokenRepository;
+import com.vti.repository.IResetPasswordTokenRepository;
 import com.vti.request.AccountRequest;
+import com.vti.request.AccountUpdateRequest;
 
 @Service
 public class AccountService implements IAccountService{
@@ -36,6 +41,9 @@ public class AccountService implements IAccountService{
 	
 	@Autowired
 	private ICartRepository cartRepo;
+	
+	@Autowired
+	private IResetPasswordTokenRepository resetPasswordRepo;
 
 	@Override
 	public Page<Account> getAllAccounts(Pageable pageable) {
@@ -74,6 +82,29 @@ public class AccountService implements IAccountService{
 		
 		createCart(account);
 	}
+	
+	@Override
+	public void resetPassword(String email) {
+		Account account = account_repo.findByEmail(email);
+		
+		if (account == null) {
+			throw new NotFoundException("Email nhập vào chưa đúng. Xin kiểm tra lại");		
+		}
+		createResetPasswordToken(account);
+		sendConfirmResetPasswordViaEmail(account.getEmail());
+	}
+	
+	@Override
+	public void activeResetPassword(String token) {
+		ResetPasswordToken activeToken = resetPasswordRepo.findByToken(token);
+
+		Account account = activeToken.getAccount();
+		account.setPassword(passwordEncoder.encode("123456"));
+		
+		account_repo.save(account);
+		
+		resetPasswordRepo.deleteById(activeToken.getId());
+	}
 
 	@Override
 	public void activeUser(String token) {
@@ -95,10 +126,25 @@ public class AccountService implements IAccountService{
 
 		token_repo.save(token);
 	}
+	
+	private void createResetPasswordToken(Account account) {
+
+		// create new token for confirm ResetPassword
+		final String newToken = UUID.randomUUID().toString();
+		ResetPasswordToken token = new ResetPasswordToken(newToken, account);
+		
+		resetPasswordRepo.save(token);
+	}
 
 	@Override
 	public void sendConfirmUserRegistrationViaEmail(String email) {
 		eventPublisher.publishEvent(new OnSendRegistrationUserConfirmViaEmailEvent(email));
+		
+	}
+	
+	@Override
+	public void sendConfirmResetPasswordViaEmail(String email) {
+		eventPublisher.publishEvent(new OnSendResetPasswordConfirmViaEmailEvent(email));
 		
 	}
 
@@ -134,4 +180,18 @@ public class AccountService implements IAccountService{
 		account_repo.deleteById(id);
 		
 	}
+
+	@Override
+	public void updateAccount(int id, AccountUpdateRequest request) {
+		Account account = account_repo.getById(id);
+		
+			account.setFullname(request.getFullname());
+			account.setEmail(request.getEmail());	
+			account.setPhonenumber(request.getPhoneNumber());
+			account.setAddress(request.getAddress());
+			account.setPassword(passwordEncoder.encode(request.getPassword()));
+		
+		account_repo.save(account);
+	}
+		
 }

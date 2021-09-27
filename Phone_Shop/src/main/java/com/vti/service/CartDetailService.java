@@ -11,6 +11,7 @@ import com.vti.entity.Cart;
 import com.vti.entity.CartDetail;
 import com.vti.entity.Product;
 import com.vti.enumerate.CartDetailStatus;
+import com.vti.exception.CustomerException;
 import com.vti.repository.ICartDetailRepository;
 import com.vti.repository.ICartRepository;
 import com.vti.repository.IProductRepository;
@@ -34,18 +35,22 @@ public class CartDetailService implements ICartDetailService {
 	}
 
 	@Override
-	public void createCartDetail(int producId, int accountId) {
+	public void createCartDetail(int producId, int accountId) throws CustomerException {
 
 		Product product = productRepo.getById(producId);
+		if (product.getQuantity() == 0) {
+			throw new CustomerException("Sản phẩm không tồn tại hoặc đã hết hàng");
+		}
+		
 		List<CartDetail> listCartDetail = product.getListCartDetail();
 		for (CartDetail cartDetail : listCartDetail) {
-			if (cartDetail.getProduct().getProduct_id() == product.getProduct_id() && cartDetail.getCart().getCart_id() == accountId) {
+			if (cartDetail.getProduct().getProduct_id() == product.getProduct_id() && cartDetail.getCart().getCart_id() == accountId){
 				System.out.println(cartDetail.getCart().getCart_id());
 				System.out.println(accountId);
 				updateCartDetailUp(cartDetail.getCartdetail_id());
 				return;
-			} 		
-		}	
+			}		
+		}		
 		CartDetail cartDetail2 = new CartDetail();
 
 		cartDetail2.setPrice(product.getPrice());

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.vti.entity.CartDetail;
+import com.vti.exception.CustomerException;
 
 public interface ICartDetailService {
 	
@@ -11,7 +12,7 @@ public interface ICartDetailService {
 	
 	public CartDetail getCartDetailById(int id);
 	
-	public void createCartDetail(int producId, int accountId);
+	public void createCartDetail(int producId, int accountId) throws CustomerException;
 	
 	public void deleteCartDetail(int id);
 	

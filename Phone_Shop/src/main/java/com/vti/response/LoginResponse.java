@@ -20,18 +20,21 @@ public class LoginResponse {
 	private int expireTime;
 
 	private String role;
+	
+	private String status;
 
 	public LoginResponse() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public LoginResponse(Integer id, String email, String accessToken, int expireTime, String role) {
+	public LoginResponse(Integer id, String email, String accessToken, int expireTime, String role, String status) {
 		super();
 		this.id = id;
 		this.email = email;
 		this.accessToken = accessToken;
 		this.expireTime = expireTime;
 		this.role = role;
+		this.status = status;
 	}
 
 	public Integer getId() {
@@ -72,6 +75,14 @@ public class LoginResponse {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

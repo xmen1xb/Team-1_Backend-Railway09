@@ -14,9 +14,15 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+
+@Data
+@NoArgsConstructor
 @Entity
-@Table(name = "`Registation_Account_Token`", catalog = "Mock_Project")
-public class RegistationAccountToken implements Serializable{
+@Table(name = "`Reset_Password_Token`", catalog = "Mock_Project")
+public class ResetPasswordToken implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -35,48 +41,11 @@ public class RegistationAccountToken implements Serializable{
 	@Column(name = "expiryDate", nullable = false)
 	private Date expiryDate;
 	
-	public RegistationAccountToken() {
-		// TODO Auto-generated constructor stub
-	}
-	
-	public RegistationAccountToken(String token, Account account) {
+	public ResetPasswordToken(String token, Account account) {
 		this.token = token;
 		this.account = account;
 
 		// 1h
 		expiryDate = new Date(System.currentTimeMillis() + 360000);
 	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	public Account getAccount() {
-		return account;
-	}
-
-	public void setAccount(Account account) {
-		this.account = account;
-	}
-
-	public Date getExpiryDate() {
-		return expiryDate;
-	}
-
-	public void setExpiryDate(Date expiryDate) {
-		this.expiryDate = expiryDate;
-	}
-	
 }

@@ -117,7 +117,9 @@ public class ProductController {
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<?> getProductByID(@PathVariable(name = "id") short id) {
 		Product product = productService.getProductById(id);
-
+		if (product == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
 				product.getDescription(), product.getPrice(), product.getRam().getRamName(),
 				product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
@@ -132,6 +134,10 @@ public class ProductController {
   @PreAuthorize("hasRole('Admin')")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> deleteProduct(@PathVariable(name = "id") int id) {
+		Product product = productService.getProductById(id);
+		if (product == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		productService.deleteProduct(id);
 		return new ResponseEntity<String>("Delete successfully!", HttpStatus.OK);
 	}

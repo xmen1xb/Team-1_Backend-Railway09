@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 
 import com.vti.entity.Account;
 import com.vti.request.AccountRequest;
+import com.vti.request.AccountUpdateRequest;
 
 public interface IAccountService {
 
@@ -22,6 +23,8 @@ public Page<Account> getAllAccounts(Pageable pageable);
 
 	public void sendConfirmUserRegistrationViaEmail(String email);
 	
+	public void sendConfirmResetPasswordViaEmail(String email);
+	
 	public boolean existsByUsername(String name);
 
 	public boolean existsByEmail(String email);
@@ -31,5 +34,11 @@ public Page<Account> getAllAccounts(Pageable pageable);
 	public void createCart(Account account);
 	
 	public void deleteAccount(int id);
+	
+	public void updateAccount(int id, AccountUpdateRequest request);
+	
+	public void resetPassword(String email);
+	
+	public void activeResetPassword(String token);
 	
 }

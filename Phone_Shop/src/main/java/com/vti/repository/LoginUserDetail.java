@@ -25,10 +25,12 @@ public class LoginUserDetail implements UserDetails {
 	private String password;
 
 	private String role;
+	
+	private String status;
 
 	private Collection<? extends GrantedAuthority> authorities;
 
-	public LoginUserDetail(int id, String username, String email, String password, String role,
+	public LoginUserDetail(int id, String username, String email, String password, String role, String status,
 			Collection<? extends GrantedAuthority> authorities) {
 		super();
 		this.id = id;
@@ -36,6 +38,7 @@ public class LoginUserDetail implements UserDetails {
 		this.email = email;
 		this.password = password;
 		this.role = role;
+		this.status = status;
 		this.authorities = authorities;
 	}
 
@@ -46,7 +49,7 @@ public class LoginUserDetail implements UserDetails {
 		List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_" + userRole));
 
 		return new LoginUserDetail(account.getAccountId(), account.getUsername(), account.getEmail(), account.getPassword(),
-				userRole, authorities);
+				userRole, account.getStatus().toString(), authorities);
 
 	}
 
@@ -102,6 +105,14 @@ public class LoginUserDetail implements UserDetails {
 	public boolean isEnabled() {
 
 		return true;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

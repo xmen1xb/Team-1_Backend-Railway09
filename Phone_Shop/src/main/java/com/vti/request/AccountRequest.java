@@ -26,13 +26,7 @@ public class AccountRequest {
 	
 	private String phoneNumber;
 	
-	private String city;
-	
-	private String district;
-	
-	private String ward;
-	
-	private String street;
+	private String address;
 	
 	@NotBlank(message = "Password không được để trống")
 	@Pattern(regexp = "^.*(?=.{8,})(?=..*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", message = "Password có ít nhất 8 kí tự, Có ít nhất 1 kí tự thường, 1 kí tự viết hoa và 1 chữ số, \"\r\n"
@@ -83,36 +77,20 @@ public class AccountRequest {
 		this.password = password;
 	}
 
-	public String getCity() {
-		return city;
+	public String getPhoneNumber() {
+		return phoneNumber;
 	}
 
-	public void setCity(String city) {
-		this.city = city;
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
 	}
 
-	public String getDistrict() {
-		return district;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setDistrict(String district) {
-		this.district = district;
-	}
-
-	public String getWard() {
-		return ward;
-	}
-
-	public void setWard(String ward) {
-		this.ward = ward;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
 }

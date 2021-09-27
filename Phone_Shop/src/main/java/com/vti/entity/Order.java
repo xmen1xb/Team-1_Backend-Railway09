@@ -22,7 +22,6 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Formula;
 
 import com.vti.enumerate.OrderStatusEnum;
 
@@ -42,20 +41,8 @@ public class Order implements Serializable{
 	@Column(name = "total_price")
 	private Double totalPrice;
 	
-	@Column(name = "city", length = 50)
-	private String city;
-	
-	@Column(name = "district", length = 50)
-	private String district;
-	
-	@Column(name = "ward", length = 50)
-	private String ward;
-	
-	@Column(name = "street", length = 100)
-	private String street;
-	
-	@Formula("concat(city, ' ', district, ' ', ward, ' ', street)")
-	private String shipAddress;
+	@Column(name = "address", length = 500)
+	private String address;
 	
 	@Column(name = "order_date")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -79,14 +66,11 @@ public class Order implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public Order(short quantity, Double totalPrice, String city, String district, String ward, String street,Account orderAccount) {
+	public Order(short quantity, Double totalPrice, String address, Account orderAccount) {
 		super();
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
-		this.city = city;
-		this.district = district;
-		this.ward = ward;
-		this.street = street;
+		this.address = address;
 		this.orderAccount = orderAccount;
 	}
 
@@ -104,14 +88,6 @@ public class Order implements Serializable{
 
 	public void setTotal_price(Double total_price) {
 		this.totalPrice = total_price;
-	}
-
-	public String getShip_address() {
-		return shipAddress;
-	}
-
-	public void setShip_address(String ship_address) {
-		this.shipAddress = ship_address;
 	}
 
 	public Date getOrder_date() {
@@ -158,43 +134,19 @@ public class Order implements Serializable{
 		this.totalPrice = totalPrice;
 	}
 
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getDistrict() {
-		return district;
-	}
-
-	public void setDistrict(String district) {
-		this.district = district;
-	}
-
-	public String getWard() {
-		return ward;
-	}
-
-	public void setWard(String ward) {
-		this.ward = ward;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
-	}
-
 	public Account getOrderAccount() {
 		return orderAccount;
 	}
 
 	public void setOrderAccount(Account orderAccount) {
 		this.orderAccount = orderAccount;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
 	}
 }

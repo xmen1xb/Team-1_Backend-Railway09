@@ -35,8 +35,8 @@ public class RegisterController {
 	@PostMapping()
 	public ResponseEntity<?> createAccount(@RequestBody @Valid AccountRequest request) {
 		accountService.createAccount(request);
-		return new ResponseEntity<String>("We have sent 1 email. Please check email to active account!",
-				HttpStatus.CREATED );
+		return new ResponseEntity<String>("Chúng tôi đã gửi 1 thư vào hòm thư của bạn. Xin hãy kiểm tra hòm thư "
+				+ "để kích hoạt tài khoản", HttpStatus.CREATED );
 	}
 	
 	/**
@@ -59,7 +59,8 @@ public class RegisterController {
 
 		accountService.sendConfirmUserRegistrationViaEmail(email);
 
-		return new ResponseEntity<>("We have sent 1 email. Please check email to active account!", HttpStatus.OK);
+		return new ResponseEntity<>("Chúng tôi đã gửi 1 thư về hòm thư của bạn. "
+				+ "Xin hãy kiểm tra hòm thư để kích hoạt tài khoản!", HttpStatus.OK);
 	}
 	
 }

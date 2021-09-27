@@ -22,7 +22,7 @@ public class OrderController {
 	private IOrderService orderService;
 	
 	@PostMapping(value = "/{accountId}")
-	public ResponseEntity<?> createAccount(@PathVariable (name = "accountId") int accountID, @RequestBody OrderRequest request){
+	public ResponseEntity<?> createOrder(@PathVariable (name = "accountId") int accountID, @RequestBody OrderRequest request){
 		orderService.createOrder(accountID, request);
 		return new ResponseEntity<String>("Create successfully!!",
 				HttpStatus.CREATED);

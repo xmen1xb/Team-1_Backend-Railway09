@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vti.entity.CartDetail;
 import com.vti.entity.Product;
+import com.vti.exception.CustomerException;
 import com.vti.response.CartDetailResponse;
 import com.vti.response.ProductResponse;
 import com.vti.service.ICartDetailService;
@@ -30,10 +31,11 @@ public class CartDetailController {
 	/**
 	 * API create CartDetail by productId and accountId
 	 * Thông số sẽ đồng bộ với cart có cartID tương ứng accountID
+	 * @throws CustomerException 
 	 */
 	
 	@PostMapping
-	public ResponseEntity<?> createCartDetail(@RequestParam(name = "productId") int productId,@RequestParam(name = "accountId") int accountId){
+	public ResponseEntity<?> createCartDetail(@RequestParam(name = "productId") int productId,@RequestParam(name = "accountId") int accountId) throws CustomerException{
 		cartdetailService.createCartDetail(productId, accountId);
 		return new ResponseEntity<String>("Create successfully!!",
 				HttpStatus.CREATED);	
@@ -46,7 +48,9 @@ public class CartDetailController {
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<?> getCartDetailById(@PathVariable(name = "id") int id){
 		CartDetail cartDetail = cartdetailService.getCartDetailById(id);
-		
+		if (cartDetail == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		CartDetailResponse cartDetailResponse = new CartDetailResponse();
 		cartDetailResponse.setId(cartDetail.getCartdetail_id());
 		cartDetailResponse.setPrice(cartDetail.getPrice());
@@ -70,6 +74,10 @@ public class CartDetailController {
 	
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> deleteCartDetail(@PathVariable(name = "id") int id) {
+		CartDetail cartDetail = cartdetailService.getCartDetailById(id);
+		if (cartDetail == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		cartdetailService.deleteCartDetail(id);
 		return new ResponseEntity<String>("Delete successfully!", HttpStatus.OK);
 	}
@@ -81,6 +89,10 @@ public class CartDetailController {
 	
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<?> updateCartDetailUp(@PathVariable(name = "id") int id) {
+		CartDetail cartDetail = cartdetailService.getCartDetailById(id);
+		if (cartDetail == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		cartdetailService.updateCartDetailUp(id);
 		return new ResponseEntity<String>("Update successfully!", HttpStatus.OK);		
 	}
@@ -92,6 +104,10 @@ public class CartDetailController {
 	
 	@PutMapping()
 	public ResponseEntity<?> updateCartDetailDown(@RequestParam(name = "id") int id) {
+		CartDetail cartDetail = cartdetailService.getCartDetailById(id);
+		if (cartDetail == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		cartdetailService.updateCartDetailDown(id);
 		return new ResponseEntity<String>("Update successfully!", HttpStatus.OK);	
 	}
@@ -102,6 +118,10 @@ public class CartDetailController {
 	
 	@PostMapping(value = "/{id}")
 	public ResponseEntity<?> updateStatusCartDetail(@PathVariable(name = "id") int id){
+		CartDetail cartDetail = cartdetailService.getCartDetailById(id);
+		if (cartDetail == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		cartdetailService.updateStatusCartDetail(id);
 		return new ResponseEntity<String>("Update successfully!", HttpStatus.OK);	
 	}

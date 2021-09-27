@@ -22,7 +22,6 @@ import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Formula;
 
 import com.vti.enumerate.AccountGenderEnum;
 import com.vti.enumerate.AccountRole;
@@ -55,19 +54,7 @@ public class Account implements Serializable{
 	@Column(name = "phone_number", length = 12, nullable = false, unique = true)
 	private String phonenumber;
 	
-	@Column(name = "city", length = 12)
-	private String city;
-	
-	@Column(name = "district", length = 12)
-	private String district;
-	
-	@Column(name = "ward", length = 12)
-	private String ward;
-	
-	@Column(name = "street", length = 12)
-	private String street;
-	
-	@Formula("concat(city, ' ', district, ' ', ward, ' ', street)")
+	@Column(name = "address", length = 500)
 	private String address;
 	
 	@Column(name = "path_image", length = 500)
@@ -147,38 +134,6 @@ public class Account implements Serializable{
 
 	public void setPhonenumber(String phonenumber) {
 		this.phonenumber = phonenumber;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public String getDistrict() {
-		return district;
-	}
-
-	public void setDistrict(String district) {
-		this.district = district;
-	}
-
-	public String getWard() {
-		return ward;
-	}
-
-	public void setWard(String ward) {
-		this.ward = ward;
-	}
-
-	public String getStreet() {
-		return street;
-	}
-
-	public void setStreet(String street) {
-		this.street = street;
 	}
 
 	public String getAddress() {

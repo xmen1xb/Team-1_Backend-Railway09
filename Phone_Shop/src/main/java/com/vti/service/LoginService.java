@@ -51,7 +51,9 @@ public class LoginService {
 		String jwt = jwttokenHelper.generateToken(String.valueOf(principal.getUsername()));
 
 		String role = principal.getRole();
+		
+		String status = principal.getStatus();
 
-		return new LoginResponse(id, email, jwt, EXPIRES_IN, role);
+		return new LoginResponse(id, email, jwt, EXPIRES_IN, role, status);
 	}
 }
