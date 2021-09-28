@@ -15,7 +15,7 @@ public class AccountRequest {
 	@UsernameValidator
 	private String username;
 
-	@NotBlank(message = "Username không được để trống")
+	@NotBlank(message = "Fullname không được để trống")
 	@Length(min = 6, max = 50, message = "Độ dài FullName không hợp lệ")
 	private String fullname;
 	

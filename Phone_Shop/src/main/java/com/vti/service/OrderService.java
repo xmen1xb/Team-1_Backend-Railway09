@@ -14,6 +14,7 @@ import com.vti.entity.CartDetail;
 import com.vti.entity.Order;
 import com.vti.entity.OrderDetail;
 import com.vti.entity.Product;
+import com.vti.enumerate.CartDetailStatus;
 import com.vti.repository.IAccountRepository;
 import com.vti.repository.ICartDetailRepository;
 import com.vti.repository.ICartRepository;
@@ -72,17 +73,14 @@ public class OrderService implements IOrderService{
 			int cartID = cartDetail.getCart().getCart_id();
 			
 			updateCartDown(cartID, cartDetail);	
-//			cartDetail.setStatus(CartDetailStatus.Not_Order);
-			cartDetailRepo.delete(cartDetail);
-//			cartDetailRepo.save(cartDetail);
-			
 		}
+		cartDetailRepo.deleteCartDetailbyCartAndStatus(CartDetailStatus.Order, cart.getCart_id());
 	}
 
 	public void updateCartDown(int cartID, CartDetail cartDetail) {
 		Cart cart = cartRepo.getById(cartID);
 		cart.setQuantity(cart.getQuantity() - cartDetail.getQuantity());
-		cart.setTotal_price(cart.getTotal_price() - cartDetail.getPrice());
+		cart.setTotal_price(cart.getTotal_price() - (cartDetail.getPrice()*cartDetail.getQuantity()));
 		cartRepo.save(cart);
 	}
 }

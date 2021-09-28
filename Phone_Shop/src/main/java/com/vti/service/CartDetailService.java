@@ -122,8 +122,8 @@ public class CartDetailService implements ICartDetailService {
 	
 	public void updateCartDown(int cartID, CartDetail cartDetail) {
 		Cart cart = cartRepo.getById(cartID);
-		cart.setQuantity(cart.getQuantity() - 1);
-		cart.setTotal_price(cart.getTotal_price() - cartDetail.getPrice());
+		cart.setQuantity(cart.getQuantity() - cartDetail.getQuantity());
+		cart.setTotal_price(cart.getTotal_price() - (cartDetail.getPrice()*cartDetail.getQuantity()));
 		cartRepo.save(cart);
 	}
 

@@ -21,6 +21,14 @@ public class OrderController {
 	@Autowired
 	private IOrderService orderService;
 	
+	/**
+	 * API create Order
+	 * Sau khi tạo order sẽ đồng bộ : 	
+	 * 		tạo các orderDetail tương ứng CartDetail đã đặt									
+	 * 		xóa CartDetail đã order									
+	 * 		fix lại giá trong Cart
+	 */
+	
 	@PostMapping(value = "/{accountId}")
 	public ResponseEntity<?> createOrder(@PathVariable (name = "accountId") int accountID, @RequestBody OrderRequest request){
 		orderService.createOrder(accountID, request);

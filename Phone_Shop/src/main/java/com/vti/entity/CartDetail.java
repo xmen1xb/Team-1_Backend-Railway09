@@ -3,9 +3,8 @@ package com.vti.entity;
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.vti.enumerate.CartDetailStatus;
+import com.vti.enumerate.CartDetailStatusConverter;
 
 @Entity
 @Table(name = "CartDetail", catalog = "Mock_Project")
@@ -31,8 +31,9 @@ public class CartDetail implements Serializable{
 	@Column(name = "quantity")
 	private int quantity;
 	
-	@Enumerated(EnumType.STRING)
+
 	@Column(name = "`status`")
+	@Convert(converter = CartDetailStatusConverter.class)
 	private CartDetailStatus status = CartDetailStatus.Not_Order;
 	
 	@ManyToOne
