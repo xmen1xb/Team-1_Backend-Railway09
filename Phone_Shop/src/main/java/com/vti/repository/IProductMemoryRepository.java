@@ -8,4 +8,5 @@ import com.vti.entity.ProductMemory;
 @Repository
 public interface IProductMemoryRepository extends JpaRepository<ProductMemory, Short>{
 
+	public ProductMemory findByMemoryName(String name);
 }

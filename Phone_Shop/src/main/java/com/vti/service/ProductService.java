@@ -8,8 +8,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import com.vti.entity.Product;
+import com.vti.entity.ProductBrand;
+import com.vti.entity.ProductMemory;
+import com.vti.entity.ProductRam;
+import com.vti.repository.IProductBrandRepository;
+import com.vti.repository.IProductMemoryRepository;
+import com.vti.repository.IProductRamRepository;
 import com.vti.repository.IProductRepository;
 import com.vti.request.ProductFilterRequest;
+import com.vti.request.ProductRequest;
 import com.vti.specification.ProductSpecification;
 
 @Service
@@ -17,6 +24,18 @@ public class ProductService implements IProductService {
 
 	@Autowired
 	private IProductRepository product_repo;
+	
+	@Autowired
+	private IProductRamRepository ramRepo;
+	
+	@Autowired
+	private IProductMemoryRepository memoryRepo;
+	
+	@Autowired
+	private IProductBrandRepository brandRepo;
+	
+	@Autowired
+	private IFileService fileService;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -82,5 +101,57 @@ public class ProductService implements IProductService {
 		return product_repo.findAllOrderByPriceAsc(pageable);
 	}
 
+	@Override
+	public void createProduct(ProductRequest request) {
+		Product product = new Product();
+		ProductBrand productBrand = brandRepo.findByBrandName(request.getBrand());
+		ProductMemory productMemory = memoryRepo.findByMemoryName(request.getMemory());
+		ProductRam productRam = ramRepo.findByRamName(request.getRam());
+		
+		product.setProductName(request.getName());
+		product.setDescription(request.getDescription());
+		product.setPrice(request.getPrice());
+		product.setRam(productRam);
+		product.setMemory(productMemory);
+		product.setBrand(productBrand);
+		product.setQuantity(request.getQuantity());
+		product.setCamera(request.getCamera());
+		product.setColor(request.getColor());
+		product.setScreenSize(request.getScreenSize());
+		product.setOperatingSystem(request.getOperatingSystem());
+		product.setChip(request.getChip());
+		product.setBattery(request.getBattery());
+		product.setSim(request.getSim());
+		product.setDiscount(request.getDiscount());
+		product.setPathImage(request.getImage());
+		
+		product_repo.save(product);
+	}
 
+	@Override
+	public void updateProduct(int productID, ProductRequest request) {
+		Product product = product_repo.getById(productID);	
+		ProductBrand productBrand = brandRepo.findByBrandName(request.getBrand());
+		ProductMemory productMemory = memoryRepo.findByMemoryName(request.getMemory());
+		ProductRam productRam = ramRepo.findByRamName(request.getRam());
+		
+		product.setProductName(request.getName());
+		product.setDescription(request.getDescription());
+		product.setPrice(request.getPrice());
+		product.setRam(productRam);
+		product.setMemory(productMemory);
+		product.setBrand(productBrand);
+		product.setQuantity(request.getQuantity());
+		product.setCamera(request.getCamera());
+		product.setColor(request.getColor());
+		product.setScreenSize(request.getScreenSize());
+		product.setOperatingSystem(request.getOperatingSystem());
+		product.setChip(request.getChip());
+		product.setBattery(request.getBattery());
+		product.setSim(request.getSim());
+		product.setDiscount(request.getDiscount());
+		product.setPathImage(request.getImage());
+		
+		product_repo.save(product);
+	}
 }

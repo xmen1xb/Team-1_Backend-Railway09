@@ -44,7 +44,7 @@ public class CartDetailService implements ICartDetailService {
 		
 		List<CartDetail> listCartDetail = product.getListCartDetail();
 		for (CartDetail cartDetail : listCartDetail) {
-			if (cartDetail.getProduct().getProduct_id() == product.getProduct_id() && cartDetail.getCart().getCart_id() == accountId){
+			if (cartDetail.getProduct().getProductId() == product.getProductId() && cartDetail.getCart().getCart_id() == accountId){
 				System.out.println(cartDetail.getCart().getCart_id());
 				System.out.println(accountId);
 				updateCartDetailUp(cartDetail.getCartdetail_id());
@@ -68,7 +68,7 @@ public class CartDetailService implements ICartDetailService {
 		CartDetail cartDetail = cartdetailRepo.getById(id);
 		int cartID = cartDetail.getCart().getCart_id();
 
-		updateCartDown(cartID, cartDetail);
+		updateCartDownAll(cartID, cartDetail);
 
 		cartdetailRepo.deleteById(id);
 
@@ -121,6 +121,13 @@ public class CartDetailService implements ICartDetailService {
 
 	
 	public void updateCartDown(int cartID, CartDetail cartDetail) {
+		Cart cart = cartRepo.getById(cartID);
+		cart.setQuantity(cart.getQuantity() - 1);
+		cart.setTotal_price(cart.getTotal_price() - (cartDetail.getPrice()*cartDetail.getQuantity()));
+		cartRepo.save(cart);
+	}
+	
+	public void updateCartDownAll(int cartID, CartDetail cartDetail) {
 		Cart cart = cartRepo.getById(cartID);
 		cart.setQuantity(cart.getQuantity() - cartDetail.getQuantity());
 		cart.setTotal_price(cart.getTotal_price() - (cartDetail.getPrice()*cartDetail.getQuantity()));

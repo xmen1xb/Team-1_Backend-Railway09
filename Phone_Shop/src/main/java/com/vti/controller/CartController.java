@@ -64,10 +64,11 @@ public class CartController {
 			cartDetailResponse.setPrice(cartDetail.getPrice());
 			cartDetailResponse.setQuantity(cartDetail.getQuantity());
 			Product product = cartDetail.getProduct();
-			ProductResponse productResponse = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
+			ProductResponse productResponse = new ProductResponse(product.getProductId(), product.getProductName(),
 					product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
-					product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
-					product.getPathImage(),product.getDiscount() ,product.getEnter_date());
+					product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),product.getCamera(),product.getColor(),
+					product.getScreenSize(),product.getOperatingSystem(), product.getChip(),product.getBattery(),
+					product.getSim() ,product.getPathImage(),product.getDiscount() ,product.getEnterDate());
 			cartDetailResponse.setProduct(productResponse);
 			cartDetailResponse.setStatus(cartDetail.getStatus());
 			listRespone.add(cartDetailResponse);

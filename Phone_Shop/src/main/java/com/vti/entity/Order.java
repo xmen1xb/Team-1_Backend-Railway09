@@ -56,7 +56,7 @@ public class Order implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "user_id", nullable = false)
 	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	private Account orderAccount;
+	private Account userId;
 	
 	@OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
 	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
@@ -66,12 +66,12 @@ public class Order implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public Order(short quantity, Double totalPrice, String address, Account orderAccount) {
+	public Order(short quantity, Double totalPrice, String address, Account userId) {
 		super();
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
 		this.address = address;
-		this.orderAccount = orderAccount;
+		this.userId = userId;
 	}
 
 	public short getQuantity() {
@@ -107,11 +107,11 @@ public class Order implements Serializable{
 	}
 
 	public Account getAccount() {
-		return orderAccount;
+		return userId;
 	}
 
 	public void setAccount(Account account) {
-		this.orderAccount = account;
+		this.userId = account;
 	}
 
 	public List<OrderDetail> getListOrderDetail() {
@@ -135,11 +135,11 @@ public class Order implements Serializable{
 	}
 
 	public Account getOrderAccount() {
-		return orderAccount;
+		return userId;
 	}
 
-	public void setOrderAccount(Account orderAccount) {
-		this.orderAccount = orderAccount;
+	public void setOrderAccount(Account userId) {
+		this.userId = userId;
 	}
 
 	public String getAddress() {

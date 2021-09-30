@@ -19,7 +19,7 @@ public class SendResetPasswordConfirmViaEmailListener
 		
 	}
 
-	private void sendConfirmViaEmail(String email) {
+	public void sendConfirmViaEmail(String email) {
 		resetPasswordService.sendResetPasswordConfirm(email);
 	}
 }

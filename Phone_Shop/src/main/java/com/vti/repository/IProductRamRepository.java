@@ -8,4 +8,5 @@ import com.vti.entity.ProductRam;
 @Repository
 public interface IProductRamRepository extends JpaRepository<ProductRam, Short>{
 
+	public ProductRam findByRamName(String name);
 }

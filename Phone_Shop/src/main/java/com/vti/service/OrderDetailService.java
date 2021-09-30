@@ -25,7 +25,7 @@ public class OrderDetailService implements IOrderDetailService{
 	@Override
 	public void createOrderDetail(int id) {
 		CartDetail cartDetail = cartDetailRepo.getById(id);
-		Product product = productRepo.getById(cartDetail.getProduct().getProduct_id()) ;
+		Product product = productRepo.getById(cartDetail.getProduct().getProductId()) ;
 		OrderDetail orderDetail = new OrderDetail(cartDetail.getPrice(), (short) cartDetail.getQuantity(), null, product);
 		
 	}

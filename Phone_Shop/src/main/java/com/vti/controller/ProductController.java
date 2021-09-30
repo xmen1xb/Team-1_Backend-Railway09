@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,6 +27,7 @@ import com.vti.entity.ProductImage;
 import com.vti.exception.NotFoundException;
 import com.vti.repository.IProductRepository;
 import com.vti.request.ProductFilterRequest;
+import com.vti.request.ProductRequest;
 import com.vti.response.ProductImagesRespone;
 import com.vti.response.ProductResponse;
 import com.vti.service.IProductService;
@@ -38,13 +42,11 @@ public class ProductController {
 
 	@Autowired
 	private IProductService productService;
-	
+
 	/**
-	 * API getAll Product
-	 * Search theo ProductName
-	 * Filter theo brand - memory - ram
+	 * API getAll Product Search theo ProductName Filter theo brand - memory - ram
 	 */
-	
+
 	@GetMapping()
 	public ResponseEntity<?> getAllProducts(Pageable pageable, @RequestParam(required = false) String search,
 			ProductFilterRequest filter) {
@@ -54,21 +56,22 @@ public class ProductController {
 
 			@Override
 			public ProductResponse apply(Product product) {
-				ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
-						product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
-						product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
-						product.getPathImage(),product.getDiscount() ,product.getEnter_date());
+				ProductResponse response = new ProductResponse(product.getProductId(), product.getProductName(),
+						product.getDescription(), product.getPrice(), product.getRam().getRamName(),
+						product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
+						product.getQuantity(), product.getCamera(), product.getColor(), product.getScreenSize(),
+						product.getOperatingSystem(), product.getChip(), product.getBattery(), product.getSim(),
+						product.getPathImage(), product.getDiscount(), product.getEnterDate());
 				return response;
 			}
 		});
 		return new ResponseEntity<>(pageResponse, HttpStatus.OK);
 	}
-	
+
 	/**
-	 * API getAll Product
-	 * Filter theo price down
+	 * API getAll Product Filter theo price down
 	 */
-	
+
 	@RequestMapping(value = "/desc", method = RequestMethod.GET)
 	public ResponseEntity<?> findAllOrderByPriceDesc(Pageable pageable) {
 		Page<Product> entities = productService.findAllOrderByPriceDesc(pageable);
@@ -77,10 +80,12 @@ public class ProductController {
 
 			@Override
 			public ProductResponse apply(Product product) {
-				ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
+				ProductResponse response = new ProductResponse(product.getProductId(), product.getProductName(),
 						product.getDescription(), product.getPrice(), product.getRam().getRamName(),
 						product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
-						product.getQuantity(), product.getPathImage(),product.getDiscount(), product.getEnter_date());
+						product.getQuantity(), product.getCamera(), product.getColor(), product.getScreenSize(),
+						product.getOperatingSystem(), product.getChip(), product.getBattery(), product.getSim(),
+						product.getPathImage(), product.getDiscount(), product.getEnterDate());
 				return response;
 			}
 		});
@@ -88,10 +93,9 @@ public class ProductController {
 	}
 
 	/**
-	 * API getAll Product
-	 * Filter theo price up
+	 * API getAll Product Filter theo price up
 	 */
-	
+
 	@RequestMapping(value = "/asc", method = RequestMethod.GET)
 	public ResponseEntity<?> findAllOrderByPriceAsc(Pageable pageable) {
 		Page<Product> entities = productService.findAllOrderByPriceAsc(pageable);
@@ -100,30 +104,34 @@ public class ProductController {
 
 			@Override
 			public ProductResponse apply(Product product) {
-				ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
-						product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
-						product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),
-						product.getPathImage(),product.getDiscount(), product.getEnter_date());
+				ProductResponse response = new ProductResponse(product.getProductId(), product.getProductName(),
+						product.getDescription(), product.getPrice(), product.getRam().getRamName(),
+						product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
+						product.getQuantity(), product.getCamera(), product.getColor(), product.getScreenSize(),
+						product.getOperatingSystem(), product.getChip(), product.getBattery(), product.getSim(),
+						product.getPathImage(), product.getDiscount(), product.getEnterDate());
 				return response;
 			}
 		});
 		return new ResponseEntity<>(pageResponse, HttpStatus.OK);
 	}
-	
+
 	/**
 	 * API getProduct by ProductID
 	 */
-	
+
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<?> getProductByID(@PathVariable(name = "id") short id) {
 		Product product = productService.getProductById(id);
 		if (product == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		ProductResponse response = new ProductResponse(product.getProduct_id(), product.getProduct_name(),
+		ProductResponse response = new ProductResponse(product.getProductId(), product.getProductName(),
 				product.getDescription(), product.getPrice(), product.getRam().getRamName(),
 				product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
-				product.getQuantity(), product.getPathImage(),product.getDiscount(), product.getEnter_date());
+				product.getQuantity(), product.getCamera(), product.getColor(), product.getScreenSize(),
+				product.getOperatingSystem(), product.getChip(), product.getBattery(), product.getSim(),
+				product.getPathImage(), product.getDiscount(), product.getEnterDate());
 
 		return new ResponseEntity<ProductResponse>(response, HttpStatus.OK);
 	}
@@ -131,7 +139,8 @@ public class ProductController {
 	/**
 	 * API deleteProduct by ProductID
 	 */
-  @PreAuthorize("hasRole('Admin')")
+	
+	@PreAuthorize("hasRole('Admin')")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> deleteProduct(@PathVariable(name = "id") int id) {
 		Product product = productService.getProductById(id);
@@ -141,11 +150,31 @@ public class ProductController {
 		productService.deleteProduct(id);
 		return new ResponseEntity<String>("Delete successfully!", HttpStatus.OK);
 	}
+	
+	/**
+	 * API create Product 
+	 */
+	
+	@PostMapping
+	public ResponseEntity<?> createProduct(@RequestBody ProductRequest request){
+		productService.createProduct(request);
+		return new ResponseEntity<String>("Create successfully!", HttpStatus.OK);	
+	}
+	
+	/**
+	 * API update Product 
+	 */
+	
+	@PutMapping(value = "/{id}")
+	public ResponseEntity<?> updateProduct(@PathVariable(name = "id") int productId, @RequestBody ProductRequest request){
+		productService.updateProduct(productId, request);
+		return new ResponseEntity<String>("Update successfully!", HttpStatus.OK);		
+	}
 
 	/**
 	 * API lấy listProductImage by ProductID
 	 */
-	
+
 	@GetMapping(value = "/{id}/images")
 	public ResponseEntity<?> ProductImgesDetail(@PathVariable(name = "id") Integer productId) {
 		Product product = productRepository.findById(productId).orElse(null);
@@ -157,7 +186,7 @@ public class ProductController {
 		for (ProductImage productImage : productImages) {
 			String pathRespone = productImage.getPath_image();
 			ProductImagesRespone respone = new ProductImagesRespone(productImage.getImage_id(),
-					productImage.getProduct().getProduct_id(), pathRespone);
+					productImage.getProduct().getProductId(), pathRespone);
 			listRespone.add(respone);
 		}
 		return new ResponseEntity<>(listRespone, HttpStatus.OK);

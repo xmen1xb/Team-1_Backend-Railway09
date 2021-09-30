@@ -37,6 +37,26 @@ public class EmailService implements IEmailService {
 		sendEmail(email, subject, content);
 
 	}
+	
+	@Override
+	public void sendOrderConfirm(String email) {
+		
+		String subject = "Xác Nhận Đặt Hàng";
+		String content = "Bạn đã đặt hàng thành công. Hàng của bạn sẽ được chuyển đến sau 3 ngày. "
+				+ "Nếu có thay đổi, chúng tôi sẽ thông báo cho bạn qua email hoặc điện thoại. Xin cám ơn vì đã ủng hộ shop \n";
+		
+		sendEmail(email, subject, content);
+	}
+	
+	@Override
+	public void sendOrderConfirmEnd(String email) {
+		
+		String subject = "Thông Báo Hủy Đơn Hàng";
+		String content = "Đơn hàng của bạn đã bị hủy. Nếu có thắc mắc xin liên hệ tổng đài 19001009 "
+				+ "Để biết thêm chi tiết. Xin chân thành xin lỗi vì sự bất tiện này \n";
+		
+		sendEmail(email, subject, content);
+	}
 
 	private void sendEmail(final String recipientEmail, final String subject, final String content) {
 		SimpleMailMessage message = new SimpleMailMessage();
@@ -46,5 +66,4 @@ public class EmailService implements IEmailService {
 
 		mailSender.send(message);
 	}
-
 }

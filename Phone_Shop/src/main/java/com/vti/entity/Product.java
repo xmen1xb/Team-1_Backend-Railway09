@@ -23,6 +23,12 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "Product", catalog = "Mock_Project")
 public class Product implements Serializable {
@@ -65,6 +71,27 @@ public class Product implements Serializable {
 
 	@Column(name = "quantity")
 	private short quantity;
+	
+	@Column(name = "camera", length = 50)
+	private String camera;
+	
+	@Column(name = "color", length = 50)
+	private String color;
+	
+	@Column(name = "screenSize", length = 50)
+	private String screenSize;
+	
+	@Column(name = "operatingSystem", length = 50)
+	private String operatingSystem;
+	
+	@Column(name = "chip", length = 50)
+	private String chip;
+	
+	@Column(name = "battery", length = 50)
+	private String battery;
+	
+	@Column(name = "sim", length = 50)
+	private String sim;
 
 	@Column(name = "enter_date")
 	@Temporal(TemporalType.TIMESTAMP)
@@ -85,123 +112,5 @@ public class Product implements Serializable {
 	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
 	@Fetch(value = FetchMode.SUBSELECT)
 	private List<OrderDetail> listOrderDetail;
-
-	public Product() {
-		// TODO Auto-generated constructor stub
-	}
-
-	public int getProduct_id() {
-		return productId;
-	}
-
-	public String getProduct_name() {
-		return productName;
-	}
-
-	public void setProduct_name(String product_name) {
-		this.productName = product_name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public short getDiscount() {
-		return discount;
-	}
-
-	public void setDiscount(short discount) {
-		this.discount = discount;
-	}
-
-	public String getPriceDesign() {
-		DecimalFormat formatter = new DecimalFormat("###,###,###");
-		return formatter.format(Double.valueOf(price));
-	}
-
-	public Double getPrice() {
-
-		return price;
-	}
-
-	public void setPrice(Double price) {
-		this.price = price;
-	}
-
-	public ProductRam getRam() {
-		return ram;
-	}
-
-	public void setRam(ProductRam ram) {
-		this.ram = ram;
-	}
-
-	public ProductMemory getMemory() {
-		return memory;
-	}
-
-	public void setMemory(ProductMemory memory) {
-		this.memory = memory;
-	}
-
-	public ProductBrand getBrand() {
-		return brand;
-	}
-
-	public void setBrand(ProductBrand brand) {
-		this.brand = brand;
-	}
-
-	public String getCategory() {
-		return category;
-	}
-
-	public void setCategory(String category) {
-		this.category = category;
-	}
-
-	public short getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(short quantity) {
-		this.quantity = quantity;
-	}
-
-	public Date getEnter_date() {
-		return enterDate;
-	}
-
-	public void setEnter_date(Date enter_date) {
-		this.enterDate = enter_date;
-	}
-
-	public String getPathImage() {
-		return pathImage;
-	}
-
-	public void setPathImage(String pathImage) {
-		this.pathImage = pathImage;
-	}
-
-	public List<ProductImage> getListProductImage() {
-		return listProductImage;
-	}
-
-	public void setListProductImage(List<ProductImage> listProductImage) {
-		this.listProductImage = listProductImage;
-	}
-
-	public List<CartDetail> getListCartDetail() {
-		return listCartDetail;
-	}
-
-	public void setListCartDetail(List<CartDetail> listCartDetail) {
-		this.listCartDetail = listCartDetail;
-	}
 
 }

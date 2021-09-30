@@ -7,21 +7,20 @@ import org.springframework.stereotype.Component;
 import com.vti.service.IEmailService;
 
 @Component
-public class SendRegistrationUserConfirmViaEmailListener
-		implements ApplicationListener<OnSendRegistrationUserConfirmViaEmailEvent> {
+public class SendOrderConfirmViaEmailListener 
+					implements ApplicationListener<OnSendOrderConfirmViaEmailEvent>{
 
 	@Autowired
 	private IEmailService emailService;
-
+	
 	@Override
-	public void onApplicationEvent(OnSendRegistrationUserConfirmViaEmailEvent event) {
+	public void onApplicationEvent(OnSendOrderConfirmViaEmailEvent event) {
 		sendConfirmViaEmail(event.getEmail());
+		
 	}
-
+	
 	private void sendConfirmViaEmail(String email) {
-		emailService.sendRegistrationUserConfirm(email);
+		emailService.sendOrderConfirm(email);
 	}
-	
-	
 
 }

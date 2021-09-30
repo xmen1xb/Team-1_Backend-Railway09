@@ -8,4 +8,5 @@ import com.vti.entity.ProductBrand;
 @Repository
 public interface IProductBrandRepository extends JpaRepository<ProductBrand, Short>{
 
+	public ProductBrand findByBrandName(String name);
 }

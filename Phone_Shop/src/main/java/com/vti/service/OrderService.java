@@ -6,6 +6,9 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.vti.entity.Account;
@@ -15,6 +18,9 @@ import com.vti.entity.Order;
 import com.vti.entity.OrderDetail;
 import com.vti.entity.Product;
 import com.vti.enumerate.CartDetailStatus;
+import com.vti.enumerate.OrderStatusEnum;
+import com.vti.event.OnSendOrderConfirmEndViaEmailEvent;
+import com.vti.event.OnSendOrderConfirmViaEmailEvent;
 import com.vti.repository.IAccountRepository;
 import com.vti.repository.ICartDetailRepository;
 import com.vti.repository.ICartRepository;
@@ -39,6 +45,9 @@ public class OrderService implements IOrderService{
 	
 	@Autowired
 	private ICartDetailRepository cartDetailRepo;
+	
+	@Autowired
+	private ApplicationEventPublisher eventPublisher;
 	
 	@Override
 	@Transactional
@@ -82,5 +91,60 @@ public class OrderService implements IOrderService{
 		cart.setQuantity(cart.getQuantity() - cartDetail.getQuantity());
 		cart.setTotal_price(cart.getTotal_price() - (cartDetail.getPrice()*cartDetail.getQuantity()));
 		cartRepo.save(cart);
+	}
+
+	@Override
+	public Page<Order> getAllOrder(Pageable pageable) {
+		
+		return orderRepo.findAll(pageable);
+	}
+
+	@Override
+	public void updateOrder(int orderID) {
+		Order order = orderRepo.getById(orderID);
+		Account account = order.getAccount();
+		if (order.getStatus().toString() == "Not_Active") {
+			order.setStatus(OrderStatusEnum.Active);
+			orderRepo.save(order);
+			sendConfirmOrderViaEmail(account.getEmail());
+		}else if (order.getStatus().toString() == "Active") {
+			order.setStatus(OrderStatusEnum.End);
+			orderRepo.save(order);
+		}	
+	}
+
+	@Override
+	public void endOrder(int orderID) {
+		Order order = orderRepo.getById(orderID);
+		Account account = order.getAccount();
+		
+		order.setStatus(OrderStatusEnum.Delete);
+		orderRepo.save(order);
+		
+		sendConfirmEndOrderViaEmail(account.getEmail());
+	}
+
+	@Override
+	public void deleteOrder(int orderID) {
+		orderRepo.deleteById(orderID);
+		
+	}
+	
+	@Override
+	public void sendConfirmOrderViaEmail(String email) {
+		eventPublisher.publishEvent(new OnSendOrderConfirmViaEmailEvent(email));
+		
+	}
+	
+	@Override
+	public void sendConfirmEndOrderViaEmail(String email) {
+		eventPublisher.publishEvent(new OnSendOrderConfirmEndViaEmailEvent(email));
+		
+	}
+
+	@Override
+	public Page<Order> getAllOrderByAccountId(int accountID, Pageable pageable) {
+		
+		return orderRepo.findAllByUserId(accountID, pageable);
 	}
 }

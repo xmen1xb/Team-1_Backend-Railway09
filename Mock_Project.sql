@@ -14,11 +14,8 @@ CREATE TABLE `Account`(
     fullname		VARCHAR(50) NOT NULL,
     gender			ENUM('Male', 'Female', 'Unknow') DEFAULT 'Unknow',
     email			VARCHAR(100) NOT NULL UNIQUE KEY,
-    phone_number	CHAR(12) UNIQUE KEY,
-    city			VARCHAR(50) ,
-    district		VARCHAR(50) ,
-    ward			VARCHAR(50) ,
-    street			VARCHAR(100),
+    phone_number	CHAR(12),
+    address			VARCHAR(500) ,
     path_image		VARCHAR(100),
     `password`		VARCHAR(255) DEFAULT '$2a$12$xZUN2GTv3pg7x1YFq8CiSuXZTitxj1XvJggmuU9D5Dx65FD93jabm',
 	`role`			ENUM('Admin', 'User') DEFAULT 'User',
@@ -55,6 +52,13 @@ CREATE TABLE Product(
     `description`		NVARCHAR(1000),
     discount			SMALLINT UNSIGNED DEFAULT '0',
     price				DOUBLE UNSIGNED NOT NULL,
+    camera				VARCHAR(50),
+    color				VARCHAR(50),
+    screenSize			VARCHAR(50),
+    operatingSystem		VARCHAR(50),
+    chip				VARCHAR(50),
+    battery				VARCHAR(50),
+    sim					VARCHAR(50),
     productRam_id		SMALLINT UNSIGNED,
     productMemory_id	SMALLINT UNSIGNED,
     productBrand_id		SMALLINT UNSIGNED,
@@ -79,6 +83,15 @@ CREATE TABLE ProductImage(
 -- create table 4: Register token
 DROP TABLE IF EXISTS `Registation_Account_Token`;
 CREATE TABLE `Registation_Account_Token`(
+	id				INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    token			CHAR(50) NOT NULL UNIQUE KEY,
+    user_id			INT UNSIGNED NOT NULL,
+	expiryDate		DATETIME NOT NULL,
+	FOREIGN KEY(user_id)  REFERENCES `Account`(account_id)
+);
+
+DROP TABLE IF EXISTS `Reset_Password_Token`;
+CREATE TABLE `Reset_Password_Token`(
 	id				INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     token			CHAR(50) NOT NULL UNIQUE KEY,
     user_id			INT UNSIGNED NOT NULL,
@@ -115,10 +128,7 @@ CREATE TABLE `Order`(
 	order_id		INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     quantity		SMALLINT UNSIGNED NOT NULL,
     total_price		DOUBLE UNSIGNED NOT NULL,
-	city			VARCHAR(50) ,
-    district		VARCHAR(50) ,
-    ward			VARCHAR(50) ,
-    street			VARCHAR(100),
+    address			VARCHAR(500) ,
     user_id			INT UNSIGNED NOT NULL,
     order_date		DATETIME DEFAULT NOW(),
     `Status`		ENUM('Active', 'Not_Active', 'End', 'Delete') DEFAULT 'Not_Active',
@@ -208,3 +218,16 @@ INSERT INTO `mock_project`.`productimage` (`path_image`, `product_id`) VALUES ('
 INSERT INTO `mock_project`.`productimage` (`path_image`, `product_id`) VALUES ('246', '2');
 INSERT INTO `mock_project`.`productimage` (`path_image`, `product_id`) VALUES ('357', '2');
 
+INSERT INTO `mock_project`.`product` (`product_name`, `discount`, `price`, `productRam_id`, `productMemory_id`, `productBrand_id`, `category`, `quantity`) 
+VALUES 									('Oppo S55', '0', '8000000', '3', '3', '4', 'Phone', '0');
+
+
+UPDATE `mock_project`.`product` SET `discount` = '20' WHERE (`product_id` = '1');
+UPDATE `mock_project`.`product` SET `discount` = '30' WHERE (`product_id` = '2');
+UPDATE `mock_project`.`product` SET `discount` = '20' WHERE (`product_id` = '3');
+UPDATE `mock_project`.`product` SET `discount` = '25' WHERE (`product_id` = '5');
+UPDATE `mock_project`.`product` SET `discount` = '10' WHERE (`product_id` = '6');
+UPDATE `mock_project`.`product` SET `discount` = '20' WHERE (`product_id` = '7');
+UPDATE `mock_project`.`product` SET `discount` = '20' WHERE (`product_id` = '8');
+UPDATE `mock_project`.`product` SET `discount` = '10' WHERE (`product_id` = '9');
+UPDATE `mock_project`.`product` SET `discount` = '10' WHERE (`product_id` = '10');
