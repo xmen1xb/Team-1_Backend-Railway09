@@ -1,7 +1,6 @@
 package com.vti.entity;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.List;
 

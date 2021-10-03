@@ -1,5 +1,7 @@
 package com.vti.controller;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vti.entity.Order;
+import com.vti.entity.OrderDetail;
+import com.vti.entity.Product;
+import com.vti.exception.CustomerException;
+import com.vti.exception.NotFoundException;
 import com.vti.request.OrderRequest;
+import com.vti.response.OrderDetailResponse;
 import com.vti.response.OrderResponse;
+import com.vti.response.ProductResponse;
 import com.vti.service.IOrderService;
 
 @RestController
@@ -42,7 +50,8 @@ public class OrderController {
 
 			@Override
 			public OrderResponse apply(Order order) {
-				OrderResponse response = new OrderResponse(order.getTotal_price(), order.getOrder_date(), order.getStatus());
+				OrderResponse response = new OrderResponse(order.getDescription(), order.getTotal_price(), 
+						order.getOrder_date(), order.getStatus());
 				return response;
 			}
 		});
@@ -53,15 +62,17 @@ public class OrderController {
 	 * API getAll Order for Admin							
 	 */
 	
-	@GetMapping(value = "/{accountID}")
-	public ResponseEntity<?> getAllOrderForUser(@PathVariable(name = "accountID") int accountID, Pageable pageable){
-		Page<Order> pageOrder = orderService.getAllOrder(pageable);
+	@GetMapping(value = "/{accountId}")
+	public ResponseEntity<?> findByUserId(@PathVariable(name = "accountId") int accountId, Pageable pageable){
+		Page<Order> pageOrder = orderService.findByUserId(accountId, pageable);
 		
 		Page<OrderResponse> response = pageOrder.map(new Function<Order, OrderResponse>() {
 
 			@Override
 			public OrderResponse apply(Order order) {
-				OrderResponse response = new OrderResponse(order.getTotal_price(), order.getOrder_date(), order.getStatus());
+				
+				OrderResponse response = new OrderResponse(order.getDescription(), order.getTotal_price(), order.getOrder_date(),
+						order.getStatus());
 				return response;
 			}
 		});
@@ -102,13 +113,48 @@ public class OrderController {
 	 * API update Order -> Delete
 	 * Sau khi update sẽ chuyển trạng thái của order sang Delete 	
 	 * 1 thư sẽ được gửi về email của khách đặt hàng									
+	 * @throws CustomerException 
 	 */
 	
 	@PutMapping()
-	public ResponseEntity<?> endOrder(@RequestParam (name = "orderID") int orderID){
-		orderService.endOrder(orderID);
+	public ResponseEntity<?> endOrder(@RequestParam (name = "orderID") int orderID,@RequestBody OrderRequest request) throws CustomerException{
+		orderService.endOrder(orderID, request);
 		return new ResponseEntity<String>("Chúng tôi đã gửi 1 thư về hòm thư của bạn. Xin hãy kiểm tra hòm thư "
 				+ "để xác nhận!", HttpStatus.OK );
+		
+	}
+	
+	/**
+	 * API lấy ListOrderDetail = OrderID
+	 */
+	
+	@GetMapping(value = "/{id}/orderDetails")
+	public ResponseEntity<?> getListOrderDetail(@PathVariable(name = "id") int id){
+		Order order = orderService.getOrderByID(id);
+		if (order == null) {
+			throw new NotFoundException("Đơn hàng không tồn tại");	
+		}
+		List<OrderDetail> listOrderDetail = order.getListOrderDetail();
+		List<OrderDetailResponse> showOrderDetail = new ArrayList<>();
+		
+		for (OrderDetail orderDetail : listOrderDetail) {
+			OrderDetailResponse response = new OrderDetailResponse();
+			response.setId(orderDetail.getorderdetail_id());
+			response.setPrice(orderDetail.getPrice());
+			response.setQuantity(orderDetail.getQuantity());
+			
+			Product product = orderDetail.getProduct();
+			ProductResponse productResponse = new ProductResponse(product.getProductId(), product.getProductName(),
+					product.getDescription(), product.getPrice(), product.getRam().getRamName(), product.getMemory().getMemoryName(),
+					product.getBrand().getBrandName(), product.getCategory(), product.getQuantity(),product.getCamera(),product.getColor(),
+					product.getScreenSize(),product.getOperatingSystem(), product.getChip(),product.getBattery(),
+					product.getSim() ,product.getPathImage(),product.getDiscount() ,product.getEnterDate());
+			
+			response.setProduct(productResponse);
+			showOrderDetail.add(response);
+		}
+		
+		return new ResponseEntity<>(showOrderDetail, HttpStatus.OK);
 		
 	}
 }

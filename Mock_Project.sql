@@ -64,7 +64,7 @@ CREATE TABLE Product(
     productBrand_id		SMALLINT UNSIGNED,
     category			VARCHAR(100) NOT NULL,
     quantity			MEDIUMINT UNSIGNED NOT NULL,
-	path_image			VARCHAR(100),
+	path_image			VARCHAR(200),
     enter_date			DATETIME DEFAULT NOW(),
     FOREIGN KEY(productRam_id)  REFERENCES ProductRam(productRam_id),
     FOREIGN KEY(productMemory_id)  REFERENCES ProductMemory(productMemory_id),
@@ -75,7 +75,7 @@ CREATE TABLE Product(
 DROP TABLE IF EXISTS ProductImage;
 CREATE TABLE ProductImage(
 	image_id		INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    path_image		VARCHAR(100),
+    path_image		VARCHAR(200),
 	product_id		INT UNSIGNED NOT NULL,
     FOREIGN KEY(product_id)  REFERENCES Product(product_id)
 );
@@ -126,9 +126,11 @@ CREATE TABLE CartDetail(
 DROP TABLE IF EXISTS `Order`;
 CREATE TABLE `Order`(
 	order_id		INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    `description`	NVARCHAR(1000),
     quantity		SMALLINT UNSIGNED NOT NULL,
     total_price		DOUBLE UNSIGNED NOT NULL,
-    address			VARCHAR(500) ,
+    address			VARCHAR(500) NOT NULL,
+    phone			CHAR(12) NOT NULL,
     user_id			INT UNSIGNED NOT NULL,
     order_date		DATETIME DEFAULT NOW(),
     `Status`		ENUM('Active', 'Not_Active', 'End', 'Delete') DEFAULT 'Not_Active',

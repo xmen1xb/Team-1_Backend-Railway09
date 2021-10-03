@@ -13,6 +13,8 @@ public interface IProductService {
 	
 	public Product getProductById(int id);
 	
+	public Product findByProductName(String name);
+	
 	public void deleteProduct(int id);
 	
 	public Page<Product> findAllOrderByPriceDesc(Pageable pageable);

@@ -2,19 +2,22 @@ package com.vti.request;
 
 public class OrderRequest {
 
+	private String description;
 	private short quantity;
 	private Double totalPrice;
 	private String address;
+	private String phone;
 	
 	public OrderRequest() {
 		// TODO Auto-generated constructor stub
 	}
 
-	public OrderRequest(short quantity, Double totalPrice, String address) {
+	public OrderRequest(short quantity, Double totalPrice, String address, String phone) {
 		super();
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
 		this.address = address;
+		this.phone = phone;
 	}
 
 	public short getQuantity() {
@@ -39,5 +42,21 @@ public class OrderRequest {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

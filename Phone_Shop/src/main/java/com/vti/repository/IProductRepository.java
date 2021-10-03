@@ -17,4 +17,6 @@ public interface IProductRepository extends JpaRepository<Product, Integer>, Jpa
 	
 	@Query("SELECT p FROM Product p  ORDER BY (p.price - ((p.price * p.discount)/100)) ASC")
 	public Page<Product> findAllOrderByPriceAsc(Pageable pageable);
+	
+	public Product findByProductName(String name);
 }

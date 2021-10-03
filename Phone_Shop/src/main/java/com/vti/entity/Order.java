@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,6 +34,9 @@ public class Order implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int orderId;
 	
+	@Column(name = "`description`", length = 1000)
+	private String description;
+	
 	@Column(name = "quantity")
 	private short quantity;
 	
@@ -44,21 +46,24 @@ public class Order implements Serializable{
 	@Column(name = "address", length = 500)
 	private String address;
 	
+	@Column(name = "phone", length = 12)
+	private String phone;
+	
 	@Column(name = "order_date")
 	@Temporal(TemporalType.TIMESTAMP)
 	@CreationTimestamp
 	private Date orderDate;
 	
-	@Column(name = "`status`", nullable = false)
+	@Column(name = "`status`")
 	@Enumerated(EnumType.STRING)
 	private OrderStatusEnum status = OrderStatusEnum.Not_Active;
 	
 	@ManyToOne
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "user_id")
 	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
 	private Account userId;
 	
-	@OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "order")
 	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
 	private List<OrderDetail> listOrderDetail;
 	
@@ -66,11 +71,12 @@ public class Order implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 
-	public Order(short quantity, Double totalPrice, String address, Account userId) {
+	public Order(short quantity, Double totalPrice, String address,String phone, Account userId) {
 		super();
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
 		this.address = address;
+		this.phone = phone;
 		this.userId = userId;
 	}
 
@@ -148,5 +154,21 @@ public class Order implements Serializable{
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

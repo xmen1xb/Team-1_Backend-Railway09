@@ -20,8 +20,6 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
 import com.vti.enumerate.AccountGenderEnum;
 import com.vti.enumerate.AccountRole;
@@ -81,7 +79,6 @@ public class Account implements Serializable{
 	
 	@OneToMany(mappedBy = "userId")
 	@Cascade(value = { CascadeType.ALL, CascadeType.SAVE_UPDATE })
-	@Fetch(value = FetchMode.SUBSELECT)
 	private List<Order> listOrder;
 	
 	public Account() {

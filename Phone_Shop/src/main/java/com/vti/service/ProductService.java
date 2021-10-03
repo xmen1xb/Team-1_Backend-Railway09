@@ -33,9 +33,6 @@ public class ProductService implements IProductService {
 	
 	@Autowired
 	private IProductBrandRepository brandRepo;
-	
-	@Autowired
-	private IFileService fileService;
 
 	@SuppressWarnings("deprecation")
 	@Override
@@ -153,5 +150,11 @@ public class ProductService implements IProductService {
 		product.setPathImage(request.getImage());
 		
 		product_repo.save(product);
+	}
+
+	@Override
+	public Product findByProductName(String name) {
+		Product product = product_repo.findByProductName(name);
+		return product;
 	}
 }

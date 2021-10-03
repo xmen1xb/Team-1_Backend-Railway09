@@ -11,6 +11,6 @@ import com.vti.entity.Order;
 @Repository
 public interface IOrderRepository extends JpaRepository<Order, Integer>{
 
-	@Query(value = "SELECT o FROM Order o WHERE o.userId =: accountID")
-	public Page<Order> findAllByUserId(int accountID, Pageable pageable);
+	@Query(value = "SELECT o FROM Order o WHERE o.userId.accountId = :accountId")
+	public Page<Order> findByUserId(int accountId, Pageable pageable);
 }
