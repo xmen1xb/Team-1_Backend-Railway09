@@ -18,7 +18,7 @@ public interface IOrderService {
 	
 	public Order getOrderByID(int orderID);
 
-	public void createOrder(int accountID, OrderRequest request);
+	public void createOrder(int accountID, OrderRequest request) throws CustomerException;
 	
 	public void updateOrder(int orderID);
 	

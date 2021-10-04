@@ -3,6 +3,7 @@ package com.vti.request;
 public class OrderRequest {
 
 	private String description;
+	private String fullname;
 	private short quantity;
 	private Double totalPrice;
 	private String address;
@@ -12,10 +13,11 @@ public class OrderRequest {
 		// TODO Auto-generated constructor stub
 	}
 
-	public OrderRequest(short quantity, Double totalPrice, String address, String phone) {
+	public OrderRequest(short quantity, Double totalPrice,String fullname, String address, String phone) {
 		super();
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
+		this.fullname = fullname;
 		this.address = address;
 		this.phone = phone;
 	}
@@ -58,5 +60,13 @@ public class OrderRequest {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getFullname() {
+		return fullname;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 }

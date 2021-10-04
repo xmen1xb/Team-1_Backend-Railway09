@@ -67,7 +67,7 @@ public class OrderService implements IOrderService{
 	
 	@Override
 	@Transactional
-	public void createOrder(int accountID, OrderRequest request) {
+	public void createOrder(int accountID, OrderRequest request) throws CustomerException {
 		Cart cart = cartRepo.getById(accountID);
 		List<CartDetail> listCartDetail = cart.getListCartDetail();
 		
@@ -95,7 +95,10 @@ public class OrderService implements IOrderService{
 			 totalPrice = totalPrice + (cartDetail.getPrice()*cartDetail.getQuantity());
 		}
 		Account account = accountRepo.getById(accountID);		
-		Order order = new Order((short) quantity, totalPrice, request.getAddress(),request.getPhone() ,account);
+		Order order = new Order((short) quantity, totalPrice,request.getFullname(), request.getAddress(),request.getPhone() ,account);
+		if (request.getAddress() == null || request.getPhone() == null || request.getFullname() == null) {
+			throw new CustomerException("Thông tin giao nhận hàng chưa đầy đủ");
+		}
 		orderRepo.save(order);
 		
 		/**

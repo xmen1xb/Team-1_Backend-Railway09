@@ -37,6 +37,9 @@ public class Order implements Serializable{
 	@Column(name = "`description`", length = 1000)
 	private String description;
 	
+	@Column(name = "fullname", length = 50, nullable = false)
+	private String fullname;
+	
 	@Column(name = "quantity")
 	private short quantity;
 	
@@ -71,10 +74,11 @@ public class Order implements Serializable{
 		
 	}
 
-	public Order(short quantity, Double totalPrice, String address,String phone, Account userId) {
+	public Order(short quantity, Double totalPrice,String fullname, String address,String phone, Account userId) {
 		super();
 		this.quantity = quantity;
 		this.totalPrice = totalPrice;
+		this.fullname = fullname;
 		this.address = address;
 		this.phone = phone;
 		this.userId = userId;
@@ -170,5 +174,13 @@ public class Order implements Serializable{
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getFullname() {
+		return fullname;
+	}
+
+	public void setFullname(String fullname) {
+		this.fullname = fullname;
 	}
 }

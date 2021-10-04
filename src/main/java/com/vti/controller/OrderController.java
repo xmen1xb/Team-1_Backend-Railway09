@@ -112,7 +112,8 @@ public class OrderController {
 	 */
 	
 	@PostMapping(value = "/{accountId}")
-	public ResponseEntity<?> createOrder(@PathVariable(name = "accountId") int accountID, @RequestBody OrderRequest request){
+	public ResponseEntity<?> createOrder(@PathVariable(name = "accountId") int accountID, @RequestBody OrderRequest request)
+			throws CustomerException{
 		orderService.createOrder(accountID, request);
 		return new ResponseEntity<String>("Đặt hàng thành công!!",  HttpStatus.CREATED);
 	}
