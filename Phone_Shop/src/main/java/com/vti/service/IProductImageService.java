@@ -1,11 +1,9 @@
 package com.vti.service;
 
-import java.util.List;
+import com.vti.request.ProductImageRequest;
 
-import com.vti.entity.ProductImage;
-
-public interface IProductImageService {
-
-	public List<ProductImage> getAllProductImage();
+public interface IProductImageService {	
+	
+	public void createIMGforProduct(int productID, ProductImageRequest request);
 	
 }

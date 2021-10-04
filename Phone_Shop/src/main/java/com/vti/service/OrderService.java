@@ -61,6 +61,10 @@ public class OrderService implements IOrderService{
 		return order;
 	}
 	
+	/**
+	 * Function tạo order
+	 */
+	
 	@Override
 	@Transactional
 	public void createOrder(int accountID, OrderRequest request) {
@@ -70,6 +74,10 @@ public class OrderService implements IOrderService{
 		List<CartDetail> listCartDetail2 = new ArrayList<>();
 		String check = "Order";
 		
+		/**
+		 * Duyệt qua list cartDetail được lấy ra từ cart ( do cartID = accountID )
+		 * lọc những cartDetail có status = order cho vào 1 list riêng
+		 */
 		for (CartDetail cartDetail : listCartDetail) {
 			if (cartDetail.getStatus().toString().equals(check)) {
 				listCartDetail2.add(cartDetail);
@@ -77,6 +85,11 @@ public class OrderService implements IOrderService{
 		}
 		int quantity = 0;
 		Double totalPrice = 0.0;
+		
+		/**
+		 * Duyệt qua list cartDetail có status là order
+		 * Tính tổng số cartDetail và tổng tiền để gán vào khi tạo order
+		 */
 		for (CartDetail cartDetail : listCartDetail2) {
 			 quantity = quantity + cartDetail.getQuantity();
 			 totalPrice = totalPrice + (cartDetail.getPrice()*cartDetail.getQuantity());
@@ -85,6 +98,10 @@ public class OrderService implements IOrderService{
 		Order order = new Order((short) quantity, totalPrice, request.getAddress(),request.getPhone() ,account);
 		orderRepo.save(order);
 		
+		/**
+		 * Duyệt qua list cartDetail có status là order
+		 * Tạo ra các orderDetail tương ứng với cartDetail
+		 */
 		for (CartDetail cartDetail : listCartDetail2) {
 			Product product = cartDetail.getProduct();
 			OrderDetail orderDetail = new OrderDetail(cartDetail.getPrice(), (short) cartDetail.getQuantity(),
@@ -92,10 +109,17 @@ public class OrderService implements IOrderService{
 			orderDetailRepo.save(orderDetail);
 			int cartID = cartDetail.getCart().getCart_id();
 			
+			/**
+			 * Đính kèm functin update lại giá trị của cart khi xóa cartDetail có status là order
+			 * update lại tổng số hàng tồn của từng product khi khách đặt hàng
+			 */
 			updateCartDown(cartID, cartDetail);	
 			product.setQuantity((short) (product.getQuantity() - cartDetail.getQuantity()));
 			productRepo.save(product);
 		}
+		/**
+		 * Xóa các cartDetail tương ứng với orderDetail được tạo
+		 */
 		cartDetailRepo.deleteCartDetailbyCartAndStatus(CartDetailStatus.Order, cart.getCart_id());
 	}
 
@@ -105,12 +129,30 @@ public class OrderService implements IOrderService{
 		cart.setTotal_price(cart.getTotal_price() - (cartDetail.getPrice()*cartDetail.getQuantity()));
 		cartRepo.save(cart);
 	}
-
+	
+	/**
+	 * Function show all order cho admin
+	 */
+	
 	@Override
 	public Page<Order> getAllOrder(Pageable pageable) {
 		
 		return orderRepo.findAll(pageable);
 	}
+	
+	/**
+	 * Function filter order theo status cho admin
+	 */
+
+	@Override
+	public Page<Order> getAllOrderByStatus(OrderStatusEnum status, Pageable pageable) {
+		
+		return orderRepo.findByStatus(status, pageable);
+	}
+	
+	/**
+	 * Function duyệt đơn hàng và gửi email thông báo cho khách
+	 */
 
 	@Override
 	public void updateOrder(int orderID) {
@@ -125,6 +167,10 @@ public class OrderService implements IOrderService{
 			orderRepo.save(order);
 		}	
 	}
+	
+	/**
+	 * Function hủy đơn hàng và gửi email thông báo cho khách
+	 */
 
 	@Override
 	public void endOrder(int orderID, OrderRequest request) throws CustomerException {
@@ -134,10 +180,17 @@ public class OrderService implements IOrderService{
 		}
 		Account account = order.getAccount();
 		for (OrderDetail orderDetail : order.getListOrderDetail()) {
+			/**
+			 * Ở đây sẽ set lại số hàng cho product nếu đơn hàng bỉ hủy
+			 */
 			Product product = orderDetail.getProduct();
 			product.setQuantity((short) (product.getQuantity() + orderDetail.getQuantity()));
 			productRepo.save(product);
 		}
+		/**
+		 * admin sẽ viết mô tả lí do hủy đơn hàng
+		 * khách có thể vào phần chi tiết đơn hàng để check
+		 */
 		order.setDescription(request.getDescription());
 		order.setStatus(OrderStatusEnum.Delete);
 		if (order.getDescription() == null) {

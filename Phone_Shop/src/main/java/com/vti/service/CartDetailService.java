@@ -33,24 +33,38 @@ public class CartDetailService implements ICartDetailService {
 
 		return cartdetailRepo.findAll(pageable);
 	}
+	
+	/**
+	 * Function cho hàng vào giỏ
+	 * từ accountID sẽ lấy được cartID vì cả 2 được tạo cùng lúc
+	 */
 
 	@Override
 	public void createCartDetail(int producId, int accountId) throws CustomerException {
-
+		Cart cart = cartRepo.getById(accountId);
 		Product product = productRepo.getById(producId);
+		/**
+		 * Check product còn hàng tồn không
+		 */
 		if (product.getQuantity() == 0) {
 			throw new CustomerException("Sản phẩm không tồn tại hoặc đã hết hàng");
 		}
 		
-		List<CartDetail> listCartDetail = product.getListCartDetail();
+		List<CartDetail> listCartDetail = cart.getListCartDetail();
 		for (CartDetail cartDetail : listCartDetail) {
-			if (cartDetail.getProduct().getProductId() == product.getProductId() && cartDetail.getCart().getCart_id() == accountId){
-				System.out.println(cartDetail.getCart().getCart_id());
-				System.out.println(accountId);
+			/**
+			 * Lọc qua những sản phẩm trong giỏ hàng
+			 * Nếu khách đã cho loại hàng tương tự vào giỏ, thì chuyển thành up số lượng sản phẩm
+			 */
+			if (cartDetail.getProduct().getProductId() == product.getProductId()){
 				updateCartDetailUp(cartDetail.getCartdetail_id());
 				return;
 			}		
-		}		
+		}			
+		/**
+		 * Nếu phù hợp các điều kiện thì cho khách bỏ hàng vào giỏ
+		 * Update lại giá trị của cart tương ứng với cartdetail được thêm vào
+		 */
 		CartDetail cartDetail2 = new CartDetail();
 
 		cartDetail2.setPrice(product.getPrice());
@@ -62,6 +76,11 @@ public class CartDetailService implements ICartDetailService {
 
 		updateCartUp(accountId, cartDetail2);
 	}
+	
+	/**
+	 * Function xóa hàng trong giỏ
+	 * Update lại giá trị của cart tương ứng với cartdetail được xóa
+	 */
 
 	@Override
 	public void deleteCartDetail(int id) {
@@ -73,6 +92,11 @@ public class CartDetailService implements ICartDetailService {
 		cartdetailRepo.deleteById(id);
 
 	}
+	
+	/**
+	 * Function thêm số sản phẩm của hàng trong giỏ
+	 * Update lại giá trị của cart tương ứng với cartdetail được thêm vào
+	 */
 
 	@Override
 	public void updateCartDetailUp(int id) {
@@ -82,6 +106,12 @@ public class CartDetailService implements ICartDetailService {
 		cartdetailRepo.save(cartDetail);
 		updateCartUp(cartID, cartDetail);
 	}
+	
+	/**
+	 * Function giảm số sản phẩm của hàng trong giỏ
+	 * Update lại giá trị của cart tương ứng với cartdetail được giảm đi
+	 * Nếu số sản phẩm = 1 thì khi bấm giảm số sp sẽ = xóa sản phẩm
+	 */
 
 	@Override
 	public void updateCartDetailDown(int id) {
@@ -99,6 +129,12 @@ public class CartDetailService implements ICartDetailService {
 		}
 	}
 	
+	/**
+	 * Function chọn sản phẩm cho vào order
+	 * Khi khách hàng tích chọn 1 lần thì sp sẽ thay đổi trạng thái từ not_order -> order
+	 * Bấm lần thứ 2 sẽ chuyển lại từ order -> not_order
+	 */
+	
 	@Override
 	public void updateStatusCartDetail(int id) {
 		CartDetail cartDetail = cartdetailRepo.getById(id);
@@ -111,6 +147,10 @@ public class CartDetailService implements ICartDetailService {
 		cartDetail.setStatus(CartDetailStatus.Order);
 		cartdetailRepo.save(cartDetail);
 	}
+	
+	/**
+	 * Function update giá trị cart khi thêm 1 sản phẩm vào giỏ
+	 */
 
 	public void updateCartUp(int cartID, CartDetail cartDetail) {
 		Cart cart = cartRepo.getById(cartID);
@@ -118,7 +158,10 @@ public class CartDetailService implements ICartDetailService {
 		cart.setTotal_price(cart.getTotal_price() + cartDetail.getPrice());
 		cartRepo.save(cart);
 	}
-
+	
+	/**
+	 * Function update giá trị cart khi bỏ sản phẩm 1 khỏi giỏ
+	 */
 	
 	public void updateCartDown(int cartID, CartDetail cartDetail) {
 		Cart cart = cartRepo.getById(cartID);
@@ -126,6 +169,10 @@ public class CartDetailService implements ICartDetailService {
 		cart.setTotal_price(cart.getTotal_price() - (cartDetail.getPrice()));
 		cartRepo.save(cart);
 	}
+	
+	/**
+	 * Function update giá trị cart khi xóa 1 sản phẩm khỏi giỏ
+	 */
 	
 	public void updateCartDownAll(int cartID, CartDetail cartDetail) {
 		Cart cart = cartRepo.getById(cartID);

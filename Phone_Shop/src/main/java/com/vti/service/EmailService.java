@@ -20,6 +20,9 @@ public class EmailService implements IEmailService {
 	@Autowired
 	private JavaMailSender mailSender;
 
+	/**
+	 * Function gửi mail kích hoạt tài khoản
+	 */
 
 	@Override
 	public void sendRegistrationUserConfirm(String email) {
@@ -38,6 +41,10 @@ public class EmailService implements IEmailService {
 
 	}
 	
+	/**
+	 * Function gửi mail thông báo đơn hàng được duyệt
+	 */
+	
 	@Override
 	public void sendOrderConfirm(String email) {
 		
@@ -47,6 +54,10 @@ public class EmailService implements IEmailService {
 		
 		sendEmail(email, subject, content);
 	}
+	
+	/**
+	 * Function gửi mail thông báo đơn hàng bị hủy
+	 */
 	
 	@Override
 	public void sendOrderConfirmEnd(String email) {

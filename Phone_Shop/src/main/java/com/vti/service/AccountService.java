@@ -44,7 +44,7 @@ public class AccountService implements IAccountService{
 	
 	@Autowired
 	private IResetPasswordTokenRepository resetPasswordRepo;
-
+	
 	@Override
 	public Page<Account> getAllAccounts(Pageable pageable) {
 		
@@ -69,6 +69,10 @@ public class AccountService implements IAccountService{
 		return account_repo.findByEmail(email);
 	}
 
+	/**
+	 * Function đăng ký account, kèm theo gửi email xác thực, tạo cart
+	 */
+	
 	@Override
 	public void createAccount(AccountRequest request) {
 		Account account = new Account(request.getUsername(), request.getFullname(), request.getEmail(),
@@ -83,6 +87,10 @@ public class AccountService implements IAccountService{
 		createCart(account);
 	}
 	
+	/**
+	 * Function quên mật khẩu
+	 */
+	
 	@Override
 	public void resetPassword(String email) {
 		Account account = account_repo.findByEmail(email);
@@ -93,6 +101,10 @@ public class AccountService implements IAccountService{
 		createResetPasswordToken(account);
 		sendConfirmResetPasswordViaEmail(account.getEmail());
 	}
+	
+	/**
+	 * Function reset mật khẩu sau khi người dùng xác thực, trả về mật khẩu mặc định 123456
+	 */
 	
 	@Override
 	public void activeResetPassword(String token) {
@@ -105,6 +117,10 @@ public class AccountService implements IAccountService{
 		
 		resetPasswordRepo.deleteById(activeToken.getId());
 	}
+	
+	/**
+	 * Function kích hoạt account, sau khi người dùng xác thực
+	 */
 
 	@Override
 	public void activeUser(String token) {
@@ -118,6 +134,10 @@ public class AccountService implements IAccountService{
 		token_repo.deleteById(active_token.getId());
 	}
 	
+	/**
+	 * Function tạo token cho kich hoạt tài khoản
+	 */
+	
 	private void createNewRegistrationUserToken(Account account) {
 
 		// create new token for confirm Registration
@@ -127,6 +147,10 @@ public class AccountService implements IAccountService{
 		token_repo.save(token);
 	}
 	
+	/**
+	 * Function tạo token cho quên mật khẩu
+	 */
+	
 	private void createResetPasswordToken(Account account) {
 
 		// create new token for confirm ResetPassword
@@ -135,6 +159,10 @@ public class AccountService implements IAccountService{
 		
 		resetPasswordRepo.save(token);
 	}
+	
+	/**
+	 * Function gửi mail
+	 */
 
 	@Override
 	public void sendConfirmUserRegistrationViaEmail(String email) {
@@ -165,6 +193,10 @@ public class AccountService implements IAccountService{
 		
 		return account_repo.existsByPhonenumber(phoneNumber);
 	}
+	
+	/**
+	 * Function tạo cart, đính kèm khi đăng ký tài khoản
+	 */
 
 	@Override
 	public void createCart(Account account) {

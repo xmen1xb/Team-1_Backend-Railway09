@@ -45,6 +45,7 @@ public class ProductController {
 
 	/**
 	 * API getAll Product Search theo ProductName Filter theo brand - memory - ram
+	 * fix trả ra thêm list ProductImgResponse
 	 */
 
 	@GetMapping()
@@ -56,12 +57,20 @@ public class ProductController {
 
 			@Override
 			public ProductResponse apply(Product product) {
+				List<ProductImage> listIMG = product.getListProductImage();
+				List<ProductImagesRespone> listResponse = new ArrayList<>();
+				for (ProductImage productImage : listIMG) {
+					ProductImagesRespone imgresponse = new ProductImagesRespone(productImage.getImage_id(), 
+							productImage.getProduct().getProductId(), productImage.getPath_image());
+					listResponse.add(imgresponse);
+				}
+				
 				ProductResponse response = new ProductResponse(product.getProductId(), product.getProductName(),
 						product.getDescription(), product.getPrice(), product.getRam().getRamName(),
 						product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
 						product.getQuantity(), product.getCamera(), product.getColor(), product.getScreenSize(),
 						product.getOperatingSystem(), product.getChip(), product.getBattery(), product.getSim(),
-						product.getPathImage(), product.getDiscount(), product.getEnterDate());
+						product.getPathImage(), product.getDiscount(),listResponse, product.getEnterDate());
 				return response;
 			}
 		});
@@ -70,6 +79,7 @@ public class ProductController {
 
 	/**
 	 * API getAll Product Filter theo price down
+	 * fix trả ra thêm list ProductImgResponse
 	 */
 
 	@RequestMapping(value = "/desc", method = RequestMethod.GET)
@@ -80,12 +90,19 @@ public class ProductController {
 
 			@Override
 			public ProductResponse apply(Product product) {
+				List<ProductImage> listIMG = product.getListProductImage();
+				List<ProductImagesRespone> listResponse = new ArrayList<>();
+				for (ProductImage productImage : listIMG) {
+					ProductImagesRespone imgresponse = new ProductImagesRespone(productImage.getImage_id(), 
+							productImage.getProduct().getProductId(), productImage.getPath_image());
+					listResponse.add(imgresponse);
+				}
 				ProductResponse response = new ProductResponse(product.getProductId(), product.getProductName(),
 						product.getDescription(), product.getPrice(), product.getRam().getRamName(),
 						product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
 						product.getQuantity(), product.getCamera(), product.getColor(), product.getScreenSize(),
 						product.getOperatingSystem(), product.getChip(), product.getBattery(), product.getSim(),
-						product.getPathImage(), product.getDiscount(), product.getEnterDate());
+						product.getPathImage(), product.getDiscount(),listResponse, product.getEnterDate());
 				return response;
 			}
 		});
@@ -94,6 +111,7 @@ public class ProductController {
 
 	/**
 	 * API getAll Product Filter theo price up
+	 * fix trả ra thêm list ProductImgResponse
 	 */
 
 	@RequestMapping(value = "/asc", method = RequestMethod.GET)
@@ -104,12 +122,19 @@ public class ProductController {
 
 			@Override
 			public ProductResponse apply(Product product) {
+				List<ProductImage> listIMG = product.getListProductImage();
+				List<ProductImagesRespone> listResponse = new ArrayList<>();
+				for (ProductImage productImage : listIMG) {
+					ProductImagesRespone imgresponse = new ProductImagesRespone(productImage.getImage_id(), 
+							productImage.getProduct().getProductId(), productImage.getPath_image());
+					listResponse.add(imgresponse);
+				}
 				ProductResponse response = new ProductResponse(product.getProductId(), product.getProductName(),
 						product.getDescription(), product.getPrice(), product.getRam().getRamName(),
 						product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
 						product.getQuantity(), product.getCamera(), product.getColor(), product.getScreenSize(),
 						product.getOperatingSystem(), product.getChip(), product.getBattery(), product.getSim(),
-						product.getPathImage(), product.getDiscount(), product.getEnterDate());
+						product.getPathImage(), product.getDiscount(),listResponse, product.getEnterDate());
 				return response;
 			}
 		});
@@ -118,6 +143,7 @@ public class ProductController {
 
 	/**
 	 * API getProduct by ProductID
+	 * fix trả ra thêm list ProductImgResponse
 	 */
 
 	@GetMapping(value = "/{id}")
@@ -126,12 +152,19 @@ public class ProductController {
 		if (product == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+		List<ProductImage> listIMG = product.getListProductImage();
+		List<ProductImagesRespone> listResponse = new ArrayList<>();
+		for (ProductImage productImage : listIMG) {
+			ProductImagesRespone imgresponse = new ProductImagesRespone(productImage.getImage_id(), 
+					productImage.getProduct().getProductId(), productImage.getPath_image());
+			listResponse.add(imgresponse);
+		}
 		ProductResponse response = new ProductResponse(product.getProductId(), product.getProductName(),
 				product.getDescription(), product.getPrice(), product.getRam().getRamName(),
 				product.getMemory().getMemoryName(), product.getBrand().getBrandName(), product.getCategory(),
 				product.getQuantity(), product.getCamera(), product.getColor(), product.getScreenSize(),
 				product.getOperatingSystem(), product.getChip(), product.getBattery(), product.getSim(),
-				product.getPathImage(), product.getDiscount(), product.getEnterDate());
+				product.getPathImage(), product.getDiscount(),listResponse, product.getEnterDate());
 
 		return new ResponseEntity<ProductResponse>(response, HttpStatus.OK);
 	}

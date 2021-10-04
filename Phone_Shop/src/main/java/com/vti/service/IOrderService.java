@@ -4,12 +4,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.vti.entity.Order;
+import com.vti.enumerate.OrderStatusEnum;
 import com.vti.exception.CustomerException;
 import com.vti.request.OrderRequest;
 
 public interface IOrderService {
 	
 	public Page<Order> getAllOrder(Pageable pageable);
+	
+	public Page<Order> getAllOrderByStatus(OrderStatusEnum status, Pageable pageable);
 	
 	public Page<Order> findByUserId(int accountID, Pageable pageable);
 	

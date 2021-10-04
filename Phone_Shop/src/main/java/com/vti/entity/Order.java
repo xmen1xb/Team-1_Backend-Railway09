@@ -68,7 +68,7 @@ public class Order implements Serializable{
 	private List<OrderDetail> listOrderDetail;
 	
 	public Order() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Order(short quantity, Double totalPrice, String address,String phone, Account userId) {

@@ -49,7 +49,7 @@ public class AccountController {
 
 				AccountResponse response = new AccountResponse(account.getAccountId(), account.getUsername(),
 						account.getFullname(), account.getEmail(), account.getGender(), account.getPhonenumber(),
-						account.getAddress(), account.getRegisterDate());
+						account.getAddress(),account.getPathImage(), account.getRegisterDate());
 
 				return response;
 			}
@@ -71,19 +71,10 @@ public class AccountController {
 		}
 		AccountResponse response = new AccountResponse(account.getAccountId(), account.getUsername(),
 				account.getFullname(), account.getEmail(), account.getGender(), account.getPhonenumber(),
-				account.getAddress(), account.getRegisterDate());
+				account.getAddress(),account.getPathImage(), account.getRegisterDate());
 		return new ResponseEntity<AccountResponse>(response, HttpStatus.OK);
 
 	}
-
-//	@GetMapping(value = "/{name}")
-//	public ResponseEntity<?> getAccountByUserName(@PathVariable(name = "name") String username){
-//		Account account = accountService.getAccountByUsername(username);
-//		
-//		AccountResponse response = new AccountResponse(account.getAccountId(), account.getUsername(), account.getFullname(), 
-//				account.getEmail(), account.getGender(), account.getPhone_number(), account.getAddress(), account.getRegister_date());
-//		return new ResponseEntity<AccountResponse>(response, HttpStatus.OK);			
-//	}
 
 	@PreAuthorize("hasAnyRole('User','Admin')")
 	@PostMapping()

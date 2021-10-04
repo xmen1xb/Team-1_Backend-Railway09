@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.vti.entity.Order;
+import com.vti.enumerate.OrderStatusEnum;
 
 @Repository
 public interface IOrderRepository extends JpaRepository<Order, Integer>{
+	
+	@Query(value = "SELECT o FROM Order o WHERE o.status = :status ORDER BY orderDate DESC")
+	public Page<Order> findByStatus(OrderStatusEnum status, Pageable pageable);
 
-	@Query(value = "SELECT o FROM Order o WHERE o.userId.accountId = :accountId")
+	@Query(value = "SELECT o FROM Order o WHERE o.userId.accountId = :accountId ORDER BY orderDate DESC")
 	public Page<Order> findByUserId(int accountId, Pageable pageable);
 }

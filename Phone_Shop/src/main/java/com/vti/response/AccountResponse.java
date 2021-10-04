@@ -13,6 +13,7 @@ public class AccountResponse {
 	private AccountGenderEnum gender;
 	private String phonenumber;
 	private String address;
+	private String avatar;
 	private Date registerdate;
 	
 	public AccountResponse() {
@@ -20,7 +21,7 @@ public class AccountResponse {
 	}
 
 	public AccountResponse(int id, String username, String fullname, String email, AccountGenderEnum gender,
-			String phone_number, String address, Date register_date) {
+			String phone_number, String address, String avatar, Date register_date) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -29,6 +30,7 @@ public class AccountResponse {
 		this.gender = gender;
 		this.phonenumber = phone_number;
 		this.address = address;
+		this.avatar = avatar;
 		this.registerdate = register_date;
 	}
 
@@ -94,5 +96,13 @@ public class AccountResponse {
 
 	public void setRegister_date(Date register_date) {
 		this.registerdate = register_date;
+	}
+
+	public String getAvatar() {
+		return avatar;
+	}
+
+	public void setAvatar(String avatar) {
+		this.avatar = avatar;
 	}
 }

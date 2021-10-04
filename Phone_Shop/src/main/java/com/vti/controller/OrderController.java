@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vti.entity.Order;
 import com.vti.entity.OrderDetail;
 import com.vti.entity.Product;
+import com.vti.enumerate.OrderStatusEnum;
 import com.vti.exception.CustomerException;
 import com.vti.exception.NotFoundException;
 import com.vti.request.OrderRequest;
@@ -37,12 +38,14 @@ public class OrderController {
 	
 	@Autowired
 	private IOrderService orderService;
-		
+	
 	/**
-	 * API getAll Order for Admin							
+	 * API getAll Order for Admin	
+	 * filter theo status
+	 * fix cứng giá trị filter						
 	 */
 	
-	@GetMapping
+	@GetMapping(value = "/all")
 	public ResponseEntity<?> getAllOrder(Pageable pageable){
 		Page<Order> pageOrder = orderService.getAllOrder(pageable);
 		
@@ -57,9 +60,30 @@ public class OrderController {
 		});
 		return new ResponseEntity<>(response, HttpStatus.OK);
 	}
-	
+		
 	/**
 	 * API getAll Order for Admin							
+	 */
+	
+	@GetMapping
+	public ResponseEntity<?> getAllOrderByStatus(@RequestParam OrderStatusEnum status, Pageable pageable){
+		Page<Order> pageOrder = orderService.getAllOrderByStatus(status, pageable);
+		
+		Page<OrderResponse> response = pageOrder.map(new Function<Order, OrderResponse>() {
+
+			@Override
+			public OrderResponse apply(Order order) {
+				OrderResponse response = new OrderResponse(order.getDescription(), order.getTotal_price(), 
+						order.getOrder_date(), order.getStatus());
+				return response;
+			}
+		});
+		return new ResponseEntity<>(response, HttpStatus.OK);
+	}
+	
+	/**
+	 * API getAll Order for Account	
+	 * trả ra toàn bộ order theo accountID						
 	 */
 	
 	@GetMapping(value = "/{accountId}")
